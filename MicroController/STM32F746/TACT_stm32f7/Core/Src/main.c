@@ -21,6 +21,7 @@
 //#include "i2c.h"
 //#include "usart.h"
 //#include "gpio.h"
+//#include "hidden_layer.h"
 //
 ///* Private includes ----------------------------------------------------------*/
 ///* USER CODE BEGIN Includes */
@@ -29,14 +30,11 @@
 //#include "vl53l0x_api.h"
 //
 //
-//
-//#include "230320_06_quantized.cc"
-//
-//
 ///* USER CODE END Includes */
 //
 ///* Private typedef -----------------------------------------------------------*/
 ///* USER CODE BEGIN PTD */
+//
 //
 ///* USER CODE END PTD */
 //
@@ -59,6 +57,12 @@
 ///* Private variables ---------------------------------------------------------*/
 //
 ///* USER CODE BEGIN PV */
+//
+//
+//
+//
+//
+//
 //
 //
 ///* UART1 rx data */
@@ -124,19 +128,14 @@
 //	uint8_t VhvSettings = 0;
 //	uint8_t PhaseCal = 0;
 //
-//	VL53L0X_Dev_t vl53l0x_s[NUM_SENSOR]; // ?��?�� 배열
+////	VL53L0X_Dev_t vl53l0x_s[NUM_SENSOR]; // ?��?�� 배열
+//	VL53L0X_Dev_t vl53l0x_s; // ?��?�� 배열
+//
 //	VL53L0X_DEV Dev;
 //	uint16_t distance[NUM_SENSOR] = {0,};
 //
 //	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 //	uint8_t tca_ch_reset = 0x00;
-//
-//    float output_data[3];
-//
-//
-//
-//
-//
 //
 //
 //  /* USER CODE END Init */
@@ -167,10 +166,9 @@
 //
 //
 //
-//	  for(int addr = 0x70; addr < 0x73; addr ++){
-//		HAL_I2C_Master_Transmit(&hi2c1, addr << 1, &tca_ch_reset, 1, 1000);
-//	  }
-//
+//		HAL_I2C_Master_Transmit(&hi2c1, 0x70 << 1, &tca_ch_reset, 1, 1000);
+//		HAL_I2C_Master_Transmit(&hi2c1, 0x71 << 1, &tca_ch_reset, 1, 1000);
+//		HAL_I2C_Master_Transmit(&hi2c1, 0x72 << 1, &tca_ch_reset, 1, 1000);
 //
 //		for (int i = 0; i < NUM_SENSOR; i++) {
 //
@@ -193,7 +191,7 @@
 //				HAL_I2C_Master_Transmit(&hi2c1, 0x72 << 1, &tca_ch[r], 1, 1000);
 //			}
 //
-//			Dev = &vl53l0x_s[i];
+//			Dev = &vl53l0x_s;
 //			Dev->I2cHandle = &hi2c1;
 //			Dev->I2cDevAddr = VL53L0X_ADDR;
 //
@@ -210,6 +208,9 @@
 //			VL53L0X_SetMeasurementTimingBudgetMicroSeconds( Dev, 33000);
 //			VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
 //			VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
+//
+//			MessageLen = sprintf((char*)Message, "%d complete \n\r",i);
+//			HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
 //	    }
 //
 //  /* USER CODE END 2 */
@@ -221,6 +222,9 @@
 //
 //  while (1)
 //  {
+//
+//  	  uint32_t start = HAL_GetTick();
+//
 //
 //		   for (int i = 0; i < NUM_SENSOR; i++) {
 //
@@ -243,13 +247,15 @@
 //					HAL_I2C_Master_Transmit(&hi2c1, 0x72 << 1, &tca_ch[r], 1, 1000);
 //				}
 //
-//		       Dev = &vl53l0x_s[i];
+//		       Dev = &vl53l0x_s;
 //
-//		       VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData);
+//		       VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 ////		       VL53L0X_PerformSingleRangingMeasurement(Dev, &RangingData);
 //		       if (RangingData.RangeStatus == 0) {
 //
-//		    	   distance[i] = RangingData.RangeMilliMeter;
+//		    	   //distance[i] = RangingData.RangeMilliMeter;
+//		    	   in[i][0] = RangingData.RangeMilliMeter;
+//
 //		           MessageLen = sprintf((char*)Message, "%d ",distance[i]);
 //		           HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
 //		       }else{
@@ -257,21 +263,48 @@
 //		           HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
 //		       }
 //		       if(r == 7){
-//		           MessageLen = sprintf((char*)Message, "/ ");
-//		           HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+////		           MessageLen = sprintf((char*)Message, "/ ");
+////		           HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
 //		       }
 //		   }
+//
+//			  uint32_t end = HAL_GetTick();
+//
+//
+//			mat_mul_relu_first(w1, in, r1, b1);
+//			mat_mul_relu_second(w2, r1, r2, b2);
+//			mat_mul_relu_third(w3, r2, r3, b3);
+//			mat_mul_relu_fourth(w4, r3, r4, b4);
+//			mat_mul_output_fifth(w5, r4, r5, b5);
+//
+//			  uint32_t end2 = HAL_GetTick();
+//
+//
+//
+//			for(int i=0; i<3; i++){
+//				MessageLen = sprintf((char*)Message, "%.8f ",r5[i][0]);
+//				HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+//			}
+//
+//
+//
 //
 //
 //		   MessageLen = sprintf((char*)Message, "\n");
 //		   HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+//
+//		  MessageLen = sprintf((char*)Message, "%d ms\n",end-start);
+//		  HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+//
+//		  MessageLen = sprintf((char*)Message, "%d ms\n",end2-end);
+//		  HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
 //
 //
 //
 //
 //
 //    /* USER CODE END WHILE */
-//+
+//
 //    /* USER CODE BEGIN 3 */
 //  }
 //  /* USER CODE END 3 */
@@ -281,6 +314,7 @@
 //  * @brief System Clock Configuration
 //  * @retval None
 //  */
+//
 //void SystemClock_Config(void)
 //{
 //  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
