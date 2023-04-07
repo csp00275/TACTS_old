@@ -1,3 +1,3 @@
 # TACTS
 Tof based Air Cushion Touch Sensors
-developed byt JH Park
+developed by JH Park
