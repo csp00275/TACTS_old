@@ -97,3 +97,4 @@
 ../Drivers/VL53L0X/core/src/vl53l0x_api.c:2997:15:VL53L0X_SetReferenceSpads	32	static
 ../Drivers/VL53L0X/core/src/vl53l0x_api.c:3010:15:VL53L0X_GetReferenceSpads	32	static
 ../Drivers/VL53L0X/core/src/vl53l0x_api.c:3023:15:VL53L0X_PerformRefSpadManagement	32	static
+../Drivers/VL53L0X/core/src/vl53l0x_api.c:3038:15:VL53L0X_PerformContinuousRangingMeasurement	24	static

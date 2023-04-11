@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright © 2016, STMicroelectronics International N.V.
+ Copyright ï¿½ 2016, STMicroelectronics International N.V.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -3033,3 +3033,29 @@ VL53L0X_Error VL53L0X_PerformRefSpadManagement(VL53L0X_DEV Dev,
 
 	return Status;
 }
+
+
+VL53L0X_Error VL53L0X_PerformContinuousRangingMeasurement(VL53L0X_Dev_t *device, VL53L0X_RangingMeasurementData_t *ranging_data) {
+    VL53L0X_Error status;
+
+    // Set the device to high accuracy mode
+    status = VL53L0X_SetDeviceMode(device, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
+    if (status != VL53L0X_ERROR_NONE) {
+        return status;
+    }
+
+    // Start continuous ranging measurement
+    status = VL53L0X_StartMeasurement(device);
+    if (status != VL53L0X_ERROR_NONE) {
+        return status;
+    }
+
+    // Get ranging measurement data
+    status = VL53L0X_GetRangingMeasurementData(device, ranging_data);
+    if (status != VL53L0X_ERROR_NONE) {
+        return status;
+    }
+
+    return VL53L0X_ERROR_NONE;
+}
+

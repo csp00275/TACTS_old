@@ -62,8 +62,8 @@ all: main-build
 main-build: test_stm32f746-disco.elf secondary-outputs
 
 # Tool invocations
-test_stm32f746-disco.elf test_stm32f746-disco.map: $(OBJS) $(USER_OBJS) C:\Users\JH_LAB\Desktop\test_stm32f746_vl\test_stm32f746\test_stm32f746-disco\STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "test_stm32f746-disco.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\JH_LAB\Desktop\test_stm32f746_vl\test_stm32f746\test_stm32f746-disco\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="test_stm32f746-disco.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+test_stm32f746-disco.elf test_stm32f746-disco.map: $(OBJS) $(USER_OBJS) D:\ME\ program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\TACT_stm32f7\STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "test_stm32f746-disco.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\TACT_stm32f7\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="test_stm32f746-disco.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

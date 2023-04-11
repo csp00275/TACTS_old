@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright © 2016, STMicroelectronics International N.V.
+ Copyright ï¿½ 2016, STMicroelectronics International N.V.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -1939,6 +1939,7 @@ VL53L0X_API VL53L0X_Error VL53L0X_SetReferenceSpads(VL53L0X_DEV Dev,
 VL53L0X_API VL53L0X_Error VL53L0X_GetReferenceSpads(VL53L0X_DEV Dev,
 	uint32_t *refSpadCount, uint8_t *isApertureSpads);
 
+VL53L0X_Error VL53L0X_PerformContinuousRangingMeasurement(VL53L0X_Dev_t *device, VL53L0X_RangingMeasurementData_t *ranging_data);
 /** @} VL53L0X_SPADfunctions_group */
 
 /** @} VL53L0X_cut11_group */
