@@ -1,9 +1,9 @@
-# TACTS
+TACTS
 <<<<<<< HEAD
 Tof based Air Cushion Touch Sensors.
 TACTS_v1 = LABS_v3
 
-# LABS 
+LABS 
 Large Area Balloon-like Sensors .
 It is old name of TACTS.
 
