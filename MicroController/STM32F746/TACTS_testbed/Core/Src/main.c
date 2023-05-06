@@ -22,13 +22,13 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "motor.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 #include <stdio.h>
 #include "vl53l0x_api.h"
+#include "motor.h"
 
 
 
@@ -164,11 +164,14 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM7_Init();
   MX_USART1_UART_Init();
+  MX_TIM2_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
+
+  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
 
 
 
@@ -313,7 +316,21 @@ int main(void)
 
 		MessageLen = sprintf((char*)Message, "%d \n",i);
 		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+		stepLin(-10);
 	}
+
+
+
+
+	for(int dist = 0; dist<=16; dist++){
+        servo_angle(&htim2, TIM_CHANNEL_1, dist);
+        HAL_Delay(3000);
+
+		MessageLen = sprintf((char*)Message, "%d \n",dist);
+		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+	}
+
+
 
 
 

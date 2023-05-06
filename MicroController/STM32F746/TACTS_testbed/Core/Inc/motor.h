@@ -28,6 +28,7 @@ extern "C" {
 
 void stepRev(int ANG);
 void stepLin(int ANG);
+void servo_angle(TIM_HandleTypeDef *htim, uint32_t channel, uint16_t angle);
 /* USER CODE BEGIN Prototypes */
 
 /* USER CODE END Prototypes */

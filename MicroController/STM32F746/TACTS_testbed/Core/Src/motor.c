@@ -7,6 +7,7 @@
 #include "stm32f7xx_hal.h"
 #include "motor.h"
 #include "gpio.h"
+#include "tim.h"
 
 #define PULSE 200
 
@@ -73,5 +74,14 @@ void stepLin(int DIST) {
   HAL_GPIO_WritePin(GPIOI, GPIO_PIN_0, GPIO_PIN_SET);  // ENA
 
 }
+
+void servo_angle(TIM_HandleTypeDef *htim, uint32_t channel, uint16_t angle) {
+    if (angle > 180)
+        angle = 180; // 최대 각도 제한
+
+    uint32_t pulse_width = 3 + angle; // 듀티 사이클 계산 (0도에서 180도까지)
+    __HAL_TIM_SET_COMPARE(htim, channel, pulse_width); // 듀티 사이클 변경
+}
+
 
 
