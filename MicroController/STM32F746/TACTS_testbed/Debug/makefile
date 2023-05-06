@@ -63,7 +63,7 @@ main-build: TACTS_testbed.elf secondary-outputs
 
 # Tool invocations
 TACTS_testbed.elf TACTS_testbed.map: $(OBJS) $(USER_OBJS) D:\ME\ program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\TACTS_testbed\STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "TACTS_testbed.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\TACTS_testbed\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TACTS_testbed.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "TACTS_testbed.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\TACTS_testbed\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TACTS_testbed.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -1,0 +1,2 @@
+../Core/Src/motor.c:13:6:stepRev	32	static
+../Core/Src/motor.c:43:6:stepLin	40	static

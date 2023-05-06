@@ -22,29 +22,69 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "motor.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include <stdio.h>
+#include "vl53l0x_api.h"
+
+
+
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+
+#define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
+#define NUM_SENSOR		4
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+
 
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+
+
+
+
+
+
+
+/* UART1 rx data */
+uint8_t rx1_data;
+
+/* Variables for VL35L0 */
+uint8_t Message[64];
+uint8_t MessageLen;
+
+VL53L0X_RangingMeasurementData_t RangingData;
+
+
+
+
+
+
+
+
+
 
 /* USER CODE END PV */
 
@@ -53,6 +93,8 @@ void SystemClock_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
+/* Setting for "printf" */
+int __write(int file, char* P, int len);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -68,6 +110,10 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+
+
+
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -76,6 +122,33 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
+/*
+	// VL53L0X initialization stuff
+	//
+	uint32_t refSpadCount = 0;
+	uint8_t isApertureSpads = 0;
+	uint8_t VhvSettings = 0;
+	uint8_t PhaseCal = 0;
+
+	VL53L0X_Dev_t vl53l0x_s[NUM_SENSOR];
+//	VL53L0X_Dev_t vl53l0x_s;
+
+	VL53L0X_DEV Dev;
+	KalmanFilter kalman_filters[NUM_SENSOR];
+	uint16_t distance[NUM_SENSOR] = {0,};
+	float filtered_distance[NUM_SENSOR] = {0,};
+
+
+
+	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
+	//uint8_t tca_ch[8] = {0b00000001, 0b00000010, 0b00000100, 0b00001000, 0b00010000, 0b00100000, 0b01000000, 0b10000000};
+	uint8_t tca_ch_reset = 0x00;
+	//uint8_t tca_ch_reset = 0b00000000;
+    uint8_t tca_addr[] = {0x70,0x71,0x72};
+
+
+*/
 
   /* USER CODE END Init */
 
@@ -96,12 +169,154 @@ int main(void)
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
+
+
+
+
+
+
+  /* UART interrupt initialization */
+  MessageLen = sprintf((char*)Message, "JH VL53L0X test\n\r");
+
+  HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+
+/*
+
+		for (int i = 0; i < sizeof(tca_addr); i++) {
+		    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[i] << 1, &tca_ch_reset, 1, 1000);
+		}
+
+		for (int i = 0; i < NUM_SENSOR; i++) {
+
+			uint8_t q = i / 8;
+			uint8_t r = i % 8;
+
+		    for (int j = 0; j < sizeof(tca_addr); j++) {
+		        uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
+		        HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
+		    }
+
+			Dev = &vl53l0x_s[i];
+			Dev->I2cHandle = &hi2c1;
+			Dev->I2cDevAddr = VL53L0X_ADDR;
+
+			VL53L0X_WaitDeviceBooted( Dev );
+			VL53L0X_DataInit( Dev );
+			VL53L0X_StaticInit( Dev );
+			VL53L0X_SetDeviceMode(Dev, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
+			VL53L0X_PerformRefCalibration( Dev, &VhvSettings, &PhaseCal);
+			VL53L0X_PerformRefSpadManagement( Dev, &refSpadCount, &isApertureSpads);
+			VL53L0X_SetLimitCheckEnable( Dev, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, 1);
+			VL53L0X_SetLimitCheckEnable( Dev, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, 1);
+			VL53L0X_SetLimitCheckValue( Dev, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1*65536));
+			VL53L0X_SetLimitCheckValue( Dev, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60*65536));
+			VL53L0X_SetMeasurementTimingBudgetMicroSeconds( Dev, 33000);
+			VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
+			VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
+
+
+			// KalmanFilter initializer BEGIN //
+			float Q = 0.1f; // Process noise covariance
+			float R = 1.0f;   // Measurement noise covariance
+			KalmanFilter_Init(&kalman_filters[i], Q, R);
+			// KalmanFilter initializer END //
+
+
+			MessageLen = sprintf((char*)Message, "%d complete \n\r",i);
+			HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+	    }
+*/
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+
+
   while (1)
   {
+
+//  	  uint32_t start = HAL_GetTick();
+
+/*
+		   for (int i = 0; i < NUM_SENSOR; i++) {
+
+				uint8_t q = i / 8;
+				uint8_t r = i % 8;
+
+			    for (int j = 0; j < sizeof(tca_addr); j++) {
+			        uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
+			        HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
+			    }
+
+		       Dev = &vl53l0x_s[i];
+
+		       VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
+		       if (RangingData.RangeStatus == 0) {
+		    	   distance[i] = RangingData.RangeMilliMeter;
+		       }else{
+		    	   distance[i] = 0;
+		       }
+
+	           MessageLen = sprintf((char*)Message, "%d ",distance[i]);
+	           HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+
+	           filtered_distance[i] = KalmanFilter_Update(&kalman_filters[i], (float)distance[i]);
+
+	           MessageLen = sprintf((char*)Message, "%.3f ",filtered_distance[i]);
+			   HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+
+		       in[i][0] = distance[i];
+
+		   }
+
+//			uint32_t end = HAL_GetTick();
+//
+//
+//			mat_mul_relu_first(w1, in, r1, b1);
+//			mat_mul_relu_second(w2, r1, r2, b2);
+//			mat_mul_relu_third(w3, r2, r3, b3);
+//			mat_mul_relu_fourth(w4, r3, r4, b4);
+//			mat_mul_output_fifth(w5, r4, r5, b5);
+//
+//			uint32_t end2 = HAL_GetTick();
+
+
+
+//		for(int i=0; i<3; i++){
+//			MessageLen = sprintf((char*)Message, "%.8f ",r5[i][0]);
+//			HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+//		}
+
+		MessageLen = sprintf((char*)Message, "\n");
+		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+//
+//		MessageLen = sprintf((char*)Message, "%d ms\n",end-start);
+//		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+//
+//		MessageLen = sprintf((char*)Message, "%d ms\n",end2-end);
+//		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+ *
+ *
+ */
+
+	for(int i = 0; i<10;i++){
+	stepRev(36);
+
+	MessageLen = sprintf((char*)Message, "%d \n",i);
+	HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+	}
+	for(int i = 10; i<11;i++){
+		stepLin(10);
+
+		MessageLen = sprintf((char*)Message, "%d \n",i);
+		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+	}
+
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
