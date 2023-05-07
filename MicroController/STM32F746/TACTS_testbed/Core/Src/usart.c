@@ -19,9 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 /* USER CODE BEGIN 0 */
 const int MAX_LENGTH = 100; // maximum length of input string
@@ -157,4 +154,3 @@ void read_uart(char* buffer) {
     }
 }
 /* USER CODE END 1 */
-

@@ -65,7 +65,7 @@
 uint8_t rxBuffer[RX_BUFFER_SIZE];
 uint16_t rxBufferIndex = 0;
 uint8_t rxData;
-uint8_t receivedFlag = 0; // 전역 플래그를 추가합니다.
+uint8_t receivedFlag = 0; // ?��?�� ?��?��그�?? 추�??��?��?��.
 
 /* UART1 rx data */
 uint8_t rx1_data;
@@ -75,6 +75,10 @@ uint8_t Message[64];
 uint8_t MessageLen;
 
 VL53L0X_RangingMeasurementData_t RangingData;
+
+
+volatile int32_t encoderCount = 0;
+
 
 /* USER CODE END PV */
 
@@ -136,9 +140,9 @@ int main(void)
 
 */
 
-  float servo_dist; // 서보 거리
-  float step_rev_angle; // 회전할 각도
-  float step_lin_dist; // 회전 후 이동 거리
+  float servo_dist; // ?���? 거리
+  float step_rev_angle; // ?��?��?�� 각도
+  float step_lin_dist; // ?��?�� ?�� ?��?�� 거리
 
 
 
@@ -292,31 +296,33 @@ int main(void)
  *
  */
 
-	  if (receivedFlag) // 전역 플래그를 확인합니다.
+	  if (receivedFlag)
 	  {
-	    if (strncmp((char *)rxBuffer, "rev", 4) == 0) // 수신된 문자열이 "auto"로 시작하는지 확인합니다.
+	    if (strncmp((char *)rxBuffer, "rev", 4) == 0)
 	    {
 	      float servo_dist, step_rev_angle, step_lin_dist;
 
-	      // 문자열에서 3개의 실수 값을 추출합니다.
 	      sscanf((char *)rxBuffer + 5, "%f,%f,%f", &servo_dist, &step_rev_angle, &step_lin_dist);
 
-	      // 함수를 실행합니다.
 	      stepRev(step_rev_angle);
 	      stepLin(step_lin_dist);
 	      servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
 
-	      // "good"을 출력합니다.
 	      uint8_t goodMsg[] = "good";
 	      HAL_UART_Transmit(&huart1, goodMsg, strlen((char *)goodMsg), 1000);
 
-	      // 줄 바꿈 문자를 추가하여 다음 출력이 새 줄에서 시작되게 합니다.
 	      uint8_t newline[2] = "\r\n";
 	      HAL_UART_Transmit(&huart1, newline, 2, 10);
 	    }
-
-	    receivedFlag = 0; // 전역 플래그를 재설정합니다.
+	    receivedFlag = 0;
 	  }
+
+	  char msg[20];
+	  float encoderAngle = encoderCount*360.0/4096.0;
+	  sprintf(msg, "Encoder value: %f\r\n", encoderAngle);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 1000);
+
+	  HAL_Delay(10); // 1초에 한 번씩 출력합니다.
 
 //	stepRev(step_rev_angle);
 //	stepLin(step_lin_dist);
@@ -330,9 +336,6 @@ int main(void)
 //		MessageLen = sprintf((char*)Message, "%d \n",dist);
 //		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
 //	}
-
-
-
 
 
     /* USER CODE END WHILE */
@@ -419,11 +422,39 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
       rxBuffer[rxBufferIndex] = '\0';
       rxBufferIndex = 0;
-      receivedFlag = 1; // 문자열이 수신되었음을 알리는 플래그를 설정합니다.
+      receivedFlag = 1; // 문자?��?�� ?��?��?��?��?��?�� ?��리는 ?��?��그�?? ?��?��?��?��?��.
     }
     HAL_UART_Receive_IT(&huart1, &rxData, 1);
   }
 }
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == GPIO_PIN_8) // A상에 대한 인터럽트
+  {
+    if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15)) // B상 값을 확인
+    {
+      encoderCount++;
+    }
+    else
+    {
+      encoderCount--;
+    }
+  }
+  else if (GPIO_Pin == GPIO_PIN_15) // B상에 대한 인터럽트
+  {
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)) // A상 값을 확인
+    {
+      encoderCount--;
+    }
+    else
+    {
+      encoderCount++;
+    }
+  }
+}
+
+
 
 
 

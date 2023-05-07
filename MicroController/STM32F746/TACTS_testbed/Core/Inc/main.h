@@ -62,12 +62,6 @@ void Error_Handler(void);
 #define RX_BUFFER_SIZE 128
 /* USER CODE END Private defines */
 
-// USER CODE BEGIN Private variables
-extern uint8_t rxBuffer[RX_BUFFER_SIZE];
-extern uint16_t rxBufferIndex;
-extern uint8_t rxData;
-// USER CODE END Private variables
-
 #ifdef __cplusplus
 }
 #endif
