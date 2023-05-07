@@ -19,8 +19,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* USER CODE BEGIN 0 */
+const int MAX_LENGTH = 100; // maximum length of input string
 
 /* USER CODE END 0 */
 
@@ -139,4 +143,18 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
 /* USER CODE BEGIN 1 */
 
+void read_uart(char* buffer) {
+    int i = 0;
+    while (i < MAX_LENGTH - 1) {
+        if (HAL_UART_Receive(&huart1, (uint8_t*) &buffer[i], 1, HAL_MAX_DELAY) == HAL_OK) {
+            if (buffer[i] == '\n' || buffer[i] == '\r') {
+                buffer[i] = '\0'; // null-terminate the string
+                break;
+            }
+            HAL_UART_Transmit(&huart1, (uint8_t*) &buffer[i], 1, HAL_MAX_DELAY); // transmit the received character through UART
+            i++;
+        }
+    }
+}
 /* USER CODE END 1 */
+

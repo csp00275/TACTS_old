@@ -27,10 +27,10 @@
 /* USER CODE BEGIN Includes */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "vl53l0x_api.h"
 #include "motor.h"
-
-
+#include <string.h>
 
 
 /* USER CODE END Includes */
@@ -55,18 +55,17 @@
 /* USER CODE BEGIN PM */
 
 
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 
-
-
-
-
-
-
+uint8_t rxBuffer[RX_BUFFER_SIZE];
+uint16_t rxBufferIndex = 0;
+uint8_t rxData;
+uint8_t receivedFlag = 0; // 전역 플래그를 추가합니다.
 
 /* UART1 rx data */
 uint8_t rx1_data;
@@ -76,15 +75,6 @@ uint8_t Message[64];
 uint8_t MessageLen;
 
 VL53L0X_RangingMeasurementData_t RangingData;
-
-
-
-
-
-
-
-
-
 
 /* USER CODE END PV */
 
@@ -109,10 +99,6 @@ int __write(int file, char* P, int len);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
-
-
-
 
   /* USER CODE END 1 */
 
@@ -150,6 +136,12 @@ int main(void)
 
 */
 
+  float servo_dist; // 서보 거리
+  float step_rev_angle; // 회전할 각도
+  float step_lin_dist; // 회전 후 이동 거리
+
+
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -172,15 +164,10 @@ int main(void)
 
 
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
-
-
-
-
-
+  HAL_UART_Receive_IT(&huart1, &rxData, 1);
 
   /* UART interrupt initialization */
   MessageLen = sprintf((char*)Message, "JH VL53L0X test\n\r");
-
   HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
 
 /*
@@ -305,30 +292,44 @@ int main(void)
  *
  */
 
-	for(int i = 0; i<10;i++){
-	stepRev(36);
+	  if (receivedFlag) // 전역 플래그를 확인합니다.
+	  {
+	    if (strncmp((char *)rxBuffer, "rev", 4) == 0) // 수신된 문자열이 "auto"로 시작하는지 확인합니다.
+	    {
+	      float servo_dist, step_rev_angle, step_lin_dist;
 
-	MessageLen = sprintf((char*)Message, "%d \n",i);
-	HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
-	}
-	for(int i = 10; i<11;i++){
-		stepLin(10);
+	      // 문자열에서 3개의 실수 값을 추출합니다.
+	      sscanf((char *)rxBuffer + 5, "%f,%f,%f", &servo_dist, &step_rev_angle, &step_lin_dist);
 
-		MessageLen = sprintf((char*)Message, "%d \n",i);
-		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
-		stepLin(-10);
-	}
+	      // 함수를 실행합니다.
+	      stepRev(step_rev_angle);
+	      stepLin(step_lin_dist);
+	      servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
 
+	      // "good"을 출력합니다.
+	      uint8_t goodMsg[] = "good";
+	      HAL_UART_Transmit(&huart1, goodMsg, strlen((char *)goodMsg), 1000);
 
+	      // 줄 바꿈 문자를 추가하여 다음 출력이 새 줄에서 시작되게 합니다.
+	      uint8_t newline[2] = "\r\n";
+	      HAL_UART_Transmit(&huart1, newline, 2, 10);
+	    }
 
+	    receivedFlag = 0; // 전역 플래그를 재설정합니다.
+	  }
 
-	for(int dist = 0; dist<=16; dist++){
-        servo_angle(&htim2, TIM_CHANNEL_1, dist);
-        HAL_Delay(3000);
-
-		MessageLen = sprintf((char*)Message, "%d \n",dist);
-		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
-	}
+//	stepRev(step_rev_angle);
+//	stepLin(step_lin_dist);
+//	stepLin(-step_lin_dist);
+//	servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
+//	HAL_Delay(3000);
+//	for(int dist = 0; dist<=16; dist++){
+//        servo_angle(&htim2, TIM_CHANNEL_1, dist);
+//        HAL_Delay(3000);
+//
+//		MessageLen = sprintf((char*)Message, "%d \n",dist);
+//		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+//	}
 
 
 
@@ -405,6 +406,26 @@ static void MX_NVIC_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1)
+  {
+    if (rxData != '\n' && rxBufferIndex < RX_BUFFER_SIZE - 1)
+    {
+      rxBuffer[rxBufferIndex++] = rxData;
+    }
+    else
+    {
+      rxBuffer[rxBufferIndex] = '\0';
+      rxBufferIndex = 0;
+      receivedFlag = 1; // 문자열이 수신되었음을 알리는 플래그를 설정합니다.
+    }
+    HAL_UART_Receive_IT(&huart1, &rxData, 1);
+  }
+}
+
+
 
 /* USER CODE END 4 */
 

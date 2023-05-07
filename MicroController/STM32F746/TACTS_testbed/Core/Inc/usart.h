@@ -35,6 +35,8 @@ extern "C" {
 extern UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN Private defines */
+void read_uart(char* buffer);
+
 
 /* USER CODE END Private defines */
 
