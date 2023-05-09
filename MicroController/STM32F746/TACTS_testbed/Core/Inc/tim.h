@@ -37,6 +37,7 @@ extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim7;
 
 /* USER CODE BEGIN Private defines */
+void TIM7_IRQHandler(void);
 
 /* USER CODE END Private defines */
 

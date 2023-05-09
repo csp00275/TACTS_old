@@ -31,6 +31,10 @@
 #include "vl53l0x_api.h"
 #include "motor.h"
 #include <string.h>
+#include "core_cm7.h"
+#include "stm32f7xx.h"
+
+
 
 
 /* USER CODE END Includes */
@@ -38,6 +42,11 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+// HX711 pins
+#define HX711_SCK_GPIO_Port GPIOI // D13
+#define HX711_SCK_Pin GPIO_PIN_1  // CLK connected to D13 (PI1)
+#define HX711_DT_GPIO_Port GPIOB  // D12
+#define HX711_DT_Pin GPIO_PIN_14  // DT connected to D12 (PB14)
 
 /* USER CODE END PTD */
 
@@ -78,6 +87,9 @@ VL53L0X_RangingMeasurementData_t RangingData;
 
 
 volatile int32_t encoderCount = 0;
+uint32_t count = 0;
+uint32_t data = 0;
+volatile uint32_t ms_tick_count = 0;
 
 
 /* USER CODE END PV */
@@ -93,6 +105,15 @@ int __write(int file, char* P, int len);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+int32_t Read_HX711(void);
+void UART_SendWeight(float weight);
+void HX711_Init(void);
+void DelayMicroseconds(uint32_t microseconds);
+void DelayMilliseconds(uint32_t milliseconds);
+void DWT_Init(void);
+void DWT_Delay(uint32_t us);
+void hx711_delay_us(void);
 
 /* USER CODE END 0 */
 
@@ -129,20 +150,24 @@ int main(void)
 	uint16_t distance[NUM_SENSOR] = {0,};
 	float filtered_distance[NUM_SENSOR] = {0,};
 
-
-
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 	//uint8_t tca_ch[8] = {0b00000001, 0b00000010, 0b00000100, 0b00001000, 0b00010000, 0b00100000, 0b01000000, 0b10000000};
 	uint8_t tca_ch_reset = 0x00;
 	//uint8_t tca_ch_reset = 0b00000000;
     uint8_t tca_addr[] = {0x70,0x71,0x72};
 
-
 */
 
-  float servo_dist; // ?���? 거리
-  float step_rev_angle; // ?��?��?�� 각도
-  float step_lin_dist; // ?��?�� ?�� ?��?�� 거리
+
+
+  // Variables to store load cell data
+  int32_t rawData;
+  float weight;
+
+
+  float servo_dist;
+  float step_rev_angle;
+  float step_lin_dist;
 
 
 
@@ -169,6 +194,9 @@ int main(void)
 
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
   HAL_UART_Receive_IT(&huart1, &rxData, 1);
+
+  // Initialize the HX711
+  HX711_Init();
 
   /* UART interrupt initialization */
   MessageLen = sprintf((char*)Message, "JH VL53L0X test\n\r");
@@ -296,33 +324,81 @@ int main(void)
  *
  */
 
-	  if (receivedFlag)
-	  {
-	    if (strncmp((char *)rxBuffer, "rev", 4) == 0)
-	    {
-	      float servo_dist, step_rev_angle, step_lin_dist;
+//	  if (receivedFlag)
+//	  {
+//	    if (strncmp((char *)rxBuffer, "rev", 4) == 0)
+//	    {
+//	      float servo_dist, step_rev_angle, step_lin_dist;
+//
+//	      sscanf((char *)rxBuffer + 5, "%f,%f,%f", &servo_dist, &step_rev_angle, &step_lin_dist);
+//
+//	      stepRev(step_rev_angle);
+//	      stepLin(step_lin_dist);
+//	      servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
+//
+//	      uint8_t goodMsg[] = "good";
+//	      HAL_UART_Transmit(&huart1, goodMsg, strlen((char *)goodMsg), 1000);
+//
+//	      uint8_t newline[2] = "\r\n";
+//	      HAL_UART_Transmit(&huart1, newline, 2, 10);
+//	    }
+//	    receivedFlag = 0;
+//	  }
 
-	      sscanf((char *)rxBuffer + 5, "%f,%f,%f", &servo_dist, &step_rev_angle, &step_lin_dist);
+	  uint32_t startTime, endTime, elapsedTime;
 
-	      stepRev(step_rev_angle);
-	      stepLin(step_lin_dist);
-	      servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
+	  // Get the start time before executing your function
+	  startTime = HAL_GetTick();
 
-	      uint8_t goodMsg[] = "good";
-	      HAL_UART_Transmit(&huart1, goodMsg, strlen((char *)goodMsg), 1000);
 
-	      uint8_t newline[2] = "\r\n";
-	      HAL_UART_Transmit(&huart1, newline, 2, 10);
-	    }
-	    receivedFlag = 0;
-	  }
+	    // Read the raw data from HX711
+	    rawData = Read_HX711();
 
-	  char msg[20];
-	  float encoderAngle = encoderCount*360.0/4096.0;
-	  sprintf(msg, "Encoder value: %f\r\n", encoderAngle);
-	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 1000);
+	    // Convert the raw data to weight (replace the calibration factor with your own)
+	    weight = -rawData /1600.0000000f + 10300;
 
-	  HAL_Delay(10); // 1초에 한 번씩 출력합니다.
+
+	  // Get the end time after executing your function
+	  endTime = HAL_GetTick();
+
+	  // Calculate the elapsed time
+	  elapsedTime = endTime - startTime;
+
+
+	    // Send the weight data over UART
+	    UART_SendWeight(weight);
+
+	    		MessageLen = sprintf((char*)Message, "%d ms\n",elapsedTime);
+	    		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+
+	    // Add some delay (optional)
+
+
+		// Convert the raw data to weight (replace the calibration factor with your own)
+//		weight = rawData / 10000.0f;
+
+//		Send the weight data over UART
+
+//	    HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_SET);
+//	    DelayMicroseconds(1);
+//	    HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
+//	    DelayMicroseconds(1);
+
+//		HAL_Delay(10); // 1초에 ?�� 번씩 출력?��?��?��.
+
+
+
+
+
+//	  char msg[20];
+//	  float encoderAngle = encoderCount*360.0/4096.0;
+//	  sprintf(msg, "Encoder value: %.2f\r\n", encoderAngle);
+//	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 1000);
+//
+//	  HAL_Delay(10); // 1초에 ?�� 번씩 출력?��?��?��.
+
+
+
 
 //	stepRev(step_rev_angle);
 //	stepLin(step_lin_dist);
@@ -403,8 +479,11 @@ void SystemClock_Config(void)
   */
 static void MX_NVIC_Init(void)
 {
+  /* USART1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(USART1_IRQn);
   /* TIM7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(TIM7_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(TIM7_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(TIM7_IRQn);
 }
 
@@ -430,9 +509,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if (GPIO_Pin == GPIO_PIN_8) // A상에 대한 인터럽트
+  if (GPIO_Pin == GPIO_PIN_8) // A?��?�� ???�� ?��?��?��?��
   {
-    if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15)) // B상 값을 확인
+    if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15)) // B?�� 값을 ?��?��
     {
       encoderCount++;
     }
@@ -441,9 +520,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       encoderCount--;
     }
   }
-  else if (GPIO_Pin == GPIO_PIN_15) // B상에 대한 인터럽트
+  else if (GPIO_Pin == GPIO_PIN_15) // B?��?�� ???�� ?��?��?��?��
   {
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)) // A상 값을 확인
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)) // A?�� 값을 ?��?��
     {
       encoderCount--;
     }
@@ -455,6 +534,67 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 
 
+void HX711_Init(void)
+{
+  // Set the SCK pin to low
+  HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
+}
+
+
+
+
+void UART_SendWeight(float weight)
+{
+  char buffer[32];
+  int len = sprintf(buffer, "Weight: %.4f g\r\n", weight);
+
+  // Send the buffer content via UART
+  HAL_UART_Transmit(&huart1, (uint8_t *)buffer, len, 1000);
+}
+void DelayMicroseconds(uint32_t microseconds)
+{
+  uint32_t ticks = microseconds;
+  while (ticks--)
+  {
+    __NOP();
+  }
+}
+
+
+
+
+
+int32_t Read_HX711(void)
+{
+  int32_t data = 0;
+
+  // Wait until the DT pin goes low
+  while (HAL_GPIO_ReadPin(HX711_DT_GPIO_Port, HX711_DT_Pin) == GPIO_PIN_SET);
+
+  // Read the 24-bit data
+  for (int i = 0; i < 24; i++)
+  {
+    // Generate a clock pulse on SCK pin
+    HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_SET);
+    DelayMicroseconds(1);
+    data = (data << 1);
+    if (HAL_GPIO_ReadPin(HX711_DT_GPIO_Port, HX711_DT_Pin) == GPIO_PIN_SET)
+    {
+      data++;
+    }
+    HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
+    DelayMicroseconds(1);
+  }
+
+  // Generate an additional 25th pulse to set the HX711 back to idle mode
+  HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_SET);
+  DelayMicroseconds(1);
+  HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
+  DelayMicroseconds(1);
+
+  // Return the 24-bit data
+  return data;
+}
 
 
 

@@ -31,7 +31,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define HX711_SCK_GPIO_Port GPIOI // D13
+#define HX711_SCK_Pin GPIO_PIN_1  // CLK connected to D13 (PI1)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -41,6 +42,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+extern volatile uint8_t tick_flag;
 
 /* USER CODE END PV */
 
