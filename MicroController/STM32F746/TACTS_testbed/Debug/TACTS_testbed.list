@@ -2427,6 +2427,7 @@ int32_t Read_HX711(void)
  80016f4:	2001      	movs	r0, #1
  80016f6:	f7ff ffa7 	bl	8001648 <DelayMicroseconds>
 
+
   // Return the 24-bit data
   return data;
  80016fa:	687b      	ldr	r3, [r7, #4]

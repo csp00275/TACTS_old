@@ -592,6 +592,7 @@ int32_t Read_HX711(void)
   HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
   DelayMicroseconds(1);
 
+
   // Return the 24-bit data
   return data;
 }

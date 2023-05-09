@@ -7,5 +7,5 @@
 ../Core/Src/main.c:546:6:UART_SendWeight	56	static
 ../Core/Src/main.c:554:6:DelayMicroseconds	24	static,ignoring_inline_asm
 ../Core/Src/main.c:567:9:Read_HX711	16	static
-../Core/Src/main.c:607:6:Error_Handler	4	static,ignoring_inline_asm
-../Core/Src/main.c:626:6:assert_failed	16	static
+../Core/Src/main.c:608:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:627:6:assert_failed	16	static
