@@ -30,9 +30,9 @@
 #include <stdlib.h>
 #include "vl53l0x_api.h"
 #include "motor.h"
+#include "hx711.h"
 #include <string.h>
-#include "core_cm7.h"
-#include "stm32f7xx.h"
+
 
 
 
@@ -42,11 +42,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
-// HX711 pins
-#define HX711_SCK_GPIO_Port GPIOI // D13
-#define HX711_SCK_Pin GPIO_PIN_1  // CLK connected to D13 (PI1)
-#define HX711_DT_GPIO_Port GPIOB  // D12
-#define HX711_DT_Pin GPIO_PIN_14  // DT connected to D12 (PB14)
+
 
 /* USER CODE END PTD */
 
@@ -345,33 +341,17 @@ int main(void)
 //	    receivedFlag = 0;
 //	  }
 
-	  uint32_t startTime, endTime, elapsedTime;
-
-	  // Get the start time before executing your function
-	  startTime = HAL_GetTick();
-
 
 	    // Read the raw data from HX711
 	    rawData = Read_HX711();
 
 	    // Convert the raw data to weight (replace the calibration factor with your own)
-	    weight = -rawData /1600.0000000f + 10300;
-
-
-	  // Get the end time after executing your function
-	  endTime = HAL_GetTick();
-
-	  // Calculate the elapsed time
-	  elapsedTime = endTime - startTime;
+	    float loadcell_slope = -1/1600.00f;
+	    float loadcell_bias = 10095;
 
 
 	    // Send the weight data over UART
-	    UART_SendWeight(weight);
-
-	    		MessageLen = sprintf((char*)Message, "%d ms\n",elapsedTime);
-	    		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
-
-	    // Add some delay (optional)
+	    UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias);
 
 
 		// Convert the raw data to weight (replace the calibration factor with your own)
@@ -532,71 +512,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     }
   }
 }
-
-
-void HX711_Init(void)
-{
-  // Set the SCK pin to low
-  HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
-}
-
-
-
-
-void UART_SendWeight(float weight)
-{
-  char buffer[32];
-  int len = sprintf(buffer, "Weight: %.4f g\r\n", weight);
-
-  // Send the buffer content via UART
-  HAL_UART_Transmit(&huart1, (uint8_t *)buffer, len, 1000);
-}
-void DelayMicroseconds(uint32_t microseconds)
-{
-  uint32_t ticks = microseconds;
-  while (ticks--)
-  {
-    __NOP();
-  }
-}
-
-
-
-
-
-int32_t Read_HX711(void)
-{
-  int32_t data = 0;
-
-  // Wait until the DT pin goes low
-  while (HAL_GPIO_ReadPin(HX711_DT_GPIO_Port, HX711_DT_Pin) == GPIO_PIN_SET);
-
-  // Read the 24-bit data
-  for (int i = 0; i < 24; i++)
-  {
-    // Generate a clock pulse on SCK pin
-    HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_SET);
-    DelayMicroseconds(1);
-    data = (data << 1);
-    if (HAL_GPIO_ReadPin(HX711_DT_GPIO_Port, HX711_DT_Pin) == GPIO_PIN_SET)
-    {
-      data++;
-    }
-    HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
-    DelayMicroseconds(1);
-  }
-
-  // Generate an additional 25th pulse to set the HX711 back to idle mode
-  HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_SET);
-  DelayMicroseconds(1);
-  HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
-  DelayMicroseconds(1);
-
-
-  // Return the 24-bit data
-  return data;
-}
-
 
 
 /* USER CODE END 4 */

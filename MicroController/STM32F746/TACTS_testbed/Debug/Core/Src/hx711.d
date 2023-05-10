@@ -1,5 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
+Core/Src/hx711.o: ../Core/Src/hx711.c ../Core/Inc/hx711.h \
+ ../Core/Inc/main.h ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h \
@@ -29,17 +29,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
- ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/tim.h \
- ../Core/Inc/usart.h ../Core/Inc/gpio.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_api.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_def.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_device.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_types.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_def.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h \
- ../Core/Inc/motor.h ../Core/Inc/hx711.h
+ ../Core/Inc/usart.h
+../Core/Inc/hx711.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -71,18 +62,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h:
-../Core/Inc/i2c.h:
-../Core/Inc/main.h:
-../Core/Inc/tim.h:
 ../Core/Inc/usart.h:
-../Core/Inc/gpio.h:
-D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_api.h:
-D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h:
-D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_def.h:
-D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_device.h:
-D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_types.h:
-D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform.h:
-D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_def.h:
-D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h:
-../Core/Inc/motor.h:
-../Core/Inc/hx711.h:
