@@ -18,7 +18,6 @@ LABS_v3
 
 TACTS_v1
 - rename version of LABS_v3
-=======
+=
 Tof based Air Cushion Touch Sensors
 developed by JH Park
->>>>>>> b5ca04223a3e878cd147df860b85954c766f7e20
