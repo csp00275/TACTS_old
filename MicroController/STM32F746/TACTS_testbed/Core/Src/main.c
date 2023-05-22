@@ -51,7 +51,7 @@
 
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		4
+#define NUM_SENSOR		7
 
 
 /* USER CODE END PD */
@@ -130,7 +130,6 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
-/*
 	// VL53L0X initialization stuff
 	//
 	uint32_t refSpadCount = 0;
@@ -142,7 +141,7 @@ int main(void)
 //	VL53L0X_Dev_t vl53l0x_s;
 
 	VL53L0X_DEV Dev;
-	KalmanFilter kalman_filters[NUM_SENSOR];
+	//KalmanFilter kalman_filters[NUM_SENSOR];
 	uint16_t distance[NUM_SENSOR] = {0,};
 	float filtered_distance[NUM_SENSOR] = {0,};
 
@@ -150,9 +149,11 @@ int main(void)
 	//uint8_t tca_ch[8] = {0b00000001, 0b00000010, 0b00000100, 0b00001000, 0b00010000, 0b00100000, 0b01000000, 0b10000000};
 	uint8_t tca_ch_reset = 0x00;
 	//uint8_t tca_ch_reset = 0b00000000;
-    uint8_t tca_addr[] = {0x70,0x71,0x72};
+    uint8_t tca_addr[] = {0x70};
 
-*/
+//    uint8_t tca_addr[] = {0x70,0x71,0x72};
+
+
 
 
 
@@ -198,7 +199,7 @@ int main(void)
   MessageLen = sprintf((char*)Message, "JH VL53L0X test\n\r");
   HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
 
-/*
+
 
 		for (int i = 0; i < sizeof(tca_addr); i++) {
 		    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[i] << 1, &tca_ch_reset, 1, 1000);
@@ -232,18 +233,18 @@ int main(void)
 			VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
 			VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 
-
+/*
 			// KalmanFilter initializer BEGIN //
 			float Q = 0.1f; // Process noise covariance
 			float R = 1.0f;   // Measurement noise covariance
 			KalmanFilter_Init(&kalman_filters[i], Q, R);
-			// KalmanFilter initializer END //
+			// KalmanFilter initializer END //			 */
 
 
 			MessageLen = sprintf((char*)Message, "%d complete \n\r",i);
 			HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
 	    }
-*/
+
 
 
   /* USER CODE END 2 */
@@ -258,7 +259,7 @@ int main(void)
 
 //  	  uint32_t start = HAL_GetTick();
 
-/*
+
 		   for (int i = 0; i < NUM_SENSOR; i++) {
 
 				uint8_t q = i / 8;
@@ -275,18 +276,18 @@ int main(void)
 		       if (RangingData.RangeStatus == 0) {
 		    	   distance[i] = RangingData.RangeMilliMeter;
 		       }else{
-		    	   distance[i] = 0;
+		    	   distance[i] = 555;
 		       }
 
 	           MessageLen = sprintf((char*)Message, "%d ",distance[i]);
 	           HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
 
-	           filtered_distance[i] = KalmanFilter_Update(&kalman_filters[i], (float)distance[i]);
-
-	           MessageLen = sprintf((char*)Message, "%.3f ",filtered_distance[i]);
-			   HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
-
-		       in[i][0] = distance[i];
+//	           filtered_distance[i] = KalmanFilter_Update(&kalman_filters[i], (float)distance[i]);
+//
+//	           MessageLen = sprintf((char*)Message, "%.3f ",filtered_distance[i]);
+//			   HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+//
+//		       in[i][0] = distance[i];
 
 		   }
 
@@ -316,9 +317,7 @@ int main(void)
 //
 //		MessageLen = sprintf((char*)Message, "%d ms\n",end2-end);
 //		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
- *
- *
- */
+
 
 //	  if (receivedFlag)
 //	  {
@@ -342,6 +341,8 @@ int main(void)
 //	  }
 
 
+		/*
+
 	    // Read the raw data from HX711
 	    rawData = Read_HX711();
 
@@ -352,6 +353,8 @@ int main(void)
 
 	    // Send the weight data over UART
 	    UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias);
+
+	    */
 
 
 		// Convert the raw data to weight (replace the calibration factor with your own)
