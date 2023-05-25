@@ -143,7 +143,7 @@ int main(void)
 	VL53L0X_DEV Dev;
 	//KalmanFilter kalman_filters[NUM_SENSOR];
 	uint16_t distance[NUM_SENSOR] = {0,};
-	float filtered_distance[NUM_SENSOR] = {0,};
+//	float filtered_distance[NUM_SENSOR] = {0,};
 
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 	//uint8_t tca_ch[8] = {0b00000001, 0b00000010, 0b00000100, 0b00001000, 0b00010000, 0b00100000, 0b01000000, 0b10000000};
@@ -341,8 +341,8 @@ int main(void)
 //	  }
 
 
-		/*
 
+/*
 	    // Read the raw data from HX711
 	    rawData = Read_HX711();
 
@@ -354,32 +354,14 @@ int main(void)
 	    // Send the weight data over UART
 	    UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias);
 
-	    */
 
 
-		// Convert the raw data to weight (replace the calibration factor with your own)
-//		weight = rawData / 10000.0f;
+	  char msg[20];
+	  float encoderAngle = encoderCount*360.0/4096.0;
+	  sprintf(msg, "Encoder value: %.2f\r\n", encoderAngle);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 1000);
 
-//		Send the weight data over UART
-
-//	    HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_SET);
-//	    DelayMicroseconds(1);
-//	    HAL_GPIO_WritePin(HX711_SCK_GPIO_Port, HX711_SCK_Pin, GPIO_PIN_RESET);
-//	    DelayMicroseconds(1);
-
-//		HAL_Delay(10); // 1초에 ?�� 번씩 출력?��?��?��.
-
-
-
-
-
-//	  char msg[20];
-//	  float encoderAngle = encoderCount*360.0/4096.0;
-//	  sprintf(msg, "Encoder value: %.2f\r\n", encoderAngle);
-//	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 1000);
-//
-//	  HAL_Delay(10); // 1초에 ?�� 번씩 출력?��?��?��.
-
+*/
 
 
 
