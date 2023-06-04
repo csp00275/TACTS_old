@@ -1,5 +1,5 @@
 ../Core/Src/hx711.c:16:6:HX711_Init	8	static
 ../Core/Src/hx711.c:22:9:Read_HX711	16	static
-../Core/Src/hx711.c:55:6:UART_SendWeight_g	64	static
-../Core/Src/hx711.c:65:6:UART_SendWeight_N	64	static
-../Core/Src/hx711.c:76:6:DelayMicroseconds	24	static,ignoring_inline_asm
+../Core/Src/hx711.c:55:6:UART_SendWeight_g	72	static
+../Core/Src/hx711.c:69:6:UART_SendWeight_N	64	static
+../Core/Src/hx711.c:80:6:DelayMicroseconds	24	static,ignoring_inline_asm

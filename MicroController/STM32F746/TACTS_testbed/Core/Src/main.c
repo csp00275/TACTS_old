@@ -257,9 +257,30 @@ int main(void)
   while (1)
   {
 
-//  	  uint32_t start = HAL_GetTick();
+
+	  if (receivedFlag)
+	  {
+	    if (strncmp((char *)rxBuffer, "rev", 4) == 0)
+	    {
+	      float servo_dist, step_rev_angle, step_lin_dist;
+
+	      sscanf((char *)rxBuffer + 5, "%f,%f,%f", &servo_dist, &step_rev_angle, &step_lin_dist);
+
+	      stepRev(step_rev_angle);
+	      stepLin(step_lin_dist);
+	      servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
+
+	      uint8_t goodMsg[] = "good";
+	      HAL_UART_Transmit(&huart1, goodMsg, strlen((char *)goodMsg), 1000);
+
+	      uint8_t newline[2] = "\r\n";
+	      HAL_UART_Transmit(&huart1, newline, 2, 10);
+	    }
+	    receivedFlag = 0;
+	  }
 
 
+#if 0
 		   for (int i = 0; i < NUM_SENSOR; i++) {
 
 				uint8_t q = i / 8;
@@ -276,7 +297,7 @@ int main(void)
 		       if (RangingData.RangeStatus == 0) {
 		    	   distance[i] = RangingData.RangeMilliMeter;
 		       }else{
-		    	   distance[i] = 555;
+		    	   distance[i] = 0;
 		       }
 
 	           MessageLen = sprintf((char*)Message, "%d ",distance[i]);
@@ -291,64 +312,30 @@ int main(void)
 
 		   }
 
-//			uint32_t end = HAL_GetTick();
-//
-//
-//			mat_mul_relu_first(w1, in, r1, b1);
-//			mat_mul_relu_second(w2, r1, r2, b2);
-//			mat_mul_relu_third(w3, r2, r3, b3);
-//			mat_mul_relu_fourth(w4, r3, r4, b4);
-//			mat_mul_output_fifth(w5, r4, r5, b5);
-//
-//			uint32_t end2 = HAL_GetTick();
+#if 0
+// Machine learning calculation
+		mat_mul_relu_first(w1, in, r1, b1);
+		mat_mul_relu_second(w2, r1, r2, b2);
+		mat_mul_relu_third(w3, r2, r3, b3);
+		mat_mul_relu_fourth(w4, r3, r4, b4);
+		mat_mul_output_fifth(w5, r4, r5, b5);
 
-
-
-//		for(int i=0; i<3; i++){
-//			MessageLen = sprintf((char*)Message, "%.8f ",r5[i][0]);
-//			HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
-//		}
-
-		MessageLen = sprintf((char*)Message, "\n");
+// Show 3 result (sin, cos, z)
+		for(int i=0; i<3; i++){
+		MessageLen = sprintf((char*)Message, "%.8f ",r5[i][0]);
 		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
-//
-//		MessageLen = sprintf((char*)Message, "%d ms\n",end-start);
-//		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
-//
-//		MessageLen = sprintf((char*)Message, "%d ms\n",end2-end);
-//		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+		}
 
-
-//	  if (receivedFlag)
-//	  {
-//	    if (strncmp((char *)rxBuffer, "rev", 4) == 0)
-//	    {
-//	      float servo_dist, step_rev_angle, step_lin_dist;
-//
-//	      sscanf((char *)rxBuffer + 5, "%f,%f,%f", &servo_dist, &step_rev_angle, &step_lin_dist);
-//
-//	      stepRev(step_rev_angle);
-//	      stepLin(step_lin_dist);
-//	      servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
-//
-//	      uint8_t goodMsg[] = "good";
-//	      HAL_UART_Transmit(&huart1, goodMsg, strlen((char *)goodMsg), 1000);
-//
-//	      uint8_t newline[2] = "\r\n";
-//	      HAL_UART_Transmit(&huart1, newline, 2, 10);
-//	    }
-//	    receivedFlag = 0;
-//	  }
+#endif
 
 
 
-/*
 	    // Read the raw data from HX711
 	    rawData = Read_HX711();
 
 	    // Convert the raw data to weight (replace the calibration factor with your own)
 	    float loadcell_slope = -1/1600.00f;
-	    float loadcell_bias = 10095;
+	    float loadcell_bias = 10002;
 
 
 	    // Send the weight data over UART
@@ -358,10 +345,16 @@ int main(void)
 
 	  char msg[20];
 	  float encoderAngle = encoderCount*360.0/4096.0;
-	  sprintf(msg, "Encoder value: %.2f\r\n", encoderAngle);
+	  sprintf(msg, " %.2f", encoderAngle);
 	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 1000);
 
-*/
+
+		MessageLen = sprintf((char*)Message, "\n");
+		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+
+#endif
+
+
 
 
 

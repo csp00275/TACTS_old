@@ -56,10 +56,14 @@ void UART_SendWeight_g(float rawData,float loadcell_slope,float loadcell_bias)
 {
   float weight = loadcell_slope * rawData  + loadcell_bias;
   char buffer[32];
-  int len = sprintf(buffer, "Weight: %.4f g", weight);
+  int len = sprintf(buffer, "Weight(g):");
+  int data = sprintf(buffer, "%.4f", weight);
 
   // Send the buffer content via UART
+#if 0
   HAL_UART_Transmit(&huart1, (uint8_t *)buffer, len, 1000);
+#endif
+  HAL_UART_Transmit(&huart1, (uint8_t *)buffer, data, 1000);
 }
 
 void UART_SendWeight_N(float rawData,float loadcell_slope,float loadcell_bias)
