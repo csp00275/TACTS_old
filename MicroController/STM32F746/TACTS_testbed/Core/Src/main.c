@@ -163,7 +163,7 @@ int main(void)
 //    uint8_t tca_addr[] = {0x70,0x71,0x72};
 
 
-
+    HAL_UART_Receive_IT(&huart1,&rxData,1);
 
 
   // Variables to store load cell data
@@ -268,26 +268,29 @@ int main(void)
   {
 
 
+	  if(receivedFlag)
+	  {
+		  if(strncmp((char*)rxBuffer, "rev",4) == 0){
+			  float servo_dist, step_rev_angle, step_lin_dist;
 
-	  while (1) {
-	      status = HAL_UART_Receive(&huart1, &received_data, 1, 100); // 한 문자씩 수신
 
-	      if (status == HAL_OK) { // 데이터 수신 확인
-	          if (received_data == '\n') { // 줄바꿈 문자가 수신되면 입력 종료
-	              buffer[string_index] = '\0'; // 문자열 끝을 표시하기 위한 null 문자 삽입
+			  sscanf((char*)rxBuffer + 5, "%f,%f,%f",servo_dist, &step_rev_angle, &step_lin_dist);
 
-	              if (strcmp((char*)buffer, "rev") == 0) { // 수신된 문자열이 "rev"인지 확인
-	                  uint8_t response[] = "Put servo distance (cm) & the angle(deg) & distance(mm)\n//////////////////////////";
-	                  HAL_UART_Transmit(&huart1, response, sizeof(response), 100); // 응답 전송
-	              }
+			  stepRev(step_rev_angle);
+			  stepLin(step_lin_dist);
+			  servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
 
-	              string_index = 0; // 문자열 인덱스 초기화
-	          } else { // 줄바꿈 문자가 아니면 버퍼에 문자 추가
-	              buffer[string_index] = received_data;
-	              string_index++;
-	          }
-	      }
+			  uint8_t goodMSG[] = "good";
+			  HAL_UART_Transmit(&huart1, goodMSG, strlen((char*)goodMSG),1000);
+
+			  uint8_t newline[2] = "\r\n";
+			  HAL_UART_Transmit(&huart1,newline,2,10);
+		  }
+		  receivedFlag = 0;
 	  }
+
+
+
 
 
 #if 0

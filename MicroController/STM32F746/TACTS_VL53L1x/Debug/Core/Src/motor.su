@@ -1,0 +1,3 @@
+../Core/Src/motor.c:14:6:stepRev	32	static
+../Core/Src/motor.c:44:6:stepLin	40	static
+../Core/Src/motor.c:78:6:servo_angle	32	static
