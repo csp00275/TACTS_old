@@ -72,6 +72,10 @@ uint16_t rxBufferIndex = 0;
 uint8_t rxData;
 uint8_t receivedFlag = 0; // ?��?�� ?��?��그�?? 추�??��?��?��.
 
+char string[100]; // 버퍼 크기 설정
+HAL_StatusTypeDef status;
+
+
 /* UART1 rx data */
 uint8_t rx1_data;
 
@@ -129,6 +133,11 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
+  uint8_t buffer[100]; // 데이터를 저장할 버퍼
+  uint8_t received_data;
+  uint32_t string_index = 0;
+  HAL_StatusTypeDef status;
 
 	// VL53L0X initialization stuff
 	//
@@ -199,7 +208,7 @@ int main(void)
   MessageLen = sprintf((char*)Message, "JH VL53L0X test\n\r");
   HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
 
-
+#if 0
 
 		for (int i = 0; i < sizeof(tca_addr); i++) {
 		    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[i] << 1, &tca_ch_reset, 1, 1000);
@@ -245,6 +254,7 @@ int main(void)
 			HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
 	    }
 
+#endif
 
 
   /* USER CODE END 2 */
@@ -258,27 +268,69 @@ int main(void)
   {
 
 
-	  if (receivedFlag)
-	  {
-	    if (strncmp((char *)rxBuffer, "rev", 4) == 0)
-	    {
-	      float servo_dist, step_rev_angle, step_lin_dist;
 
-	      sscanf((char *)rxBuffer + 5, "%f,%f,%f", &servo_dist, &step_rev_angle, &step_lin_dist);
+	  while (1) {
+	      status = HAL_UART_Receive(&huart1, &received_data, 1, 100); // 한 문자씩 수신
 
-	      stepRev(step_rev_angle);
-	      stepLin(step_lin_dist);
-	      servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
+	      if (status == HAL_OK) { // 데이터 수신 확인
+	          if (received_data == '\n') { // 줄바꿈 문자가 수신되면 입력 종료
+	              buffer[string_index] = '\0'; // 문자열 끝을 표시하기 위한 null 문자 삽입
 
-	      uint8_t goodMsg[] = "good";
-	      HAL_UART_Transmit(&huart1, goodMsg, strlen((char *)goodMsg), 1000);
+	              if (strcmp((char*)buffer, "rev") == 0) { // 수신된 문자열이 "rev"인지 확인
+	                  uint8_t response[] = "Put servo distance (cm) & the angle(deg) & distance(mm)\n//////////////////////////";
+	                  HAL_UART_Transmit(&huart1, response, sizeof(response), 100); // 응답 전송
+	              }
 
-	      uint8_t newline[2] = "\r\n";
-	      HAL_UART_Transmit(&huart1, newline, 2, 10);
-	    }
-	    receivedFlag = 0;
+	              string_index = 0; // 문자열 인덱스 초기화
+	          } else { // 줄바꿈 문자가 아니면 버퍼에 문자 추가
+	              buffer[string_index] = received_data;
+	              string_index++;
+	          }
+	      }
 	  }
 
+
+#if 0
+	  if (HAL_UART_Receive(&huart1, (uint8_t*)string, sizeof(string), 100) == HAL_OK)
+	      {
+	        //////////////////////  R  E  V  //////////////////////////
+	        if (strncmp(string, "rev", 3) == 0)
+	        {
+	        	MessageLen = sprintf((char*)Message, "Put servo distance (cm) & the angle(deg) & distance(mm)\n");
+	        	HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+
+	          while (HAL_UART_Receive(&huart1, (uint8_t*)string, sizeof(string), 100) != HAL_OK);
+
+	          sscanf(string, "%f %f %d", &servo_dist, &step_rev_angle, &step_lin_dist);
+
+
+	        	MessageLen = sprintf((char*)Message, "//////////////////////////\n");
+	        	HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+	        	MessageLen = sprintf((char*)Message, "Angle(degree) : %.2f\n");
+	        	HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+	        	MessageLen = sprintf((char*)Message, "Distance(mm) : %d\n");
+	        	HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+	        	MessageLen = sprintf((char*)Message, "Servo distance(cm) : %.2f\n");
+	        	HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+	        	MessageLen = sprintf((char*)Message, "//////////////////////////\n");
+	        	HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+
+
+	        		stepRev(step_rev_angle);
+	        		stepLin(step_lin_dist);
+	        		stepLin(-step_lin_dist);
+	        		servo_angle(&htim2, TIM_CHANNEL_1, servo_dist);
+
+
+	        	MessageLen = sprintf((char*)Message, "rotation end\n");
+	        	HAL_UART_Transmit(&huart1, Message, MessageLen, 100);
+	          servo_dist = 0.0;
+	          step_rev_angle = 0.0;
+	          step_lin_dist = 0;
+	        }
+	      }
+
+#endif
 
 #if 0
 		   for (int i = 0; i < NUM_SENSOR; i++) {
@@ -347,14 +399,10 @@ int main(void)
 	  float encoderAngle = encoderCount*360.0/4096.0;
 	  sprintf(msg, " %.2f", encoderAngle);
 	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 1000);
-
-
-		MessageLen = sprintf((char*)Message, "\n");
-		HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
+	  MessageLen = sprintf((char*)Message, "\n");
+	  HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
 
 #endif
-
-
 
 
 
