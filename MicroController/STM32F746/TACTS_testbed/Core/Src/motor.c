@@ -75,11 +75,13 @@ void stepLin(int DIST) {
 
 }
 
-void servo_angle(TIM_HandleTypeDef *htim, uint32_t channel, uint16_t angle) {
-    if (angle > 180)
-        angle = 180; // 최대 각도 제한
+void servo_angle(TIM_HandleTypeDef *htim, uint32_t channel, int step) {
 
-    uint32_t pulse_width = 3 + angle; // 듀티 사이클 계산 (0도에서 180도까지)
+	// 1 step is 0.8 mm
+    if (step > 17)
+    	step = 17; // 최대 각도 제한
+
+    int pulse_width = 21-step; // 듀티 사이클 계산 (0도에서 180도까지)
     __HAL_TIM_SET_COMPARE(htim, channel, pulse_width); // 듀티 사이클 변경
 }
 
