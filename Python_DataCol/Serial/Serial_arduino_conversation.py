@@ -1,32 +1,42 @@
 import serial, time, csv
+import datetime
+
 import numpy as np
 
-tof = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-arduino = serial.Serial('COM4',115200,timeout=1)
+num = 9
+
+tof = [0]*num
+stm32f7 = serial.Serial('COM4',115200,timeout=1)
 
 print("Starting Conversation with Arduino")
 print(len(tof))
-SayingTo = input()
+SayingTo = input("Enter a message to send: ")
 
-SayingToArduino = SayingTo.encode("utf-8")
-arduino.write(SayingToArduino)
-print(SayingToArduino)
+stm32f7.write((SayingTo + '\n').encode())
+
+print(SayingTo)
 time.sleep(1)
 
 while True:
 
-    while (arduino.inWaiting()==0):
+    while (stm32f7.inWaiting()==0):
         pass
-    SdataPacket = arduino.readline()
+    SdataPacket = stm32f7.readline()
     SdataPacket = str(SdataPacket, "utf-8")
     SsplitPacket = SdataPacket.split(" ")
 
-    file_path = "C:/Users/Lab/Desktop/LYS/Coding/Python/210805_50ms_Data.csv"
+    now = datetime.datetime.now()    # 현재 날짜와 시간을 얻습니다.
+    time_string = now.strftime("%y%m%d_%H%M")     # 날짜와 시간을 원하는 형식의 문자열로 변환합니다.
+
+    # 이 문자열을 파일 경로에 포함시킵니다.
+    file_path = "C:/Users/21310/Desktop/PJH/Software/TACTS/MicroController/DataCol_Python/CollectedData/" + time_string + "_Data.csv"
+    #print(file_path)
+
     if len(SsplitPacket) >= len(tof):
         file = open(file_path, 'a',encoding = "utf-8", newline='')
         csv_writer = csv.writer(file)
         csv_writer.writerow(SsplitPacket)
-        for i in range(0,17):
+        for i in range(0,num):
             tof[i] = float(SsplitPacket[i])
             print(tof[i],end=' ')
     print("")

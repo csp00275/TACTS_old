@@ -311,9 +311,9 @@ int main(void)
 		     }
 
 
-		  if(strncmp((char*)rxBuffer, "auto",4) == 0)
+		  if(strncmp((char*)rxBuffer, "auto",7) == 0)
 		     {
-	             uint8_t autoMSG[] = "autoMode \r\n";
+	             uint8_t autoMSG[] = "autoMode\r\n";
 	             HAL_UART_Transmit(&huart1, autoMSG, strlen((char*)autoMSG),1000);
 
 		             stepRev(50); // revolution
@@ -363,8 +363,9 @@ int main(void)
 
 		      	  char msg[20];
 		      	  float encoderAngle = encoderCount*360.0/4096.0;
-		      	  sprintf(msg, " %.2f", encoderAngle);
+		      	  sprintf(msg, " %.2f ", encoderAngle);
 		      	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 1000);
+
 		      	  MessageLen = sprintf((char*)Message, "\n");
 		      	  HAL_UART_Transmit(&huart1, Message, MessageLen, 1000);
 

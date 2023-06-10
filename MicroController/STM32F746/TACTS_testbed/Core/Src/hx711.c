@@ -57,7 +57,7 @@ void UART_SendWeight_g(float rawData,float loadcell_slope,float loadcell_bias)
   float weight = loadcell_slope * rawData  + loadcell_bias;
   char buffer[32];
   int len = sprintf(buffer, "Weight(g):");
-  int data = sprintf(buffer, "%.4f", weight);
+  int data = sprintf(buffer, "%.2f", weight);
 
   // Send the buffer content via UART
 #if 0
