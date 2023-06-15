@@ -58,7 +58,7 @@ void stepLin(int DIST) {
     HAL_GPIO_WritePin(GPIOI, GPIO_PIN_3, direction == 1 ? GPIO_PIN_SET : GPIO_PIN_RESET); // DIR
     HAL_GPIO_WritePin(GPIOI, GPIO_PIN_0, GPIO_PIN_RESET);  // ENA
     uint32_t steps = PULSE * ANG / 360.0;
-    uint32_t pulse_delay_ms_ = 1; // 6rpm
+    uint32_t pulse_delay_ms_ = 3; // 6rpm
 
     for (int i = 0; i < steps; i++) {
       HAL_GPIO_WritePin(GPIOI, GPIO_PIN_2, GPIO_PIN_SET); // CLK
