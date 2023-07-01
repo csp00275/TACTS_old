@@ -3,10 +3,10 @@ import datetime
 
 import numpy as np
 
-num = 9
+num = 12
 
 tof = [0]*num
-stm32f7 = serial.Serial('COM4',115200,timeout=1)
+stm32f7 = serial.Serial('COM3',115200,timeout=100)
 
 print("Starting Conversation with Arduino")
 print(len(tof))
@@ -17,6 +17,9 @@ stm32f7.write((SayingTo + '\n').encode())
 print(SayingTo)
 time.sleep(1)
 
+now = datetime.datetime.now()  # 현재 날짜와 시간을 얻습니다.
+time_string = now.strftime("%y%m%d_%H%M")  # 날짜와 시간을 원하는 형식의 문자열로 변환합니다.
+
 while True:
 
     while (stm32f7.inWaiting()==0):
@@ -25,8 +28,7 @@ while True:
     SdataPacket = str(SdataPacket, "utf-8")
     SsplitPacket = SdataPacket.split(" ")
 
-    now = datetime.datetime.now()    # 현재 날짜와 시간을 얻습니다.
-    time_string = now.strftime("%y%m%d_%H%M")     # 날짜와 시간을 원하는 형식의 문자열로 변환합니다.
+
 
     # 이 문자열을 파일 경로에 포함시킵니다.
     file_path = "C:/Users/21310/Desktop/PJH/Software/TACTS/MicroController/DataCol_Python/CollectedData/" + time_string + "_Data.csv"

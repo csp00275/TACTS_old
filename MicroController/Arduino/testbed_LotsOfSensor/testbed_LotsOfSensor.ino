@@ -153,14 +153,12 @@ if(Serial.available())
           }
                  
           if(string=="auto")
-          {
-            
+          {            
             for(int z=0; z<10;z++)
             {  
               for(int theta=0; theta<36; theta++)
-              {            
-                
-                for(int r=0; r<10;r++)
+              {                      
+               for(int r=0; r<10;r++)
                 {
                 servo_dist = r*0.2; //absolute
                 float ANG_deltaStep=(float)1/2/1600*1000*1000*60/ANG_RPM; // micro seconds
@@ -217,7 +215,6 @@ if(Serial.available())
                 value_rev_dist = INC_Z;  // incremetal
             }
           }
-
   }
 }
 

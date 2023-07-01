@@ -177,7 +177,6 @@ int main(void)
   int32_t rawData;
   float weight;
 
-
   float servo_dist;
   float step_rev_angle;
   float step_lin_dist;
@@ -363,6 +362,60 @@ int main(void)
 		         receivedFlag = 0;
 		     }
 
+		  command = "sensor";
+		  if(strncmp((char*)rxBuffer, command,strlen(command)) == 0)
+		     {
+	        	 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "sensor test\r\n"), 100);
+
+							 ///////////////////////////////////////////////////////
+							 ////////////////////Logging Start//////////////////////
+							 ///////////////////////////////////////////////////////
+							 start_time = HAL_GetTick(); // 시작 시간 측정
+							 do{
+							  /// Read the VL53l0x data ///
+							   for (int i = 0; i < NUM_SENSOR; i++) {
+									uint8_t q = i / 8;
+									uint8_t r = i % 8;
+									for (int j = 0; j < sizeof(tca_addr); j++) {
+										uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
+										HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
+									}
+								   Dev = &vl53l0x_s[i];
+								   VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
+								   if (RangingData.RangeStatus == 0) {
+									   distance[i] = RangingData.RangeMilliMeter;
+									   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",distance[i]), 100);
+								   }else{
+									   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "NaN "), 100);
+								   }
+							   }
+							   /// End of Reading Vl53l0x data ///
+
+
+						  /// Read the raw data from HX711 ///
+						  rawData = Read_HX711();
+						  float loadcell_slope = -1/1600.00f; // Convert the raw data to weight (replace the calibration factor with your own)
+						  float loadcell_bias = 10002;
+						  UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias); // Send the weight data over UART
+						  /// End of Reading HX711 data ///
+
+						  /// Read the raw data from AMT103 ///
+						  float encoderAngle = encoderCount*360.0/4096.0;
+						  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
+						  /// End of Reading AMT103 data ///
+
+						 end_time = HAL_GetTick(); // 끝 시간 측정
+						 time_diff = end_time - start_time; // 시간 차이 계산
+
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
+
+						 }while(time_diff<5000);
+
+
+		         receivedFlag = 0;
+
+		     }
+
 		  command = "auto";
 		  if(strncmp((char*)rxBuffer, command,strlen(command)) == 0)
 		     {
@@ -377,7 +430,7 @@ int main(void)
 	        	 for( int lin = 0; lin < 16;lin ++){
 	        		 stepLin(10); // moving horizontal
 					 for(int rev = 0; rev<1; rev++){
-						 stepRev(10); // revolution
+						 //stepRev(10); // revolution
 						 for(int r = 0;r<16;r++){
 
 							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
@@ -423,7 +476,7 @@ int main(void)
 						 time_diff = end_time - start_time; // 시간 차이 계산
 
 
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",lin), 100);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",10*lin), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",rev), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d",r), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
