@@ -73,7 +73,7 @@ uint16_t rxBufferIndex = 0;
 uint8_t rxData;
 uint8_t receivedFlag = 0; // ?��?�� ?��?��그�?? 추�??��?��?��.
 
-char string[100]; // 버퍼 크기 설정
+char string[100]; // 버퍼 ?���? ?��?��
 HAL_StatusTypeDef status;
 
 uint32_t time_diff =0;
@@ -141,7 +141,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
-  uint8_t buffer[100]; // 데이터를 저장할 버퍼 m
+  uint8_t buffer[100]; // ?��?��?���? ???��?�� 버퍼 m
   uint8_t received_data;
   uint32_t string_index = 0;
   HAL_StatusTypeDef status;
@@ -370,7 +370,7 @@ int main(void)
 							 ///////////////////////////////////////////////////////
 							 ////////////////////Logging Start//////////////////////
 							 ///////////////////////////////////////////////////////
-							 start_time = HAL_GetTick(); // 시작 시간 측정
+							 start_time = HAL_GetTick(); // ?��?�� ?���? 측정
 							 do{
 							  /// Read the VL53l0x data ///
 							   for (int i = 0; i < NUM_SENSOR; i++) {
@@ -404,8 +404,8 @@ int main(void)
 						  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
 						  /// End of Reading AMT103 data ///
 
-						 end_time = HAL_GetTick(); // 끝 시간 측정
-						 time_diff = end_time - start_time; // 시간 차이 계산
+						 end_time = HAL_GetTick(); // ?�� ?���? 측정
+						 time_diff = end_time - start_time; // ?���? 차이 계산
 
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 
@@ -434,11 +434,12 @@ int main(void)
 						 for(int r = 0;r<16;r++){
 
 							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
+							 HAL_Delay(500);
 
 							 ///////////////////////////////////////////////////////
 							 ////////////////////Logging Start//////////////////////
 							 ///////////////////////////////////////////////////////
-							 start_time = HAL_GetTick(); // 시작 시간 측정
+							 start_time = HAL_GetTick(); // ?��?�� ?���? 측정
 							 do{
 							  /// Read the VL53l0x data ///
 							   for (int i = 0; i < NUM_SENSOR; i++) {
@@ -452,10 +453,10 @@ int main(void)
 								   VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 								   if (RangingData.RangeStatus == 0) {
 									   distance[i] = RangingData.RangeMilliMeter;
+									   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",distance[i]), 100);
 								   }else{
-									   distance[i] = 0;
+									   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "NaN "), 100);
 								   }
-								 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",distance[i]), 100);
 							   }
 							   /// End of Reading Vl53l0x data ///
 
@@ -472,8 +473,8 @@ int main(void)
 						  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
 						  /// End of Reading AMT103 data ///
 
-						 end_time = HAL_GetTick(); // 끝 시간 측정
-						 time_diff = end_time - start_time; // 시간 차이 계산
+						 end_time = HAL_GetTick(); // ?�� ?���? 측정
+						 time_diff = end_time - start_time; // ?���? 차이 계산
 
 
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",10*lin), 100);
@@ -481,10 +482,12 @@ int main(void)
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d",r), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 
-						 }while(time_diff<3000);
+						 }while(time_diff<3500);
 						 ///////////////////////////////////////////////////////
 						 ////////////////////Logging End////////////////////////
 						 ///////////////////////////////////////////////////////
+						 HAL_Delay(500);
+
 						 servo_angle(&htim2, TIM_CHANNEL_1, 0); // turn to origin
 						 HAL_Delay(500);
 						 }
@@ -567,9 +570,18 @@ static void MX_NVIC_Init(void)
   /* USART1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(USART1_IRQn);
+  /* I2C1_ER_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(I2C1_ER_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
+  /* I2C1_EV_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(I2C1_EV_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
   /* TIM7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(TIM7_IRQn, 1, 0);
+  HAL_NVIC_SetPriority(TIM7_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(TIM7_IRQn);
+  /* TIM2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM2_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
