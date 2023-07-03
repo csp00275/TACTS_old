@@ -431,10 +431,10 @@ int main(void)
 	        		 stepLin(10); // moving horizontal
 					 for(int rev = 0; rev<1; rev++){
 						 //stepRev(10); // revolution
-						 for(int r = 0;r<16;r++){
+						 for(int r = 0;r<8;r++){
 
 							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
-							 HAL_Delay(500);
+							 HAL_Delay(700);
 
 							 ///////////////////////////////////////////////////////
 							 ////////////////////Logging Start//////////////////////
@@ -482,7 +482,7 @@ int main(void)
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d",r), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 
-						 }while(time_diff<3500);
+						 }while(time_diff<4000);
 						 ///////////////////////////////////////////////////////
 						 ////////////////////Logging End////////////////////////
 						 ///////////////////////////////////////////////////////
