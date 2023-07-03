@@ -427,14 +427,14 @@ int main(void)
 //		             stepLin(10); // moving horizontal
 //		             stepLin(-10); //
 
-	        	 for( int lin = 0; lin < 16;lin ++){
-	        		 stepLin(10); // moving horizontal
+	        	 for( int lin = 0; lin < 80;lin ++){
+	        		 stepLin(2); // moving horizontal
 					 for(int rev = 0; rev<1; rev++){
 						 //stepRev(10); // revolution
-						 for(int r = 0;r<8;r++){
+						 for(int r = 2;r<11;r++){
 
 							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
-							 HAL_Delay(700);
+							 HAL_Delay(500);
 
 							 ///////////////////////////////////////////////////////
 							 ////////////////////Logging Start//////////////////////

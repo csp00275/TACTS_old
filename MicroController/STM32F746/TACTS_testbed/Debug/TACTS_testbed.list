@@ -3202,20 +3202,20 @@ int main(void)
 //		             stepLin(10); // moving horizontal
 //		             stepLin(-10); //
 
-	        	 for( int lin = 0; lin < 16;lin ++){
+	        	 for( int lin = 0; lin < 80;lin ++){
  8001eea:	2300      	movs	r3, #0
  8001eec:	f8c7 3be0 	str.w	r3, [r7, #3040]	; 0xbe0
  8001ef0:	e18f      	b.n	8002212 <main+0xdba>
-	        		 stepLin(10); // moving horizontal
- 8001ef2:	200a      	movs	r0, #10
+	        		 stepLin(2); // moving horizontal
+ 8001ef2:	2002      	movs	r0, #2
  8001ef4:	f000 fb56 	bl	80025a4 <stepLin>
 					 for(int rev = 0; rev<1; rev++){
  8001ef8:	2300      	movs	r3, #0
  8001efa:	f8c7 3bdc 	str.w	r3, [r7, #3036]	; 0xbdc
  8001efe:	e17e      	b.n	80021fe <main+0xda6>
 						 //stepRev(10); // revolution
-						 for(int r = 0;r<8;r++){
- 8001f00:	2300      	movs	r3, #0
+						 for(int r = 2;r<11;r++){
+ 8001f00:	2302      	movs	r3, #2
  8001f02:	f8c7 3bd8 	str.w	r3, [r7, #3032]	; 0xbd8
  8001f06:	e170      	b.n	80021ea <main+0xd92>
 
@@ -3224,8 +3224,8 @@ int main(void)
  8001f0c:	2100      	movs	r1, #0
  8001f0e:	4857      	ldr	r0, [pc, #348]	; (800206c <main+0xc14>)
  8001f10:	f000 fbe2 	bl	80026d8 <servo_angle>
-							 HAL_Delay(700);
- 8001f14:	f44f 702f 	mov.w	r0, #700	; 0x2bc
+							 HAL_Delay(500);
+ 8001f14:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
  8001f18:	f000 ffd4 	bl	8002ec4 <HAL_Delay>
 
 							 ///////////////////////////////////////////////////////
@@ -3526,12 +3526,12 @@ int main(void)
 						 HAL_Delay(500);
  80021d8:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
  80021dc:	f000 fe72 	bl	8002ec4 <HAL_Delay>
-						 for(int r = 0;r<8;r++){
+						 for(int r = 2;r<11;r++){
  80021e0:	f8d7 3bd8 	ldr.w	r3, [r7, #3032]	; 0xbd8
  80021e4:	3301      	adds	r3, #1
  80021e6:	f8c7 3bd8 	str.w	r3, [r7, #3032]	; 0xbd8
  80021ea:	f8d7 3bd8 	ldr.w	r3, [r7, #3032]	; 0xbd8
- 80021ee:	2b07      	cmp	r3, #7
+ 80021ee:	2b0a      	cmp	r3, #10
  80021f0:	f77f ae8a 	ble.w	8001f08 <main+0xab0>
 					 for(int rev = 0; rev<1; rev++){
  80021f4:	f8d7 3bdc 	ldr.w	r3, [r7, #3036]	; 0xbdc
@@ -3540,12 +3540,12 @@ int main(void)
  80021fe:	f8d7 3bdc 	ldr.w	r3, [r7, #3036]	; 0xbdc
  8002202:	2b00      	cmp	r3, #0
  8002204:	f77f ae7c 	ble.w	8001f00 <main+0xaa8>
-	        	 for( int lin = 0; lin < 16;lin ++){
+	        	 for( int lin = 0; lin < 80;lin ++){
  8002208:	f8d7 3be0 	ldr.w	r3, [r7, #3040]	; 0xbe0
  800220c:	3301      	adds	r3, #1
  800220e:	f8c7 3be0 	str.w	r3, [r7, #3040]	; 0xbe0
  8002212:	f8d7 3be0 	ldr.w	r3, [r7, #3040]	; 0xbe0
- 8002216:	2b0f      	cmp	r3, #15
+ 8002216:	2b4f      	cmp	r3, #79	; 0x4f
  8002218:	f77f ae6b 	ble.w	8001ef2 <main+0xa9a>
 						 }
 					 }
