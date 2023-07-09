@@ -52,6 +52,7 @@
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
 #define NUM_SENSOR		7
+#define WINDOW_SIZE 5
 
 
 /* USER CODE END PD */
@@ -158,7 +159,7 @@ int main(void)
 
 	VL53L0X_DEV Dev;
 	//KalmanFilter kalman_filters[NUM_SENSOR];
-	uint16_t distance[NUM_SENSOR] = {0,};
+//	uint16_t distance[NUM_SENSOR] = {0,};
 //	float filtered_distance[NUM_SENSOR] = {0,};
 
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
@@ -363,58 +364,71 @@ int main(void)
 		     }
 
 		  command = "sensor";
-		  if(strncmp((char*)rxBuffer, command,strlen(command)) == 0)
-		     {
-	        	 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "sensor test\r\n"), 100);
+		  if (strncmp((char*)rxBuffer, command,strlen(command)) == 0) {
+		      HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "sensor test\r\n"), 100);
 
-							 ///////////////////////////////////////////////////////
-							 ////////////////////Logging Start//////////////////////
-							 ///////////////////////////////////////////////////////
-							 start_time = HAL_GetTick(); // ?��?�� ?���? 측정
-							 do{
-							  /// Read the VL53l0x data ///
-							   for (int i = 0; i < NUM_SENSOR; i++) {
-									uint8_t q = i / 8;
-									uint8_t r = i % 8;
-									for (int j = 0; j < sizeof(tca_addr); j++) {
-										uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
-										HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
-									}
-								   Dev = &vl53l0x_s[i];
-								   VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
-								   if (RangingData.RangeStatus == 0) {
-									   distance[i] = RangingData.RangeMilliMeter;
-									   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",distance[i]), 100);
-								   }else{
-									   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "NaN "), 100);
-								   }
-							   }
-							   /// End of Reading Vl53l0x data ///
+		      ///////////////////////////////////////////////////////
+		      ////////////////////Logging Start//////////////////////
+		      ///////////////////////////////////////////////////////
+		      start_time = HAL_GetTick(); // 현재 시간 측정
 
+		      int distance[NUM_SENSOR][WINDOW_SIZE] = {{0}};
+		      int filtered_distance[NUM_SENSOR] = {0};
+		      int current_index[NUM_SENSOR] = {0};
 
-						  /// Read the raw data from HX711 ///
-						  rawData = Read_HX711();
-						  float loadcell_slope = -1/1600.00f; // Convert the raw data to weight (replace the calibration factor with your own)
-						  float loadcell_bias = 10002;
-						  UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias); // Send the weight data over UART
-						  /// End of Reading HX711 data ///
+		      do {
+		          /// Read the VL53l0x data ///
+		          for (int i = 0; i < NUM_SENSOR; i++) {
+		              uint8_t q = i / 8;
+		              uint8_t r = i % 8;
+		              for (int j = 0; j < sizeof(tca_addr); j++) {
+		                  uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
+		                  HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
+		              }
+		              Dev = &vl53l0x_s[i];
+		              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
-						  /// Read the raw data from AMT103 ///
-						  float encoderAngle = encoderCount*360.0/4096.0;
-						  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
-						  /// End of Reading AMT103 data ///
+		              if (RangingData.RangeStatus == 0) {
+		                  distance[i][current_index[i]] = RangingData.RangeMilliMeter;
+		                  current_index[i] = (current_index[i] + 1) % WINDOW_SIZE;
+		              }
 
-						 end_time = HAL_GetTick(); // ?�� ?���? 측정
-						 time_diff = end_time - start_time; // ?���? 차이 계산
+		              // Apply the filter every time new data comes in
+		              int temp[WINDOW_SIZE];
+		              for (int j = 0; j < WINDOW_SIZE; j++) {
+		                  temp[j] = distance[i][j];
+		              }
 
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
+		              // Insertion sort
+		              for (int j = 1; j < WINDOW_SIZE; j++) {
+		                  int key = temp[j];
+		                  int k = j - 1;
 
-						 }while(time_diff<5000);
+		                  while (k >= 0 && temp[k] > key) {
+		                      temp[k + 1] = temp[k];
+		                      k = k - 1;
+		                  }
+		                  temp[k + 1] = key;
+		              }
 
+		              filtered_distance[i] = temp[WINDOW_SIZE / 2];
 
-		         receivedFlag = 0;
+		              // Print the filtered data to the serial port
+		              HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ", filtered_distance[i]), 100);
+		          }
+		          /// End of Reading and Filtering Vl53l0x data ///
 
-		     }
+		          // Rest of the code...
+
+		          end_time = HAL_GetTick(); // 종료 시간 측정
+		          time_diff = end_time - start_time; // 시간 차이 계산
+
+		          HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
+
+		      } while (time_diff < 5000);
+
+		      receivedFlag = 0;
+		  }
 
 		  command = "auto";
 		  if(strncmp((char*)rxBuffer, command,strlen(command)) == 0)
@@ -440,25 +454,52 @@ int main(void)
 							 ////////////////////Logging Start//////////////////////
 							 ///////////////////////////////////////////////////////
 							 start_time = HAL_GetTick(); // ?��?�� ?���? 측정
+
+							int distance[NUM_SENSOR][WINDOW_SIZE] = {{0}};
+							int filtered_distance[NUM_SENSOR] = {0};
+							int current_index[NUM_SENSOR] = {0};
+
 							 do{
-							  /// Read the VL53l0x data ///
-							   for (int i = 0; i < NUM_SENSOR; i++) {
-									uint8_t q = i / 8;
-									uint8_t r = i % 8;
-									for (int j = 0; j < sizeof(tca_addr); j++) {
-										uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
-										HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
-									}
-								   Dev = &vl53l0x_s[i];
-								   VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
-								   if (RangingData.RangeStatus == 0) {
-									   distance[i] = RangingData.RangeMilliMeter;
-									   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",distance[i]), 100);
-								   }else{
-									   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "NaN "), 100);
-								   }
-							   }
-							   /// End of Reading Vl53l0x data ///
+							        for (int i = 0; i < NUM_SENSOR; i++) {
+									  uint8_t q = i / 8;
+									  uint8_t r = i % 8;
+									  for (int j = 0; j < sizeof(tca_addr); j++) {
+										  uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
+										  HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
+									  }
+									  Dev = &vl53l0x_s[i];
+									  VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
+
+									  if (RangingData.RangeStatus == 0) {
+										  distance[i][current_index[i]] = RangingData.RangeMilliMeter;
+										  current_index[i] = (current_index[i] + 1) % WINDOW_SIZE;
+									  }
+
+									  // Apply the filter every time new data comes in
+									  int temp[WINDOW_SIZE];
+									  for (int j = 0; j < WINDOW_SIZE; j++) {
+										  temp[j] = distance[i][j];
+									  }
+
+									  // Insertion sort
+									  for (int j = 1; j < WINDOW_SIZE; j++) {
+										  int key = temp[j];
+										  int k = j - 1;
+
+										  while (k >= 0 && temp[k] > key) {
+											  temp[k + 1] = temp[k];
+											  k = k - 1;
+										  }
+										  temp[k + 1] = key;
+									  }
+
+									  filtered_distance[i] = temp[WINDOW_SIZE / 2];
+
+									  // Print the filtered data to the serial port
+									  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ", filtered_distance[i]), 100);
+							          /// End of Reading and Filtering Vl53l0x data ///
+
+								  }
 
 
 						  /// Read the raw data from HX711 ///
@@ -500,7 +541,6 @@ int main(void)
 
      	 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "Message end\r\n"), 100);
 	  }
-
 
     /* USER CODE END WHILE */
 
