@@ -1,3 +1,3 @@
-motor.c:14:6:stepRev	4
-motor.c:44:6:stepLin	4
-motor.c:78:6:servo_angle	7
+motor.c:15:6:stepRev	4
+motor.c:45:6:stepLin	4
+motor.c:79:6:servo_angle	7

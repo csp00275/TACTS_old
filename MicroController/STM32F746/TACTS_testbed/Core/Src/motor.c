@@ -10,6 +10,7 @@
 #include "tim.h"
 
 #define PULSE 200
+#define GEAR 139
 
 void stepRev(int ANG) {
 
@@ -25,8 +26,8 @@ void stepRev(int ANG) {
     ANG *= direction;
     HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, direction == 1 ? GPIO_PIN_SET : GPIO_PIN_RESET); // DIR
     HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6, GPIO_PIN_RESET); // ENA
-    uint32_t steps = PULSE * ANG / 360.0;
-    uint32_t pulse_delay_ms_ = 5; // 6rpm
+    uint32_t steps = PULSE * GEAR * ANG / 360.0;
+    uint32_t pulse_delay_ms_ = 1; // 6rpm
 
     for (int i = 0; i < steps; i++) {
       HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET); //CLK

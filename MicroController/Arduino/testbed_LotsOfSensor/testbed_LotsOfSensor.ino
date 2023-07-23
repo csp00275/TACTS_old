@@ -300,7 +300,7 @@ void stepRotate2(int CLK2, int DIR2, int ENA2, float DIST__deltaStep, int DIST){
     else
       {
         digitalWrite(DIR2,LOW);  
-        DIST= -DIST;
+    ........2....................................................................................................    DIST= -DIST;
         digitalWrite(ENA2,LOW);
  
        for(int j=0; j<1;j++)
@@ -321,7 +321,7 @@ void stepRotate2(int CLK2, int DIR2, int ENA2, float DIST__deltaStep, int DIST){
 void poking(float poke)
 {
 //  Serial.println(poke);
-  float poke_dist = poke + 0.5;
+    float poke_dist = poke + 0.5;
 //  Serial.println(poke_dist);
   float poke_angle = poke_dist * 60/1.2;
 //  Serial.println(poke_angle);

@@ -51,8 +51,10 @@
 
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		7
+#define NUM_SENSOR		24
 #define WINDOW_SIZE 5
+#define DEBOUNCE_DELAY 20  // ?��바운?�� �??�� ?���? (�?리초)
+
 
 
 /* USER CODE END PD */
@@ -74,7 +76,7 @@ uint16_t rxBufferIndex = 0;
 uint8_t rxData;
 uint8_t receivedFlag = 0; // ?��?�� ?��?��그�?? 추�??��?��?��.
 
-char string[100]; // 버퍼 ?���? ?��?��
+char string[100]; // 버퍼 ?���???? ?��?��
 HAL_StatusTypeDef status;
 
 uint32_t time_diff =0;
@@ -93,6 +95,7 @@ uint8_t MessageLen;
 
 VL53L0X_RangingMeasurementData_t RangingData;
 
+volatile uint32_t lastInterruptTime = 0;
 
 volatile int32_t encoderCount = 0;
 uint32_t count = 0;
@@ -142,47 +145,22 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
-  uint8_t buffer[100]; // ?��?��?���? ???��?�� 버퍼 m
-  uint8_t received_data;
-  uint32_t string_index = 0;
-  HAL_StatusTypeDef status;
-
 	// VL53L0X initialization stuff
-	//
 	uint32_t refSpadCount = 0;
 	uint8_t isApertureSpads = 0;
 	uint8_t VhvSettings = 0;
 	uint8_t PhaseCal = 0;
 
 	VL53L0X_Dev_t vl53l0x_s[NUM_SENSOR];
-//	VL53L0X_Dev_t vl53l0x_s;
-
 	VL53L0X_DEV Dev;
-	//KalmanFilter kalman_filters[NUM_SENSOR];
-//	uint16_t distance[NUM_SENSOR] = {0,};
-//	float filtered_distance[NUM_SENSOR] = {0,};
 
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
-	//uint8_t tca_ch[8] = {0b00000001, 0b00000010, 0b00000100, 0b00001000, 0b00010000, 0b00100000, 0b01000000, 0b10000000};
 	uint8_t tca_ch_reset = 0x00;
-	//uint8_t tca_ch_reset = 0b00000000;
-    uint8_t tca_addr[] = {0x70};
-
-//    uint8_t tca_addr[] = {0x70,0x71,0x72};
-
+    uint8_t tca_addr[] = {0x70, 0x71, 0x72};
 
     HAL_UART_Receive_IT(&huart1,&rxData,1);
-
-
   // Variables to store load cell data
   int32_t rawData;
-  float weight;
-
-  float servo_dist;
-  float step_rev_angle;
-  float step_lin_dist;
-
-
 
   /* USER CODE END Init */
 
@@ -214,46 +192,46 @@ int main(void)
   /* UART interrupt initialization */
   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "JH TACTS test\n\r"), 100);
 
-		for (int i = 0; i < sizeof(tca_addr); i++) {
-		    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[i] << 1, &tca_ch_reset, 1, 1000);
+	for (int i = 0; i < sizeof(tca_addr); i++) {
+		HAL_I2C_Master_Transmit(&hi2c1, tca_addr[i] << 1, &tca_ch_reset, 1, 1000);
+	}
+
+	for (int i = 0; i < NUM_SENSOR; i++) {
+
+		uint8_t q = i / 8;
+		uint8_t r = i % 8;
+
+		for (int j = 0; j < sizeof(tca_addr); j++) {
+			uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
+			HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
 		}
 
-		for (int i = 0; i < NUM_SENSOR; i++) {
+		Dev = &vl53l0x_s[i];
+		Dev->I2cHandle = &hi2c1;
+		Dev->I2cDevAddr = VL53L0X_ADDR;
 
-			uint8_t q = i / 8;
-			uint8_t r = i % 8;
+		VL53L0X_WaitDeviceBooted( Dev );
+		VL53L0X_DataInit( Dev );
+		VL53L0X_StaticInit( Dev );
+		VL53L0X_SetDeviceMode(Dev, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
+		VL53L0X_PerformRefCalibration( Dev, &VhvSettings, &PhaseCal);
+		VL53L0X_PerformRefSpadManagement( Dev, &refSpadCount, &isApertureSpads);
+		VL53L0X_SetLimitCheckEnable( Dev, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, 1);
+		VL53L0X_SetLimitCheckEnable( Dev, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, 1);
+		VL53L0X_SetLimitCheckValue( Dev, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1*65536));
+		VL53L0X_SetLimitCheckValue( Dev, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60*65536));
+		VL53L0X_SetMeasurementTimingBudgetMicroSeconds( Dev, 33000);
+		VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
+		VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 
-		    for (int j = 0; j < sizeof(tca_addr); j++) {
-		        uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
-		        HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
-		    }
-
-			Dev = &vl53l0x_s[i];
-			Dev->I2cHandle = &hi2c1;
-			Dev->I2cDevAddr = VL53L0X_ADDR;
-
-			VL53L0X_WaitDeviceBooted( Dev );
-			VL53L0X_DataInit( Dev );
-			VL53L0X_StaticInit( Dev );
-			VL53L0X_SetDeviceMode(Dev, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
-			VL53L0X_PerformRefCalibration( Dev, &VhvSettings, &PhaseCal);
-			VL53L0X_PerformRefSpadManagement( Dev, &refSpadCount, &isApertureSpads);
-			VL53L0X_SetLimitCheckEnable( Dev, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, 1);
-			VL53L0X_SetLimitCheckEnable( Dev, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, 1);
-			VL53L0X_SetLimitCheckValue( Dev, VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1*65536));
-			VL53L0X_SetLimitCheckValue( Dev, VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60*65536));
-			VL53L0X_SetMeasurementTimingBudgetMicroSeconds( Dev, 33000);
-			VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
-			VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
-
-/*
-			// KalmanFilter initializer BEGIN //
-			float Q = 0.1f; // Process noise covariance
-			float R = 1.0f;   // Measurement noise covariance
-			KalmanFilter_Init(&kalman_filters[i], Q, R);
-			// KalmanFilter initializer END //			 */
-			HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d complete \n\r",i), 100);
-	    }
+	/*
+		// KalmanFilter initializer BEGIN //
+		float Q = 0.1f; // Process noise covariance
+		float R = 1.0f;   // Measurement noise covariance
+		KalmanFilter_Init(&kalman_filters[i], Q, R);
+		// KalmanFilter initializer END //			 */
+		HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d complete \n\r",i), 100);
+	}
 
 
   /* USER CODE END 2 */
@@ -309,7 +287,6 @@ int main(void)
 		         HAL_Delay(1000); // Delay for 1 second
 		         receivedFlag = 0;
 		     }
-
 		  command = "rev";
 		  if(strncmp((char*)rxBuffer, command,strlen(command)) == 0)
 		     {
@@ -370,7 +347,7 @@ int main(void)
 		      ///////////////////////////////////////////////////////
 		      ////////////////////Logging Start//////////////////////
 		      ///////////////////////////////////////////////////////
-		      start_time = HAL_GetTick(); // 현재 시간 측정
+		      start_time = HAL_GetTick(); // ?��?�� ?���??? 측정
 
 		      int distance[NUM_SENSOR][WINDOW_SIZE] = {{0}};
 		      int filtered_distance[NUM_SENSOR] = {0};
@@ -418,14 +395,26 @@ int main(void)
 		          }
 		          /// End of Reading and Filtering Vl53l0x data ///
 
+				  /// Read the raw data from HX711 ///
+				  rawData = Read_HX711();
+				  float loadcell_slope = -1/1600.00f; // Convert the raw data to weight (replace the calibration factor with your own)
+				  float loadcell_bias = 10002;
+				  UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias); // Send the weight data over UART
+				  /// End of Reading HX711 data ///
+
+				  /// Read the raw data from AMT103 ///
+				  float encoderAngle = encoderCount/4096.0*360.0;
+				  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
+				  /// End of Reading AMT103 data ///
+
 		          // Rest of the code...
 
-		          end_time = HAL_GetTick(); // 종료 시간 측정
-		          time_diff = end_time - start_time; // 시간 차이 계산
+		          end_time = HAL_GetTick(); // 종료 ?���??? 측정
+		          time_diff = end_time - start_time; // ?���??? 차이 계산
 
 		          HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 
-		      } while (time_diff < 5000);
+		      } while (time_diff < 50000);
 
 		      receivedFlag = 0;
 		  }
@@ -441,10 +430,10 @@ int main(void)
 //		             stepLin(10); // moving horizontal
 //		             stepLin(-10); //
 
-	        	 for( int lin = 0; lin < 80;lin ++){
-	        		 stepLin(2); // moving horizontal
-					 for(int rev = 0; rev<1; rev++){
-						 //stepRev(10); // revolution
+	        	 for( int lin = 0; lin < 1;lin ++){
+	        		 //stepLin(2); // moving horizontal
+					 for(int rev = 0; rev<40; rev++){
+						 stepRev(9); // revolution
 						 for(int r = 2;r<11;r++){
 
 							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
@@ -453,7 +442,7 @@ int main(void)
 							 ///////////////////////////////////////////////////////
 							 ////////////////////Logging Start//////////////////////
 							 ///////////////////////////////////////////////////////
-							 start_time = HAL_GetTick(); // ?��?�� ?���? 측정
+							 start_time = HAL_GetTick(); // ?��?�� ?���???? 측정
 
 							int distance[NUM_SENSOR][WINDOW_SIZE] = {{0}};
 							int filtered_distance[NUM_SENSOR] = {0};
@@ -510,12 +499,12 @@ int main(void)
 						  /// End of Reading HX711 data ///
 
 						  /// Read the raw data from AMT103 ///
-						  float encoderAngle = encoderCount*360.0/4096.0;
+						  float encoderAngle = encoderCount/4096.0*360.0;
 						  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
 						  /// End of Reading AMT103 data ///
 
-						 end_time = HAL_GetTick(); // ?�� ?���? 측정
-						 time_diff = end_time - start_time; // ?���? 차이 계산
+						 end_time = HAL_GetTick(); // ?�� ?���???? 측정
+						 time_diff = end_time - start_time; // ?���???? 차이 계산
 
 
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",2*lin), 100);
@@ -616,6 +605,12 @@ static void MX_NVIC_Init(void)
   /* I2C1_EV_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(I2C1_EV_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
+  /* EXTI15_10_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+  /* EXTI9_5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
   /* TIM7_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(TIM7_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(TIM7_IRQn);
@@ -644,6 +639,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   }
 }
 
+
+#if 1
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if (GPIO_Pin == GPIO_PIN_8) // A?��?�� ???�� ?��?��?��?��
@@ -669,6 +666,47 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     }
   }
 }
+#endif
+
+#if 0
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  uint32_t currentInterruptTime = HAL_GetTick(); // 현재 시간 가져오기
+
+  // 지난 인터럽트로부터 DEBOUNCE_DELAY 시간이 경과하지 않았다면 무시
+  if((currentInterruptTime - lastInterruptTime) < DEBOUNCE_DELAY) {
+    return;  // 이 인터럽트는 무시
+  }
+
+  // 현재 시간 업데이트
+  lastInterruptTime = currentInterruptTime;
+
+  if (GPIO_Pin == GPIO_PIN_8) // A 채널
+  {
+    if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15)) // B 채널 값을 읽기
+    {
+      encoderCount++;
+    }
+    else
+    {
+      encoderCount--;
+    }
+  }
+  else if (GPIO_Pin == GPIO_PIN_15) // B 채널
+  {
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)) // A 채널 값을 읽기
+    {
+      encoderCount--;
+    }
+    else
+    {
+      encoderCount++;
+    }
+  }
+}
+#endif
+
+
 
 
 /* USER CODE END 4 */
