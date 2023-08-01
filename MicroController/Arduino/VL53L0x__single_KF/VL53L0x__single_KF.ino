@@ -1,109 +1,185 @@
 #include <Wire.h>
 #include <VL53L0X.h>
-#include <Kalman.h> // Include the Kalman library
-
 
 VL53L0X sensor;
 
-#define HIGH_SPEED
-
-#define MAX_DATA_POINTS 100  // Maximum number of data points for moving average filter
+#define MAX_DATA_POINTS 7  // Maximum number of data points for moving average filter
 
 class MovingAverageFilter {
-  int data[MAX_DATA_POINTS];  // Array to store data points
-  int dataIndex = 0;         // Index to keep track of where to insert new data points
-  int total = 0;             // Sum of data points for calculating average
-  int numDataPoints = 0;     // Number of data points collected so far
+  int data[MAX_DATA_POINTS];
+  int dataIndex = 0;
+  int total = 0;
+  int numDataPoints = 0;
   int windowSize;
 
 public:
   MovingAverageFilter(int windowSize) : windowSize(windowSize) {}
 
-  // Function to add a new data point and calculate the moving average
   float calculate(float newData) {
-    // Check if maximum number of data points have been collected
     if (numDataPoints < windowSize) {
       numDataPoints++;
     } else {
-      // Subtract the oldest data point from total
       total -= data[dataIndex];
     }
-
-    // Add new data point to total and data array
     total += newData;
     data[dataIndex] = newData;
-
-    // Increment data index
     dataIndex = (dataIndex + 1) % windowSize;
-
-    // Return the moving average
     return total / numDataPoints;
   }
 };
 
-MovingAverageFilter filter3(3);
+//MovingAverageFilter filter3(3);
 MovingAverageFilter filter5(5);
-MovingAverageFilter filter7(7);
-class KalmanFilter {
-  float A, Q, H, R;
-  float state_estimate, covariance_estimate;
+//MovingAverageFilter filter7(7);
+
+class MovingMedianFilter {
+  int data[MAX_DATA_POINTS];
+  int dataIndex = 0;
+  int windowSize;
 
 public:
-  KalmanFilter(float A, float Q, float H, float R) : A(A), Q(Q), H(H), R(R), state_estimate(0), covariance_estimate(Q) {}
+  MovingMedianFilter(int windowSize) : windowSize(windowSize) {}
 
-  float update(float measurement) {
-    // prediction update
-    float prediction = A * state_estimate;
-    float predictionCovariance = A * covariance_estimate * A + Q;
+  void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n-1; i++) {
+      for (int j = 0; j < n-i-1; j++) {
+        if (arr[j] > arr[j+1]) {
+          int temp = arr[j];
+          arr[j] = arr[j+1];
+          arr[j+1] = temp;
+        }
+      }
+    }
+  }
 
-    // measurement update
-    float K = predictionCovariance * H / (H * predictionCovariance * H + R);
-    state_estimate = prediction + K * (measurement - H * prediction);
-    covariance_estimate = (1 - K * H) * predictionCovariance;
+  int calculate(int newData) {
+    data[dataIndex] = newData;
+    dataIndex = (dataIndex + 1) % windowSize;
+    
+    int sortedData[MAX_DATA_POINTS];
+    for (int i = 0; i < windowSize; i++) {
+      sortedData[i] = data[i];
+    }
 
-    return state_estimate;
+    bubbleSort(sortedData, windowSize);
+
+    if (windowSize % 2 == 0) {
+      return (sortedData[windowSize/2 - 1] + sortedData[windowSize/2]) / 2;
+    } else {
+      return sortedData[windowSize/2];
+    }
   }
 };
 
-// Initialize the A, Q, H, and R values
-float A = 1.0;  // Value for A
-float Q = 1;  // Value for Q
-float H = 1.02;  // Value for H
-float R = 1.04; // Value for R
+//MovingMedianFilter medianFilter3(3);
+MovingMedianFilter medianFilter5(5);
+//MovingMedianFilter medianFilter7(7);
 
-// Create an instance of the KalmanFilter class
-KalmanFilter kalmanFilter(A, Q, H, R);
+class KalmanFilter {
+private:
+    float Q; // process noise covariance
+    float R; // measurement noise covariance
+    float P; // estimation error covariance
+    float X_estimate; // value of the best estimate of the desired variable
+    float K; // Kalman gain
+    
+public:
+    KalmanFilter(float processNoise, float measurementNoise, float errorCovariance)
+    {
+        Q = processNoise;
+        R = measurementNoise;
+        P = errorCovariance;
+        X_estimate = 0;
+    }
+
+    float estimate(float measurement)
+    {
+        // Predict
+        P = P + Q;
+
+        // Update
+        K = P / (P + R);
+        X_estimate = X_estimate + K * (measurement - X_estimate);
+        P = (1 - K) * P;
+
+        return X_estimate;
+    }
+};
+
+// 사용 예시
+KalmanFilter kalmanFilter1(0.001, 0.03, 0.1); // Q, R, and initial P values respectively. Adjust based on your specific use case.
+KalmanFilter kalmanFilter2(0.002, 0.04, 0.1);
+KalmanFilter kalmanFilter3(0.003, 0.05, 0.1);
+// class MovingStatistics {
+//   float data[MAX_DATA_POINTS];
+//   int dataIndex = 0;
+//   int numDataPoints = 0;
+//   int windowSize;
+//   float sum = 0;
+//   float sumSquares = 0;
+
+// public:
+//   MovingStatistics(int windowSize) : windowSize(windowSize) {}
+
+//   float average(float newData) {
+//     if (numDataPoints < windowSize) {
+//       numDataPoints++;
+//     } else {
+//       sum -= data[dataIndex];
+//       sumSquares -= data[dataIndex] * data[dataIndex];
+//     }
+
+//     sum += newData;
+//     sumSquares += newData * newData;
+//     data[dataIndex] = newData;
+//     dataIndex = (dataIndex + 1) % windowSize;
+
+//     return sum / numDataPoints;
+//   }
+
+//   float standardDeviation() {
+//     float mean = sum / numDataPoints;
+//     float variance = (sumSquares / numDataPoints) - (mean * mean);
+//     return sqrt(variance);
+//   }
+// };
+
+// MovingStatistics statsRaw(20);
+// MovingStatistics statsFilter3(20);
+// MovingStatistics statsFilter5(20);
+// MovingStatistics statsFilter7(20);
+// MovingStatistics statsMedian3(20);
+// MovingStatistics statsMedian5(20);
+// MovingStatistics statsMedian7(20);
 
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
   Wire.begin();
-
   sensor.setTimeout(500);
-  if (!sensor.init())
-  {
+  
+  if (!sensor.init()) {
     Serial.println("Failed to detect and initialize sensor!");
     while (1) {}
   }
 
-  sensor.setMeasurementTimingBudget(20000);
+  sensor.setMeasurementTimingBudget(33000);
 }
 
-void loop()
-{
+void loop() {
   float range = sensor.readRangeSingleMillimeters();
-
-  float estimatedState = kalmanFilter.update(range);
-
   Serial.print(range);
-  Serial.print(" ");
-  Serial.print(filter3.calculate(range));
   Serial.print(" ");
   Serial.print(filter5.calculate(range));
   Serial.print(" ");
-  Serial.print(filter7.calculate(range));
+  Serial.print(medianFilter5.calculate(range));
   Serial.print(" ");
-  Serial.print(estimatedState);
+  Serial.print(kalmanFilter1.estimate(range));
+  Serial.print(" ");
+  Serial.print(kalmanFilter2.estimate(range));
+  Serial.print(" ");
+  Serial.print(kalmanFilter3.estimate(range));
   Serial.println();
 }
+
+
