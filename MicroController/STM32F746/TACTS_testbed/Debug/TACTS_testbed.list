@@ -3320,8 +3320,8 @@ int main(void)
  8002058:	f8c7 3e10 	str.w	r3, [r7, #3600]	; 0xe10
  800205c:	e23d      	b.n	80024da <main+0x10a2>
 						 //stepRev(9); // revolution
-						 for(int r = 2;r<11;r++){
- 800205e:	2302      	movs	r3, #2
+						 for(int r = 5;r<14;r++){
+ 800205e:	2305      	movs	r3, #5
  8002060:	f8c7 3e0c 	str.w	r3, [r7, #3596]	; 0xe0c
  8002064:	e22f      	b.n	80024c6 <main+0x108e>
 
@@ -3779,12 +3779,12 @@ int main(void)
 						 HAL_Delay(500);
  80024b4:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
  80024b8:	f000 fe84 	bl	80031c4 <HAL_Delay>
-						 for(int r = 2;r<11;r++){
+						 for(int r = 5;r<14;r++){
  80024bc:	f8d7 3e0c 	ldr.w	r3, [r7, #3596]	; 0xe0c
  80024c0:	3301      	adds	r3, #1
  80024c2:	f8c7 3e0c 	str.w	r3, [r7, #3596]	; 0xe0c
  80024c6:	f8d7 3e0c 	ldr.w	r3, [r7, #3596]	; 0xe0c
- 80024ca:	2b0a      	cmp	r3, #10
+ 80024ca:	2b0d      	cmp	r3, #13
  80024cc:	f77f adcb 	ble.w	8002066 <main+0xc2e>
 					 for(int rev = 0; rev<1; rev++){
  80024d0:	f8d7 3e10 	ldr.w	r3, [r7, #3600]	; 0xe10
