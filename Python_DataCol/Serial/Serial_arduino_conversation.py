@@ -3,7 +3,7 @@ import datetime
 
 import numpy as np
 
-num = 29
+num = 13
 
 tof = [0]*num
 stm32f7 = serial.Serial('COM3',115200,timeout=100)

@@ -51,7 +51,7 @@
 
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		24
+#define NUM_SENSOR		8
 #define WINDOW_SIZE 5
 #define DEBOUNCE_DELAY 20  // ?��바운?�� �??�� ?���? (�?리초)
 
@@ -156,7 +156,7 @@ int main(void)
 
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 	uint8_t tca_ch_reset = 0x00;
-    uint8_t tca_addr[] = {0x70, 0x71, 0x72};
+    uint8_t tca_addr[] = {0x70};
 
     HAL_UART_Receive_IT(&huart1,&rxData,1);
   // Variables to store load cell data
@@ -430,10 +430,10 @@ int main(void)
 //		             stepLin(10); // moving horizontal
 //		             stepLin(-10); //
 
-	        	 for( int lin = 0; lin < 1;lin ++){
-	        		 //stepLin(2); // moving horizontal
-					 for(int rev = 0; rev<40; rev++){
-						 stepRev(9); // revolution
+	        	 for( int lin = 0; lin < 80;lin ++){
+	        		 stepLin(2); // moving horizontal
+					 for(int rev = 0; rev<1; rev++){
+						 //stepRev(9); // revolution
 						 for(int r = 2;r<11;r++){
 
 							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
