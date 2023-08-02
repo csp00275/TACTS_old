@@ -8,12 +8,11 @@
 
 #include "kalman.h"
 
-void KalmanFilter_Init(KalmanFilter *filter, float Q, float R) {
-    filter->Q = Q;
-    filter->R = R;
-    filter->P = 0;
-    filter->K = 0;
-    filter->X = 0;
+void Kalman_Init(KalmanFilter* filter, float processNoise, float measurementNoise, float errorCovariance) {
+    filter->Q = processNoise;
+    filter->R = measurementNoise;
+    filter->P = errorCovariance;
+    filter->X_estimate = 0;
 }
 
 float KalmanFilter_Update(KalmanFilter *filter, float measurement) {
