@@ -13,10 +13,9 @@ typedef struct {
     float Q;
     float R;
     float P;
+    float X_estimate;
     float K;
-    float X;
 } KalmanFilter;
-
 void Kalman_Init(KalmanFilter* filter, float processNoise, float measurementNoise, float errorCovariance);
 float Kalman_Estimate(KalmanFilter* filter, float measurement);
 
