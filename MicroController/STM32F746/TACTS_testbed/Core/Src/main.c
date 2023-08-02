@@ -434,7 +434,7 @@ int main(void)
 	        		 stepLin(2); // moving horizontal
 					 for(int rev = 0; rev<1; rev++){
 						 //stepRev(9); // revolution
-						 for(int r = 5;r<14;r++){
+						 for(int r = 1;r<11;r++){
 
 							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
 							 HAL_Delay(500);
