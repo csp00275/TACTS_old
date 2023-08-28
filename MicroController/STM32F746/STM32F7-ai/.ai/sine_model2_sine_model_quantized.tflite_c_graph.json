@@ -1,0 +1,889 @@
+{
+    "outputs": ["conversion_5_output"],
+    "c_layers": [
+        {
+            "next": "gemm_1",
+            "op_by_type": {"conv_f32_s8": 2},
+            "c_forward": "node_convert",
+            "macc": 2,
+            "tensors": {
+                "outputs": ["conversion_0_output"],
+                "inputs": ["serving_default_dense_16_input0_output"],
+                "scratchs": [],
+                "weights": []
+            },
+            "layer_type": "converter",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 5.000000237487257E-4,
+                "counters": [],
+                "percentage": 9.302325631764335,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conversion_0",
+            "c_id": 0,
+            "weight_sparsity": [
+                0,
+                1,
+                0
+            ],
+            "m_id": 0
+        },
+        {
+            "next": "gemm_2",
+            "op_by_type": {"smul_s8_s8": 32},
+            "c_forward": "forward_dense_integer_SSSA",
+            "macc": 32,
+            "tensors": {
+                "outputs": ["gemm_1_output"],
+                "inputs": ["conversion_0_output"],
+                "scratchs": ["gemm_1_scratch0"],
+                "weights": [
+                    "gemm_1_weights",
+                    "gemm_1_bias"
+                ]
+            },
+            "layer_type": "dense",
+            "rom": 80,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.0018750000599538907,
+                "counters": [],
+                "percentage": 34.88372057764966,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "gemm_1",
+            "c_id": 1,
+            "weight_sparsity": [
+                0.34375,
+                32,
+                11
+            ],
+            "m_id": 1
+        },
+        {
+            "next": "gemm_3",
+            "op_by_type": {"smul_s8_s8": 272},
+            "c_forward": "forward_dense_integer_SSSA",
+            "macc": 272,
+            "tensors": {
+                "outputs": ["gemm_2_output"],
+                "inputs": ["gemm_1_output"],
+                "scratchs": ["gemm_2_scratch0"],
+                "weights": [
+                    "gemm_2_weights",
+                    "gemm_2_bias"
+                ]
+            },
+            "layer_type": "dense",
+            "rom": 320,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.0012500000593718141,
+                "counters": [],
+                "percentage": 23.255814079410836,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "gemm_2",
+            "c_id": 2,
+            "weight_sparsity": [
+                0.03676470588235292,
+                272,
+                10
+            ],
+            "m_id": 2
+        },
+        {
+            "next": "gemm_4",
+            "op_by_type": {"smul_s8_s8": 272},
+            "c_forward": "forward_dense_integer_SSSA",
+            "macc": 272,
+            "tensors": {
+                "outputs": ["gemm_3_output"],
+                "inputs": ["gemm_2_output"],
+                "scratchs": ["gemm_3_scratch0"],
+                "weights": [
+                    "gemm_3_weights",
+                    "gemm_3_bias"
+                ]
+            },
+            "layer_type": "dense",
+            "rom": 320,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 0.0010000000474974513,
+                "counters": [],
+                "percentage": 18.60465126352867,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "gemm_3",
+            "c_id": 3,
+            "weight_sparsity": [
+                0.0404411764705882,
+                272,
+                11
+            ],
+            "m_id": 3
+        },
+        {
+            "next": "conversion_5",
+            "op_by_type": {"smul_s8_s8": 17},
+            "c_forward": "forward_dense_integer_SSSA",
+            "macc": 17,
+            "tensors": {
+                "outputs": ["gemm_4_output"],
+                "inputs": ["gemm_3_output"],
+                "scratchs": ["gemm_4_scratch0"],
+                "weights": [
+                    "gemm_4_weights",
+                    "gemm_4_bias"
+                ]
+            },
+            "layer_type": "dense",
+            "rom": 20,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 5.000000237487257E-4,
+                "counters": [],
+                "percentage": 9.302325631764335,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "gemm_4",
+            "c_id": 4,
+            "weight_sparsity": [
+                0,
+                17,
+                0
+            ],
+            "m_id": 4
+        },
+        {
+            "next": "conversion_5",
+            "op_by_type": {"conv_s8_f32": 2},
+            "c_forward": "node_convert",
+            "macc": 2,
+            "tensors": {
+                "outputs": ["conversion_5_output"],
+                "inputs": ["gemm_4_output"],
+                "scratchs": [],
+                "weights": []
+            },
+            "layer_type": "converter",
+            "rom": 0,
+            "c_code_emit": true,
+            "exec_time": {
+                "duration_ms": 2.500000118743628E-4,
+                "counters": [],
+                "percentage": 4.651162815882167,
+                "cycles_by_macc": 0,
+                "cycles": 0
+            },
+            "name": "conversion_5",
+            "c_id": 5,
+            "weight_sparsity": [
+                0,
+                1,
+                0
+            ],
+            "m_id": 5
+        }
+    ],
+    "data_alignment": 4,
+    "compilation_options": {
+        "optimization": "balanced",
+        "options": [
+            "allocate-inputs",
+            "allocate-outputs"
+        ],
+        "compression": "none"
+    },
+    "inputs": ["serving_default_dense_16_input0_output"],
+    "macc": 597,
+    "c_weights_header": 0,
+    "activations_alignment": 4,
+    "c_nodes_n": 6,
+    "c_tensors_n": 19,
+    "type": "tflite",
+    "c_arrays": [
+        {
+            "mem_pool": "weights",
+            "offset": 0,
+            "is_const": true,
+            "format": "ss32",
+            "n_items": 16,
+            "scale": [7.058113988023251E-5],
+            "tensors": [{
+                "shape": [16],
+                "name": "gemm_3_bias"
+            }],
+            "zeropoint": [0],
+            "zeros": 4,
+            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [7.058113988023251e-05] Zeros: [0] Quantizer: UNIFORM)",
+            "c_mem_pool": "weights",
+            "padded": true,
+            "size": 16,
+            "c_type": "const int32_t",
+            "name": "gemm_3_bias_array",
+            "c_id": 0,
+            "c_bits": 32,
+            "c_size_in_byte": 64
+        },
+        {
+            "mem_pool": "weights",
+            "offset": 64,
+            "is_const": true,
+            "format": "ss8",
+            "n_items": 16,
+            "scale": [0.007780564948916435],
+            "tensors": [{
+                "intq": "gemm_4_weights_array_intq",
+                "shape": [
+                    16,
+                    1
+                ],
+                "name": "gemm_4_weights"
+            }],
+            "zeropoint": [0],
+            "zeros": 0,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.007780564948916435] Zeros: [0] Quantizer: UNIFORM)",
+            "c_mem_pool": "weights",
+            "padded": true,
+            "size": 16,
+            "c_type": "const int8_t",
+            "name": "gemm_4_weights_array",
+            "c_id": 1,
+            "c_bits": 8,
+            "c_size_in_byte": 16
+        },
+        {
+            "mem_pool": "weights",
+            "offset": 80,
+            "is_const": true,
+            "format": "ss32",
+            "n_items": 1,
+            "scale": [3.187994298059493E-5],
+            "tensors": [{
+                "shape": [1],
+                "name": "gemm_4_bias"
+            }],
+            "zeropoint": [0],
+            "zeros": 0,
+            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [3.187994298059493e-05] Zeros: [0] Quantizer: UNIFORM)",
+            "c_mem_pool": "weights",
+            "padded": true,
+            "size": 1,
+            "c_type": "const int32_t",
+            "name": "gemm_4_bias_array",
+            "c_id": 2,
+            "c_bits": 32,
+            "c_size_in_byte": 4
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 20,
+            "is_const": false,
+            "format": "s16",
+            "n_items": 1,
+            "tensors": [{
+                "shape": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "name": "gemm_1_scratch0"
+            }],
+            "raw_fmt": "(SIGNED, 16 bit, C Size: 16 bits)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 1,
+            "c_type": "int16_t",
+            "name": "gemm_1_scratch0_array",
+            "c_id": 3,
+            "c_bits": 16,
+            "c_size_in_byte": 2
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 16,
+            "is_const": false,
+            "format": "s16",
+            "n_items": 16,
+            "tensors": [{
+                "shape": [
+                    1,
+                    1,
+                    1,
+                    16
+                ],
+                "name": "gemm_2_scratch0"
+            }],
+            "raw_fmt": "(SIGNED, 16 bit, C Size: 16 bits)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 16,
+            "c_type": "int16_t",
+            "name": "gemm_2_scratch0_array",
+            "c_id": 4,
+            "c_bits": 16,
+            "c_size_in_byte": 32
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 0,
+            "is_const": false,
+            "format": "s16",
+            "n_items": 16,
+            "tensors": [{
+                "shape": [
+                    1,
+                    1,
+                    1,
+                    16
+                ],
+                "name": "gemm_3_scratch0"
+            }],
+            "raw_fmt": "(SIGNED, 16 bit, C Size: 16 bits)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 16,
+            "c_type": "int16_t",
+            "name": "gemm_3_scratch0_array",
+            "c_id": 5,
+            "c_bits": 16,
+            "c_size_in_byte": 32
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 0,
+            "is_const": false,
+            "format": "s16",
+            "n_items": 16,
+            "tensors": [{
+                "shape": [
+                    1,
+                    1,
+                    1,
+                    16
+                ],
+                "name": "gemm_4_scratch0"
+            }],
+            "raw_fmt": "(SIGNED, 16 bit, C Size: 16 bits)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 16,
+            "c_type": "int16_t",
+            "name": "gemm_4_scratch0_array",
+            "c_id": 6,
+            "c_bits": 16,
+            "c_size_in_byte": 32
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 16,
+            "is_const": false,
+            "format": "float32",
+            "n_items": 1,
+            "tensors": [{
+                "shape": [
+                    1,
+                    1
+                ],
+                "name": "serving_default_dense_16_input0_output"
+            }],
+            "raw_fmt": "(FLOAT, 32 bit, C Size: 32 bits)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 1,
+            "c_type": "float",
+            "name": "serving_default_dense_16_input0_output_array",
+            "c_id": 7,
+            "c_bits": 32,
+            "c_size_in_byte": 4,
+            "io_type": "input"
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 16,
+            "is_const": false,
+            "format": "sa8",
+            "n_items": 1,
+            "scale": [0.02459126152098179],
+            "tensors": [{
+                "intq": "conversion_0_output_array_intq",
+                "shape": [
+                    1,
+                    1
+                ],
+                "name": "conversion_0_output"
+            }],
+            "zeropoint": [-128],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.02459126152098179] Zeros: [-128] Quantizer: UNIFORM)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 1,
+            "c_type": "int8_t",
+            "name": "conversion_0_output_array",
+            "c_id": 8,
+            "c_bits": 8,
+            "c_size_in_byte": 1
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 0,
+            "is_const": false,
+            "format": "sa8",
+            "n_items": 16,
+            "scale": [0.012133159674704075],
+            "tensors": [{
+                "intq": "gemm_1_output_array_intq",
+                "shape": [
+                    1,
+                    16
+                ],
+                "name": "gemm_1_output"
+            }],
+            "zeropoint": [-128],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.012133159674704075] Zeros: [-128] Quantizer: UNIFORM)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 16,
+            "c_type": "int8_t",
+            "name": "gemm_1_output_array",
+            "c_id": 9,
+            "c_bits": 8,
+            "c_size_in_byte": 16
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 48,
+            "is_const": false,
+            "format": "sa8",
+            "n_items": 16,
+            "scale": [0.005446084775030613],
+            "tensors": [{
+                "intq": "gemm_2_output_array_intq",
+                "shape": [
+                    1,
+                    16
+                ],
+                "name": "gemm_2_output"
+            }],
+            "zeropoint": [-128],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.005446084775030613] Zeros: [-128] Quantizer: UNIFORM)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 16,
+            "c_type": "int8_t",
+            "name": "gemm_2_output_array",
+            "c_id": 10,
+            "c_bits": 8,
+            "c_size_in_byte": 16
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 32,
+            "is_const": false,
+            "format": "sa8",
+            "n_items": 16,
+            "scale": [0.004097381606698036],
+            "tensors": [{
+                "intq": "gemm_3_output_array_intq",
+                "shape": [
+                    1,
+                    16
+                ],
+                "name": "gemm_3_output"
+            }],
+            "zeropoint": [-128],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.004097381606698036] Zeros: [-128] Quantizer: UNIFORM)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 16,
+            "c_type": "int8_t",
+            "name": "gemm_3_output_array",
+            "c_id": 11,
+            "c_bits": 8,
+            "c_size_in_byte": 16
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 48,
+            "is_const": false,
+            "format": "sa8",
+            "n_items": 1,
+            "scale": [0.0076906997710466385],
+            "tensors": [{
+                "intq": "gemm_4_output_array_intq",
+                "shape": [
+                    1,
+                    1
+                ],
+                "name": "gemm_4_output"
+            }],
+            "zeropoint": [-1],
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.0076906997710466385] Zeros: [-1] Quantizer: UNIFORM)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 1,
+            "c_type": "int8_t",
+            "name": "gemm_4_output_array",
+            "c_id": 12,
+            "c_bits": 8,
+            "c_size_in_byte": 1
+        },
+        {
+            "mem_pool": "activations",
+            "offset": 0,
+            "is_const": false,
+            "format": "float32",
+            "n_items": 1,
+            "tensors": [{
+                "shape": [
+                    1,
+                    1
+                ],
+                "name": "conversion_5_output"
+            }],
+            "raw_fmt": "(FLOAT, 32 bit, C Size: 32 bits)",
+            "c_mem_pool": "**default**",
+            "padded": true,
+            "size": 1,
+            "c_type": "float",
+            "name": "conversion_5_output_array",
+            "c_id": 13,
+            "c_bits": 32,
+            "c_size_in_byte": 4,
+            "io_type": "output"
+        },
+        {
+            "mem_pool": "weights",
+            "offset": 84,
+            "is_const": true,
+            "format": "ss8",
+            "n_items": 16,
+            "scale": [0.004517584107816219],
+            "tensors": [{
+                "intq": "gemm_1_weights_array_intq",
+                "shape": [
+                    1,
+                    16
+                ],
+                "name": "gemm_1_weights"
+            }],
+            "zeropoint": [0],
+            "zeros": 1,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.004517584107816219] Zeros: [0] Quantizer: UNIFORM)",
+            "c_mem_pool": "weights",
+            "padded": true,
+            "size": 16,
+            "c_type": "const int8_t",
+            "name": "gemm_1_weights_array",
+            "c_id": 14,
+            "c_bits": 8,
+            "c_size_in_byte": 16
+        },
+        {
+            "mem_pool": "weights",
+            "offset": 100,
+            "is_const": true,
+            "format": "ss32",
+            "n_items": 16,
+            "scale": [1.110930897993967E-4],
+            "tensors": [{
+                "shape": [16],
+                "name": "gemm_1_bias"
+            }],
+            "zeropoint": [0],
+            "zeros": 10,
+            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [0.0001110930897993967] Zeros: [0] Quantizer: UNIFORM)",
+            "c_mem_pool": "weights",
+            "padded": true,
+            "size": 16,
+            "c_type": "const int32_t",
+            "name": "gemm_1_bias_array",
+            "c_id": 15,
+            "c_bits": 32,
+            "c_size_in_byte": 64
+        },
+        {
+            "mem_pool": "weights",
+            "offset": 164,
+            "is_const": true,
+            "format": "ss8",
+            "n_items": 256,
+            "scale": [0.007993846200406551],
+            "tensors": [{
+                "intq": "gemm_2_weights_array_intq",
+                "shape": [
+                    16,
+                    16
+                ],
+                "name": "gemm_2_weights"
+            }],
+            "zeropoint": [0],
+            "zeros": 2,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.007993846200406551] Zeros: [0] Quantizer: UNIFORM)",
+            "c_mem_pool": "weights",
+            "padded": true,
+            "size": 256,
+            "c_type": "const int8_t",
+            "name": "gemm_2_weights_array",
+            "c_id": 16,
+            "c_bits": 8,
+            "c_size_in_byte": 256
+        },
+        {
+            "mem_pool": "weights",
+            "offset": 420,
+            "is_const": true,
+            "format": "ss32",
+            "n_items": 16,
+            "scale": [9.699061047285795E-5],
+            "tensors": [{
+                "shape": [16],
+                "name": "gemm_2_bias"
+            }],
+            "zeropoint": [0],
+            "zeros": 8,
+            "raw_fmt": "(SIGNED, 32 bit, C Size: 32 bits Scales: [9.699061047285795e-05] Zeros: [0] Quantizer: UNIFORM)",
+            "c_mem_pool": "weights",
+            "padded": true,
+            "size": 16,
+            "c_type": "const int32_t",
+            "name": "gemm_2_bias_array",
+            "c_id": 17,
+            "c_bits": 32,
+            "c_size_in_byte": 64
+        },
+        {
+            "mem_pool": "weights",
+            "offset": 484,
+            "is_const": true,
+            "format": "ss8",
+            "n_items": 256,
+            "scale": [0.012959977611899376],
+            "tensors": [{
+                "intq": "gemm_3_weights_array_intq",
+                "shape": [
+                    16,
+                    16
+                ],
+                "name": "gemm_3_weights"
+            }],
+            "zeropoint": [0],
+            "zeros": 7,
+            "raw_fmt": "(SIGNED, 8 bit, C Size: 8 bits Scales: [0.012959977611899376] Zeros: [0] Quantizer: UNIFORM)",
+            "c_mem_pool": "weights",
+            "padded": true,
+            "size": 256,
+            "c_type": "const int8_t",
+            "name": "gemm_3_weights_array",
+            "c_id": 18,
+            "c_bits": 8,
+            "c_size_in_byte": 256
+        }
+    ],
+    "c_activations_count": 1,
+    "date_time": "Mon Aug 28 22:23:47 2023",
+    "model_name": "sine_model_quantized",
+    "tool_version": {
+        "major": 1,
+        "minor": 7,
+        "micro": 0
+    },
+    "c_intq_n": 9,
+    "stm_ai_version": {
+        "major": 8,
+        "minor": 1,
+        "micro": 0,
+        "extra": "19520"
+    },
+    "model_fmt": "ss/sa per tensor",
+    "c_weights_count": 1,
+    "weights": {"weights_array": {
+        "buffer_data_size": 740,
+        "pool_size": 740,
+        "buffer_c_name": "NULL",
+        "buffer_offsets": [
+            {
+                "lite_tag": null,
+                "offset": 0,
+                "size": 64,
+                "start_offset": 0,
+                "buffer_name": "gemm_3_bias_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 64,
+                "size": 16,
+                "start_offset": 64,
+                "buffer_name": "gemm_4_weights_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 80,
+                "size": 4,
+                "start_offset": 80,
+                "buffer_name": "gemm_4_bias_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 84,
+                "size": 16,
+                "start_offset": 84,
+                "buffer_name": "gemm_1_weights_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 100,
+                "size": 64,
+                "start_offset": 100,
+                "buffer_name": "gemm_1_bias_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 164,
+                "size": 256,
+                "start_offset": 164,
+                "buffer_name": "gemm_2_weights_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 420,
+                "size": 64,
+                "start_offset": 420,
+                "buffer_name": "gemm_2_bias_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 484,
+                "size": 256,
+                "start_offset": 484,
+                "buffer_name": "gemm_3_weights_array"
+            }
+        ],
+        "buffer_c_name_addr": "NULL",
+        "pool_id": 0
+    }},
+    "memory_footprint": {
+        "kernel_ram": 2440,
+        "kernel_flash": 18777,
+        "io": [
+            0,
+            0
+        ],
+        "series": "generic",
+        "activations": 64,
+        "weights": 740
+    },
+    "version": "1.2",
+    "tool_api_version": {
+        "major": 1,
+        "minor": 5,
+        "micro": 0
+    },
+    "model_signature": "87d4c9452440469cc86e62458afa598c",
+    "params_alignment": 4,
+    "activations": {"heap_overlay_pool": {
+        "buffer_data_size": 0,
+        "pool_size": 64,
+        "buffer_c_name": "NULL",
+        "buffer_offsets": [
+            {
+                "lite_tag": null,
+                "offset": 16,
+                "size": 4,
+                "start_offset": 16,
+                "buffer_name": "serving_default_dense_16_input0_output_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 16,
+                "size": 1,
+                "start_offset": 16,
+                "buffer_name": "conversion_0_output_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 20,
+                "size": 2,
+                "start_offset": 20,
+                "buffer_name": "gemm_1_scratch0_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 0,
+                "size": 16,
+                "start_offset": 0,
+                "buffer_name": "gemm_1_output_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 16,
+                "size": 32,
+                "start_offset": 16,
+                "buffer_name": "gemm_2_scratch0_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 48,
+                "size": 16,
+                "start_offset": 48,
+                "buffer_name": "gemm_2_output_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 0,
+                "size": 32,
+                "start_offset": 0,
+                "buffer_name": "gemm_3_scratch0_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 32,
+                "size": 16,
+                "start_offset": 32,
+                "buffer_name": "gemm_3_output_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 0,
+                "size": 32,
+                "start_offset": 0,
+                "buffer_name": "gemm_4_scratch0_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 48,
+                "size": 1,
+                "start_offset": 48,
+                "buffer_name": "gemm_4_output_array"
+            },
+            {
+                "lite_tag": null,
+                "offset": 0,
+                "size": 4,
+                "start_offset": 0,
+                "buffer_name": "conversion_5_output_array"
+            }
+        ],
+        "buffer_c_name_addr": "NULL",
+        "pool_id": 0
+    }},
+    "exec_time": {
+        "duration_ms": 0.00537500022619497,
+        "cycles_by_macc": 0,
+        "cycles": 0,
+        "device": "AMD64 Intel64 Family 6 Model 167 Stepping 1, GenuineIntel (Windows)"
+    },
+    "c_arrays_n": 19,
+    "c_name": "sine_model2",
+    "memory_pools": []
+}

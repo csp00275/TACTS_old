@@ -1,0 +1,453 @@
+{
+    "_allocate_inputs": 4,
+    "_allocate_outputs": 4,
+    "cli_parameters": "validate --name sine_model2 -m D:/ME program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/TensorflowLite/sine_model_quantized.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\JH_LAB\\AppData\\Local\\Temp\\mxAI_workspace131732035438005095723492569955618 --output C:\\Users\\JH_LAB\\.stm32cubemx\\sine_model2_output --allocate-inputs --allocate-outputs",
+    "cli_version": {
+        "major": 1,
+        "micro": 0,
+        "minor": 7
+    },
+    "cli_version_str": "1.7.0",
+    "code_size": 0,
+    "compression": {
+        "factor": null,
+        "layers": {}
+    },
+    "date_time": "Mon Aug 28 22:23:47 2023",
+    "error": 0,
+    "error_str": [],
+    "exec_cmd": "validate",
+    "exec_duration": 0.0,
+    "hash": "87d4c9452440469cc86e62458afa598c",
+    "inputs": [
+        "serving_default_dense_16_input0"
+    ],
+    "layers": [
+        {
+            "c_id": [
+                0
+            ],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 4,
+                    "fmt": {
+                        "format": "float"
+                    },
+                    "shape": [
+                        1,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 0,
+            "inputs": [],
+            "name": "serving_default_dense_16_input0",
+            "original": "",
+            "type": "Input"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 2,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 1,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        1,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 0,
+            "inputs": [
+                "serving_default_dense_16_input0"
+            ],
+            "name": "conversion_0",
+            "original": "QUANTIZE",
+            "type": "Conversion"
+        },
+        {
+            "c_id": [
+                1
+            ],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 16,
+                "psize": 16,
+                "rom_size": 80
+            },
+            "id": 1,
+            "inputs": [],
+            "name": "sequential_5_dense_16_MatMul",
+            "original": "",
+            "type": "Placeholder"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 16,
+                "psize": 64,
+                "rom_size": 0
+            },
+            "id": 1,
+            "inputs": [],
+            "name": "sequential_5_dense_16_BiasAdd_ReadVariableOp",
+            "original": "",
+            "type": "Placeholder"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 32,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 16,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        16,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 1,
+            "inputs": [
+                "conversion_0",
+                "sequential_5_dense_16_MatMul",
+                "sequential_5_dense_16_BiasAdd_ReadVariableOp"
+            ],
+            "name": "gemm_1",
+            "original": "FULLY_CONNECTED",
+            "type": "Gemm"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 16,
+                "n_params": 0,
+                "psize": 0,
+                "rom_size": 0
+            },
+            "id": 1,
+            "inputs": [
+                "gemm_1"
+            ],
+            "name": "nl_1_nl",
+            "original": "FULLY_CONNECTED",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [
+                2
+            ],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 320
+            },
+            "id": 2,
+            "inputs": [],
+            "name": "sequential_5_dense_17_MatMul",
+            "original": "",
+            "type": "Placeholder"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 16,
+                "psize": 64,
+                "rom_size": 0
+            },
+            "id": 2,
+            "inputs": [],
+            "name": "sequential_5_dense_17_BiasAdd_ReadVariableOp",
+            "original": "",
+            "type": "Placeholder"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 272,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 16,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        16,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 2,
+            "inputs": [
+                "nl_1_nl",
+                "sequential_5_dense_17_MatMul",
+                "sequential_5_dense_17_BiasAdd_ReadVariableOp"
+            ],
+            "name": "gemm_2",
+            "original": "FULLY_CONNECTED",
+            "type": "Gemm"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 16,
+                "n_params": 0,
+                "psize": 0,
+                "rom_size": 0
+            },
+            "id": 2,
+            "inputs": [
+                "gemm_2"
+            ],
+            "name": "nl_2_nl",
+            "original": "FULLY_CONNECTED",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [
+                3
+            ],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 256,
+                "psize": 256,
+                "rom_size": 320
+            },
+            "id": 3,
+            "inputs": [],
+            "name": "sequential_5_dense_18_MatMul",
+            "original": "",
+            "type": "Placeholder"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 16,
+                "psize": 64,
+                "rom_size": 0
+            },
+            "id": 3,
+            "inputs": [],
+            "name": "sequential_5_dense_18_BiasAdd_ReadVariableOp",
+            "original": "",
+            "type": "Placeholder"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 272,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 16,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        16,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 3,
+            "inputs": [
+                "nl_2_nl",
+                "sequential_5_dense_18_MatMul",
+                "sequential_5_dense_18_BiasAdd_ReadVariableOp"
+            ],
+            "name": "gemm_3",
+            "original": "FULLY_CONNECTED",
+            "type": "Gemm"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 16,
+                "n_params": 0,
+                "psize": 0,
+                "rom_size": 0
+            },
+            "id": 3,
+            "inputs": [
+                "gemm_3"
+            ],
+            "name": "nl_3_nl",
+            "original": "FULLY_CONNECTED",
+            "type": "Nonlinearity"
+        },
+        {
+            "c_id": [
+                4
+            ],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 16,
+                "psize": 16,
+                "rom_size": 20
+            },
+            "id": 4,
+            "inputs": [],
+            "name": "sequential_5_dense_19_MatMul",
+            "original": "",
+            "type": "Placeholder"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 0,
+                "n_params": 1,
+                "psize": 4,
+                "rom_size": 0
+            },
+            "id": 4,
+            "inputs": [],
+            "name": "sequential_5_dense_19_BiasAdd_ReadVariableOp",
+            "original": "",
+            "type": "Placeholder"
+        },
+        {
+            "c_id": [],
+            "extras": {
+                "n_macc": 17,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 1,
+                    "fmt": {
+                        "format": "int8_t"
+                    },
+                    "shape": [
+                        1,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 4,
+            "inputs": [
+                "nl_3_nl",
+                "sequential_5_dense_19_MatMul",
+                "sequential_5_dense_19_BiasAdd_ReadVariableOp"
+            ],
+            "name": "gemm_4",
+            "original": "FULLY_CONNECTED",
+            "type": "Gemm"
+        },
+        {
+            "c_id": [
+                5
+            ],
+            "extras": {
+                "n_macc": 2,
+                "n_params": 0,
+                "psize": 0,
+                "rom_output": {
+                    "c_size": 4,
+                    "fmt": {
+                        "format": "float"
+                    },
+                    "shape": [
+                        1,
+                        1
+                    ]
+                },
+                "rom_size": 0
+            },
+            "id": 5,
+            "inputs": [
+                "gemm_4"
+            ],
+            "name": "conversion_5",
+            "original": "DEQUANTIZE",
+            "type": "Conversion"
+        }
+    ],
+    "model_files": [
+        "D:\\ME program\\2017-PhD\\01_research\\02Study\\34_ballon_like_cover\\DeepLearing\\TACTS\\TensorflowLite\\sine_model_quantized.tflite"
+    ],
+    "model_n_params": 593,
+    "model_name": "sine_model_quantized",
+    "model_size": 740,
+    "model_type": "tflite",
+    "name": "sine_model2",
+    "outputs": [
+        "conversion_5"
+    ],
+    "ram_io_size": [
+        4,
+        4
+    ],
+    "ram_size": [
+        64,
+        64
+    ],
+    "report_version": 1.1,
+    "rom_cfact": 1.0,
+    "rom_heap_inspector": 2048,
+    "rom_inputs": [
+        {
+            "c_size": 4,
+            "c_type": "float",
+            "name": "serving_default_dense_16_input0"
+        }
+    ],
+    "rom_n_macc": 597,
+    "rom_outputs": [
+        {
+            "c_size": 4,
+            "c_type": "float",
+            "name": "conversion_5"
+        }
+    ],
+    "rom_size": 740,
+    "strategy": "heap_overlay",
+    "tools_api_version": {
+        "major": 1,
+        "micro": 0,
+        "minor": 7
+    },
+    "tools_version": {
+        "extra": "19520",
+        "major": 8,
+        "micro": 0,
+        "minor": 1
+    },
+    "val_error": 0.0,
+    "val_error_desc": "x-cross (rmse) #1",
+    "val_metrics": [
+        {
+            "acc": "n.a.",
+            "cos": 1.0,
+            "desc": "X-cross #1",
+            "l2r": 0.0,
+            "mae": 0.0,
+            "mean": 0.0,
+            "nse": 1.0,
+            "rmse": 0.0,
+            "std": 0.0,
+            "ts_name": "conversion_5, ai_float, (1,1), m_id=[5]"
+        }
+    ]
+}
