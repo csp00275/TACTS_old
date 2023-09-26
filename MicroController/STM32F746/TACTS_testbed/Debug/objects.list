@@ -1,3 +1,4 @@
+"./Core/Src/KalmanFilter.o"
 "./Core/Src/gpio.o"
 "./Core/Src/hidden_layer.o"
 "./Core/Src/hx711.o"
