@@ -51,7 +51,7 @@
 
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		8
+#define NUM_SENSOR		24
 #define WINDOW_SIZE 5
 #define DEBOUNCE_DELAY 20  // ?��바운?�� �??�� ?���? (�?리초)
 
@@ -156,7 +156,14 @@ int main(void)
 
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 	uint8_t tca_ch_reset = 0x00;
-    uint8_t tca_addr[] = {0x70};
+    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75};
+    uint8_t tca_addr[] = {0x70,0x71,0x72,0x73};
+    //uint8_t tca_addr[] = {0x70,0x71};
+    //uint8_t tca_addr[] = {0x72,0x73};
+    //uint8_t tca_addr[] = {0x76,0x77};
+	//uint8_t tca_addr[] = {0x74,0x75};
+
+
 
     HAL_UART_Receive_IT(&huart1,&rxData,1);
   // Variables to store load cell data
@@ -192,19 +199,27 @@ int main(void)
   /* UART interrupt initialization */
   HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "JH TACTS test\n\r"), 100);
 
-	for (int i = 0; i < sizeof(tca_addr); i++) {
-		HAL_I2C_Master_Transmit(&hi2c1, tca_addr[i] << 1, &tca_ch_reset, 1, 1000);
-	}
+  for (int j = 0; j < sizeof(tca_addr); ++j) {
+      HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, &tca_ch_reset, 1, 1000);
+  }
 
 	for (int i = 0; i < NUM_SENSOR; i++) {
 
-		uint8_t q = i / 8;
-		uint8_t r = i % 8;
+	    uint8_t q = i / 12;
+	    uint8_t r = i % 12;
+	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
+	    uint8_t channel = (r >= 8) ? r - 8 : r;
 
-		for (int j = 0; j < sizeof(tca_addr); j++) {
-			uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
-			HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
-		}
+	    //Reset device except active
+	    for (int j = 0; j < sizeof(tca_addr); ++j) {
+	           if (j != active_device) {
+	               HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, &tca_ch_reset, 1, 1000);
+	           }
+	       }
+
+	    // set channel of active device
+	    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[active_device] << 1, &tca_ch[channel], 1, 1000);
+
 
 		Dev = &vl53l0x_s[i];
 		Dev->I2cHandle = &hi2c1;
@@ -229,7 +244,7 @@ int main(void)
 		float Q = 0.1f; // Process noise covariance
 		float R = 1.0f;   // Measurement noise covariance
 		KalmanFilter_Init(&kalman_filters[i], Q, R);
-		// KalmanFilter initializer END //			 */
+		// KalmanFilter initializer END //
 		HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d complete \n\r",i), 100);
 	}
 
@@ -356,12 +371,20 @@ int main(void)
 		      do {
 		          /// Read the VL53l0x data ///
 		          for (int i = 0; i < NUM_SENSOR; i++) {
-		              uint8_t q = i / 8;
-		              uint8_t r = i % 8;
-		              for (int j = 0; j < sizeof(tca_addr); j++) {
-		                  uint8_t *channel = (j == q) ? &tca_ch[r] : &tca_ch_reset;
-		                  HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel, 1, 1000);
-		              }
+		      	    uint8_t q = i / 12;
+		      	    uint8_t r = i % 12;
+		      	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
+		      	    uint8_t channel = (r >= 8) ? r - 8 : r;
+
+		      	    //Reset device except active
+		      	    for (int j = 0; j < sizeof(tca_addr); ++j) {
+		      	           if (j != active_device) {
+		      	               HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, &tca_ch_reset, 1, 1000);
+		      	           }
+		      	       }
+
+		      	    // set channel of active device
+		      	    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[active_device] << 1, &tca_ch[channel], 1, 1000);
 		              Dev = &vl53l0x_s[i];
 		              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
