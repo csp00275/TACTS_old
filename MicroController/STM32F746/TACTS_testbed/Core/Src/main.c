@@ -367,6 +367,8 @@ int main(void)
 		      int distance[NUM_SENSOR][WINDOW_SIZE] = {{0}};
 		      int filtered_distance[NUM_SENSOR] = {0};
 		      int current_index[NUM_SENSOR] = {0};
+		      KalmanFilter kalmanFilters[NUM_SENSOR];
+
 
 		      do {
 		          /// Read the VL53l0x data ///
@@ -389,32 +391,11 @@ int main(void)
 		              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
 		              if (RangingData.RangeStatus == 0) {
-		                  distance[i][current_index[i]] = RangingData.RangeMilliMeter;
-		                  current_index[i] = (current_index[i] + 1) % WINDOW_SIZE;
+		                  float filteredValue = Kalman_Estimate(&kalmanFilters[i], RangingData.RangeMilliMeter);
+		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%f ", filteredValue), 100);
 		              }
 
-		              // Apply the filter every time new data comes in
-		              int temp[WINDOW_SIZE];
-		              for (int j = 0; j < WINDOW_SIZE; j++) {
-		                  temp[j] = distance[i][j];
-		              }
 
-		              // Insertion sort
-		              for (int j = 1; j < WINDOW_SIZE; j++) {
-		                  int key = temp[j];
-		                  int k = j - 1;
-
-		                  while (k >= 0 && temp[k] > key) {
-		                      temp[k + 1] = temp[k];
-		                      k = k - 1;
-		                  }
-		                  temp[k + 1] = key;
-		              }
-
-		              filtered_distance[i] = temp[WINDOW_SIZE / 2];
-
-		              // Print the filtered data to the serial port
-		              HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ", filtered_distance[i]), 100);
 		          }
 		          /// End of Reading and Filtering Vl53l0x data ///
 
@@ -437,7 +418,7 @@ int main(void)
 
 		          HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 
-		      } while (time_diff < 50000);
+		      } while (time_diff < 10000);
 
 		      receivedFlag = 0;
 		  }
