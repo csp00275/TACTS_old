@@ -1,0 +1,45 @@
+!SESSION 2023-08-29 14:18:28.018 -----------------------------------------------
+eclipse.buildId=Version 1.11.0
+java.version=11.0.16
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-08-29 14:18:32.535
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-08-29 14:18:32.597
+!MESSAGE Log4j initialized with config file D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-08-29 14:18:39.585
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2023-08-29 14:18:42.590 -----------------------------------------------
+eclipse.buildId=Version 1.11.0
+java.version=11.0.16
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-08-29 14:18:46.269
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-08-29 14:18:46.319
+!MESSAGE Log4j initialized with config file D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-08-29 14:18:53.881
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2023-08-29 14:19:00.097 -----------------------------------------------
+eclipse.buildId=Version 1.11.0
+java.version=11.0.16
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-08-29 14:19:03.652
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-08-29 14:19:03.703
+!MESSAGE Log4j initialized with config file D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-08-29 14:19:11.119
+!MESSAGE Started RMI Server, listening on port 41337

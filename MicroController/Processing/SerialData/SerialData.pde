@@ -15,13 +15,13 @@ float movingMean;
 float movingStdDev;
 
 // Y 축의 최대, 최소 값을 조절하기 위한 상수
-final int Y_MIN = 30;
-final int Y_MAX = 50;  // 이 값을 변경하여 Y축의 최대 값을 조절하세요.
+final int Y_MIN = 40;
+final int Y_MAX = 60;  // 이 값을 변경하여 Y축의 최대 값을 조절하세요.
 
 
 void setup() {
   size(1000, 1000);  // 그래픽 윈도우의 크기를 수정
-  arduino = new Serial(this, "COM13", 115200);
+  arduino = new Serial(this, "COM11", 115200);
   arduino.bufferUntil('\n');
 }
 void draw() {
