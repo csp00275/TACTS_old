@@ -1,23 +1,25 @@
 /*
  * kalman.h
  *
- *  Created on: 2023. 4. 11.
+ *  Created on: 2023. 10. 04.
  *      Author: JH_LAB
  */
 
-#ifndef INC_KALMAN_H_
-#define INC_KALMAN_H_
-
+#ifndef KALMAN_H
+#define KALMAN_H
 
 typedef struct {
-    float Q;
-    float R;
-    float P;
-    float X_estimate;
-    float K;
+    float Q;  // process noise covariance
+    float R;  // measurement noise covariance
+    float P;  // estimation error covariance
+    float X;  // value of the best estimate of the desired variable
+    float K;  // Kalman gain
 } KalmanFilter;
-void Kalman_Init(KalmanFilter* filter, float processNoise, float measurementNoise, float errorCovariance);
-float Kalman_Estimate(KalmanFilter* filter, float measurement);
 
+// Initialize Kalman filter
+void Kalman_Init(KalmanFilter *kf, float Q, float R, float P, float initial_value);
 
-#endif /* INC_KALMAN_H_ */
+// Estimate the new value
+float Kalman_Estimate(KalmanFilter *kf, float measurement);
+
+#endif // KALMAN_H

@@ -32,6 +32,7 @@
 #include "motor.h"
 #include "hx711.h"
 #include <string.h>
+#include "kalman.h"
 
 
 
@@ -51,19 +52,14 @@
 
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		24
+#define NUM_SENSOR		36
 #define WINDOW_SIZE 5
 #define DEBOUNCE_DELAY 20  // ?��바운?�� �??�� ?���? (�?리초)
-
-
 
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
-
-
 
 /* USER CODE END PM */
 
@@ -74,9 +70,9 @@
 uint8_t rxBuffer[RX_BUFFER_SIZE];
 uint16_t rxBufferIndex = 0;
 uint8_t rxData;
-uint8_t receivedFlag = 0; // ?��?�� ?��?��그�?? 추�??��?��?��.
+uint8_t receivedFlag = 0; // Data Received Declare
 
-char string[100]; // 버퍼 ?���???? ?��?��
+char string[100]; // String Buffer
 HAL_StatusTypeDef status;
 
 uint32_t time_diff =0;
@@ -96,12 +92,10 @@ uint8_t MessageLen;
 VL53L0X_RangingMeasurementData_t RangingData;
 
 volatile uint32_t lastInterruptTime = 0;
-
 volatile int32_t encoderCount = 0;
 uint32_t count = 0;
 uint32_t data = 0;
 volatile uint32_t ms_tick_count = 0;
-
 
 /* USER CODE END PV */
 
@@ -156,12 +150,18 @@ int main(void)
 
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 	uint8_t tca_ch_reset = 0x00;
-    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75};
-    uint8_t tca_addr[] = {0x70,0x71,0x72,0x73};
+    uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75};
+    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73};
     //uint8_t tca_addr[] = {0x70,0x71};
     //uint8_t tca_addr[] = {0x72,0x73};
     //uint8_t tca_addr[] = {0x76,0x77};
 	//uint8_t tca_addr[] = {0x74,0x75};
+
+
+    KalmanFilter filters[NUM_SENSOR];
+	float Q = 0.001f; // Process noise covariance
+	float R = 0.03f;   // Measurement noise covariance
+	float P = 0.001f;
 
 
 
@@ -239,11 +239,9 @@ int main(void)
 		VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
 		VL53L0X_SetVcselPulsePeriod( Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 
-	/*
+
 		// KalmanFilter initializer BEGIN //
-		float Q = 0.1f; // Process noise covariance
-		float R = 1.0f;   // Measurement noise covariance
-		KalmanFilter_Init(&kalman_filters[i], Q, R);
+        Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기값
 		// KalmanFilter initializer END //
 		HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d complete \n\r",i), 100);
 	}
@@ -349,30 +347,29 @@ int main(void)
 		        	 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "invalid data\r\n"), 100);
 		         }
 		         HAL_Delay(2000); // Delay for 1 second
-
 		         servo_angle(&htim2, TIM_CHANNEL_1, 0); // return to servo origin
-
 		         receivedFlag = 0;
 		     }
 
 		  command = "sensor";
 		  if (strncmp((char*)rxBuffer, command,strlen(command)) == 0) {
+
+
+			  uint32_t start_section_time, end_section_time,elapsed_section_time;
+
+
 		      HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "sensor test\r\n"), 100);
 
 		      ///////////////////////////////////////////////////////
 		      ////////////////////Logging Start//////////////////////
 		      ///////////////////////////////////////////////////////
 		      start_time = HAL_GetTick(); // ?��?�� ?���??? 측정
-
-		      int distance[NUM_SENSOR][WINDOW_SIZE] = {{0}};
-		      int filtered_distance[NUM_SENSOR] = {0};
-		      int current_index[NUM_SENSOR] = {0};
-		      KalmanFilter kalmanFilters[NUM_SENSOR];
-
-
 		      do {
-		          /// Read the VL53l0x data ///
+		    	  start_section_time = HAL_GetTick();
+
+		    	  /// Read the VL53l0x data ///
 		          for (int i = 0; i < NUM_SENSOR; i++) {
+
 		      	    uint8_t q = i / 12;
 		      	    uint8_t r = i % 12;
 		      	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
@@ -391,12 +388,19 @@ int main(void)
 		              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
 		              if (RangingData.RangeStatus == 0) {
-		                  float filteredValue = Kalman_Estimate(&kalmanFilters[i], RangingData.RangeMilliMeter);
-		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%f ", filteredValue), 100);
+		                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
+		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.2f ", filteredValue), 100);
 		              }
 
 
+
 		          }
+
+				  end_section_time = HAL_GetTick();
+				  elapsed_section_time = end_section_time - start_section_time;
+				  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%lu ms ", elapsed_section_time), 100);
+
+
 		          /// End of Reading and Filtering Vl53l0x data ///
 
 				  /// Read the raw data from HX711 ///
@@ -405,13 +409,17 @@ int main(void)
 				  float loadcell_bias = 10002;
 				  UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias); // Send the weight data over UART
 				  /// End of Reading HX711 data ///
-
+				  #if 0
 				  /// Read the raw data from AMT103 ///
 				  float encoderAngle = encoderCount/4096.0*360.0;
 				  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
 				  /// End of Reading AMT103 data ///
+				  #endif
 
 		          // Rest of the code...
+
+
+
 
 		          end_time = HAL_GetTick(); // 종료 ?���??? 측정
 		          time_diff = end_time - start_time; // ?���??? 차이 계산
@@ -437,7 +445,7 @@ int main(void)
 	        	 for( int lin = 0; lin < 80;lin ++){
 	        		 stepLin(2); // moving horizontal
 					 for(int rev = 0; rev<1; rev++){
-						 //stepRev(9); // revolution
+						 stepRev(9); // revolution
 						 for(int r = 1;r<11;r++){
 
 							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
@@ -448,9 +456,7 @@ int main(void)
 							 ///////////////////////////////////////////////////////
 							 start_time = HAL_GetTick(); // ?��?�� ?���???? 측정
 
-							int distance[NUM_SENSOR][WINDOW_SIZE] = {{0}};
-							int filtered_distance[NUM_SENSOR] = {0};
-							int current_index[NUM_SENSOR] = {0};
+
 
 							 do{
 							        for (int i = 0; i < NUM_SENSOR; i++) {
@@ -463,33 +469,12 @@ int main(void)
 									  Dev = &vl53l0x_s[i];
 									  VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
-									  if (RangingData.RangeStatus == 0) {
-										  distance[i][current_index[i]] = RangingData.RangeMilliMeter;
-										  current_index[i] = (current_index[i] + 1) % WINDOW_SIZE;
-									  }
+						              if (RangingData.RangeStatus == 0) {
+						                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
+						                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 100);
+						              }
 
-									  // Apply the filter every time new data comes in
-									  int temp[WINDOW_SIZE];
-									  for (int j = 0; j < WINDOW_SIZE; j++) {
-										  temp[j] = distance[i][j];
-									  }
-
-									  // Insertion sort
-									  for (int j = 1; j < WINDOW_SIZE; j++) {
-										  int key = temp[j];
-										  int k = j - 1;
-
-										  while (k >= 0 && temp[k] > key) {
-											  temp[k + 1] = temp[k];
-											  k = k - 1;
-										  }
-										  temp[k + 1] = key;
-									  }
-
-									  filtered_distance[i] = temp[WINDOW_SIZE / 2];
-
-									  // Print the filtered data to the serial port
-									  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ", filtered_distance[i]), 100);
+						              // Print the filtered data to the serial port
 							          /// End of Reading and Filtering Vl53l0x data ///
 
 								  }
