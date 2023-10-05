@@ -3,8 +3,7 @@ import datetime
 
 import numpy as np
 
-num = 13
-
+num = 40
 tof = [0]*num
 stm32f7 = serial.Serial('COM3',115200,timeout=100)
 
@@ -31,7 +30,7 @@ while True:
 
 
     # 이 문자열을 파일 경로에 포함시킵니다.
-    file_path = "C:/Users/21310/Desktop/PJH/Software/TACTS/MicroController/DataCol_Python/CollectedData/" + time_string + "_Data.csv"
+    file_path = "C:/Users/21310/Desktop/PJH/Software/TACTS/MicroController/DataCol_Python/CollectedData/" + time_string + "_2kPa_Data.csv"
     #print(file_path)
 
     if len(SsplitPacket) >= len(tof):
