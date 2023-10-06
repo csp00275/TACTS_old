@@ -481,7 +481,7 @@ int main(void)
 	        	 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "autoMode\r\n"), 100);
 
 
-	        	 for( int lin = 0; lin < 43;lin ++){
+	        	 for( int lin = 0; lin < 20;lin ++){
 					 for(int rev = 0; rev<18; rev++){
 						 for(int r = 1;r<8;r++){
 

@@ -3979,7 +3979,7 @@ int main(void)
  8002592:	f007 fac3 	bl	8009b1c <HAL_UART_Transmit>
 
 
-	        	 for( int lin = 0; lin < 43;lin ++){
+	        	 for( int lin = 0; lin < 20;lin ++){
  8002596:	2300      	movs	r3, #0
  8002598:	f643 32a0 	movw	r2, #15264	; 0x3ba0
  800259c:	443a      	add	r2, r7
@@ -4464,7 +4464,7 @@ int main(void)
 	        		 stepLin(8); // moving horizontal
  80029d6:	2008      	movs	r0, #8
  80029d8:	f000 f9e6 	bl	8002da8 <stepLin>
-	        	 for( int lin = 0; lin < 43;lin ++){
+	        	 for( int lin = 0; lin < 20;lin ++){
  80029dc:	f643 33a0 	movw	r3, #15264	; 0x3ba0
  80029e0:	443b      	add	r3, r7
  80029e2:	681b      	ldr	r3, [r3, #0]
@@ -4475,7 +4475,7 @@ int main(void)
  80029ee:	f643 33a0 	movw	r3, #15264	; 0x3ba0
  80029f2:	443b      	add	r3, r7
  80029f4:	681b      	ldr	r3, [r3, #0]
- 80029f6:	2b2a      	cmp	r3, #42	; 0x2a
+ 80029f6:	2b13      	cmp	r3, #19
  80029f8:	f77f add3 	ble.w	80025a2 <main+0x108a>
 
 	        	 }
