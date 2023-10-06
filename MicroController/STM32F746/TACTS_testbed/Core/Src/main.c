@@ -481,7 +481,7 @@ int main(void)
 	        	 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "autoMode\r\n"), 100);
 
 
-	        	 for( int lin = 0; lin < 20;lin ++){
+	        	 for( int lin = 0; lin < 21;lin ++){
 					 for(int rev = 0; rev<18; rev++){
 						 for(int r = 1;r<8;r++){
 
@@ -515,10 +515,15 @@ int main(void)
 						              Dev = &vl53l0x_s[i];
 						              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
+
 						              if (RangingData.RangeStatus == 0) {
+						                  // Skip the loop iteration if the value is greater than or equal to 100.
+						                  if (RangingData.RangeMilliMeter >= 80) {
+						                      continue;
+						                  }
 						                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
 						                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 100);
-						              }else{
+						              } else {
 						                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "999 "), 100);
 						              }
 						          }
@@ -543,8 +548,8 @@ int main(void)
 						 time_diff = end_time - start_time; // ?���???? 차이 계산
 
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " "), 100);
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",2*lin), 100);
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",rev), 100);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",4*lin), 100);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",20*rev), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.2f",r*0.8), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 
