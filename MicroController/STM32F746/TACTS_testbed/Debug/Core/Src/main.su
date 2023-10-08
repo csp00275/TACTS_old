@@ -1,7 +1,7 @@
-../Core/Src/main.c:129:5:main	15312	static
-../Core/Src/main.c:590:6:SystemClock_Config	88	static
-../Core/Src/main.c:642:13:MX_NVIC_Init	8	static
-../Core/Src/main.c:669:6:HAL_UART_RxCpltCallback	16	static
-../Core/Src/main.c:689:6:HAL_GPIO_EXTI_Callback	16	static
-../Core/Src/main.c:763:6:Error_Handler	4	static,ignoring_inline_asm
-../Core/Src/main.c:782:6:assert_failed	16	static
+../Core/Src/main.c:129:5:main	20360	static
+../Core/Src/main.c:591:6:SystemClock_Config	88	static
+../Core/Src/main.c:643:13:MX_NVIC_Init	8	static
+../Core/Src/main.c:670:6:HAL_UART_RxCpltCallback	16	static
+../Core/Src/main.c:690:6:HAL_GPIO_EXTI_Callback	16	static
+../Core/Src/main.c:764:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:783:6:assert_failed	16	static

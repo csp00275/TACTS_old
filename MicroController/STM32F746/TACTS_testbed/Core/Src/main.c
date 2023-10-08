@@ -52,7 +52,7 @@
 
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		36
+#define NUM_SENSOR		48
 #define WINDOW_SIZE 5
 #define DEBOUNCE_DELAY 20  // ?��바운?�� �??�� ?���? (�?리초)
 
@@ -150,9 +150,10 @@ int main(void)
 
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 	uint8_t tca_ch_reset = 0x00;
-    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77};
-    uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75};
-    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73};
+
+    uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77};  // 4 line
+    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75}; // 3 line
+    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73}; // 2 line
     //uint8_t tca_addr[] = {0x70,0x71};
     //uint8_t tca_addr[] = {0x72,0x73};
     //uint8_t tca_addr[] = {0x76,0x77};
@@ -466,7 +467,7 @@ int main(void)
 		                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
 		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 100);
 		              }else{
-		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "999 "), 100);
+		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "Er "), 100);
 		              }
 		          }
 
@@ -485,7 +486,7 @@ int main(void)
 					 for(int rev = 0; rev<18; rev++){
 						 for(int r = 1;r<8;r++){
 
-							 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
+							 servo_angle(&htim2, TIM_CHANNEL_1, r+2); // poking
 							 HAL_Delay(500);
 
 							 ///////////////////////////////////////////////////////
@@ -524,7 +525,7 @@ int main(void)
 						                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
 						                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 100);
 						              } else {
-						                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "999 "), 100);
+						            	  continue;
 						              }
 						          }
 
@@ -548,12 +549,12 @@ int main(void)
 						 time_diff = end_time - start_time; // ?���???? 차이 계산
 
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " "), 100);
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",4*lin), 100);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",8*lin), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",20*rev), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.2f",r*0.8), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 
-						 }while(time_diff<3000);
+						 }while(time_diff<4000);
 						 ///////////////////////////////////////////////////////
 						 ////////////////////Logging End////////////////////////
 						 ///////////////////////////////////////////////////////

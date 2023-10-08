@@ -1,7 +1,7 @@
 main.c:129:5:main	40
-main.c:590:6:SystemClock_Config	4
-main.c:642:13:MX_NVIC_Init	1
-main.c:669:6:HAL_UART_RxCpltCallback	4
-main.c:689:6:HAL_GPIO_EXTI_Callback	5
-main.c:763:6:Error_Handler	1
-main.c:782:6:assert_failed	1
+main.c:591:6:SystemClock_Config	4
+main.c:643:13:MX_NVIC_Init	1
+main.c:670:6:HAL_UART_RxCpltCallback	4
+main.c:690:6:HAL_GPIO_EXTI_Callback	5
+main.c:764:6:Error_Handler	1
+main.c:783:6:assert_failed	1
