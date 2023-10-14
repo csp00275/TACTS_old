@@ -365,7 +365,8 @@ int main(void)
 		      ///////////////////////////////////////////////////////
 		      ////////////////////Logging Start//////////////////////
 		      ///////////////////////////////////////////////////////
-		      start_time = HAL_GetTick(); // ?��?�� ?���??? 측정
+		      start_time = HAL_GetTick();
+		      uint8_t count =0;
 		      do {
 		    	  start_section_time = HAL_GetTick();
 
@@ -390,10 +391,10 @@ int main(void)
 		              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
 		              if (RangingData.RangeStatus == 0) {
-		                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
-		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.2f ", filteredValue), 100);
-		              }else{
-		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "999 "), 100);
+		                  if (RangingData.RangeMilliMeter < 80) {
+			                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
+			                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 500);
+		                  }
 		              }
 
 		          }
@@ -411,24 +412,14 @@ int main(void)
 				  float loadcell_bias = 10002;
 				  UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias); // Send the weight data over UART
 				  /// End of Reading HX711 data ///
-				  #if 0
-				  /// Read the raw data from AMT103 ///
-				  float encoderAngle = encoderCount/4096.0*360.0;
-				  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
-				  /// End of Reading AMT103 data ///
-				  #endif
-
-		          // Rest of the code...
-
-
-
 
 		          end_time = HAL_GetTick(); // 종료 ?���??? 측정
 		          time_diff = end_time - start_time; // ?���??? 차이 계산
 
 		          HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
+		          count++;
 
-		      } while (time_diff < 10000);
+		      } while (count < 100);
 
 		      receivedFlag = 0;
 		  }
@@ -438,14 +429,12 @@ int main(void)
 		     {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		      HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "sensor test\r\n"), 100);
-	    	  start_time = HAL_GetTick(); // 종료 ?���??? 측정
-
+		      HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "kalman steady state\r\n"), 100);
+	    	  start_time = HAL_GetTick();
+	    	  uint8_t count = 0;
 		      do {
-
 		    	  /// Read the VL53l0x data ///
 		          for (int i = 0; i < NUM_SENSOR; i++) {
-
 		      	    uint8_t q = i / 12;
 		      	    uint8_t r = i % 12;
 		      	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
@@ -457,17 +446,15 @@ int main(void)
 		      	               HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, &tca_ch_reset, 1, 1000);
 		      	           }
 		      	       }
-
-		      	    // set channel of active device
-		      	    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[active_device] << 1, &tca_ch[channel], 1, 1000);
-		              Dev = &vl53l0x_s[i];
-		              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
+		      	    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[active_device] << 1, &tca_ch[channel], 1, 1000); 	    // set channel of active device
+		      	    Dev = &vl53l0x_s[i];
+		            VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
 		              if (RangingData.RangeStatus == 0) {
-		                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
-		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 100);
-		              }else{
-		                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "Er "), 100);
+		                  if (RangingData.RangeMilliMeter < 80) {
+			                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
+			                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 500);
+		                  }
 		              }
 		          }
 
@@ -476,13 +463,14 @@ int main(void)
 		          end_time = HAL_GetTick(); // 종료 ?���??? 측정
 		          time_diff = end_time - start_time; // ?���??? 차이 계산
 		          HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
-		      } while (time_diff < 10000);
+		          count++;
+		      } while (count < 100);
 
 
 	        	 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "autoMode\r\n"), 100);
 
-
-	        	 for( int lin = 0; lin < 21;lin ++){
+				 servo_angle(&htim2, TIM_CHANNEL_1, 1); // poking
+	        	 for(int lin = 0; lin < 21;lin ++){
 					 for(int rev = 0; rev<18; rev++){
 						 for(int r = 1;r<8;r++){
 
@@ -492,10 +480,8 @@ int main(void)
 							 ///////////////////////////////////////////////////////
 							 ////////////////////Logging Start//////////////////////
 							 ///////////////////////////////////////////////////////
-							 start_time = HAL_GetTick(); // ?��?�� ?���???? 측정
 
-
-
+							 uint8_t count =0;
 							 do{
 						          for (int i = 0; i < NUM_SENSOR; i++) {
 
@@ -518,14 +504,10 @@ int main(void)
 
 
 						              if (RangingData.RangeStatus == 0) {
-						                  // Skip the loop iteration if the value is greater than or equal to 100.
-						                  if (RangingData.RangeMilliMeter >= 80) {
-						                      continue;
+						                  if (RangingData.RangeMilliMeter < 80) {
+							                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
+							                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 500);
 						                  }
-						                  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
-						                  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.1f ", filteredValue), 100);
-						              } else {
-						            	  continue;
 						              }
 						          }
 
@@ -537,24 +519,13 @@ int main(void)
 						  UART_SendWeight_g(rawData,loadcell_slope,loadcell_bias); // Send the weight data over UART
 						  /// End of Reading HX711 data ///
 
-
-						  #if 0
-						  /// Read the raw data from AMT103 ///
-						  float encoderAngle = encoderCount/4096.0*360.0;
-						  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
-						  /// End of Reading AMT103 data ///
-						  #endif
-
-						 end_time = HAL_GetTick(); // ?�� ?���???? 측정
-						 time_diff = end_time - start_time; // ?���???? 차이 계산
-
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " "), 100);
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",8*lin), 100);
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",20*rev), 100);
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.2f",r*0.8), 100);
-						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
-
-						 }while(time_diff<4000);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " "), 500);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",8*lin), 500);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",20*rev), 500);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.2f",r*0.8), 500);
+						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 500);
+						 count++;
+						 }while(count<40);
 						 ///////////////////////////////////////////////////////
 						 ////////////////////Logging End////////////////////////
 						 ///////////////////////////////////////////////////////
@@ -566,8 +537,7 @@ int main(void)
 
 					 }
 					 stepRev(-360);
-	        		 stepLin(8); // moving horizontal
-
+	        		 stepLin(-8); // moving horizontal
 	        	 }
 
 
