@@ -52,7 +52,7 @@
 
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		36
+#define NUM_SENSOR		24
 #define WINDOW_SIZE 5
 #define DEBOUNCE_DELAY 20  // ?��바운?�� �??�� ?���? (�?리초)
 
@@ -150,8 +150,9 @@ int main(void)
 
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 	uint8_t tca_ch_reset = 0x00;
+    uint8_t tca_addr[] = {0x70,0x71,0x72};
     //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77};
-    uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75};
+    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75};
     //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73};
     //uint8_t tca_addr[] = {0x70,0x71};
     //uint8_t tca_addr[] = {0x72,0x73};
@@ -206,21 +207,13 @@ int main(void)
 
 	for (int i = 0; i < NUM_SENSOR; i++) {
 
-	    uint8_t q = i / 12;
-	    uint8_t r = i % 12;
-	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
-	    uint8_t channel = (r >= 8) ? r - 8 : r;
+	    uint8_t q = i / 8;
+	    uint8_t r = i % 8;
 
-	    //Reset device except active
-	    for (int j = 0; j < sizeof(tca_addr); ++j) {
-	           if (j != active_device) {
-	               HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, &tca_ch_reset, 1, 1000);
-	           }
-	       }
-
-	    // set channel of active device
-	    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[active_device] << 1, &tca_ch[channel], 1, 1000);
-
+	    for(int j =0;j< sizeof(tca_addr);j++){
+	    	uint8_t *channel = (j==q) ? &tca_ch[r] : &tca_ch_reset;
+	    	HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel,1,1000);
+	    }
 
 		Dev = &vl53l0x_s[i];
 		Dev->I2cHandle = &hi2c1;
@@ -371,20 +364,15 @@ int main(void)
 		    	  /// Read the VL53l0x data ///
 		          for (int i = 0; i < NUM_SENSOR; i++) {
 
-		      	    uint8_t q = i / 12;
-		      	    uint8_t r = i % 12;
-		      	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
-		      	    uint8_t channel = (r >= 8) ? r - 8 : r;
+		      	    uint8_t q = i / 8;
+		      	    uint8_t r = i % 8;
 
-		      	    //Reset device except active
-		      	    for (int j = 0; j < sizeof(tca_addr); ++j) {
-		      	           if (j != active_device) {
-		      	               HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, &tca_ch_reset, 1, 1000);
-		      	           }
-		      	       }
+		      	    for(int j =0;j< sizeof(tca_addr);j++){
+		      	    	uint8_t *channel = (j==q) ? &tca_ch[r] : &tca_ch_reset;
+		      	    	HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel,1,1000);
+		      	    }
 
-		      	    // set channel of active device
-		      	    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[active_device] << 1, &tca_ch[channel], 1, 1000);
+
 		              Dev = &vl53l0x_s[i];
 		              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
@@ -445,20 +433,13 @@ int main(void)
 		    	  /// Read the VL53l0x data ///
 		          for (int i = 0; i < NUM_SENSOR; i++) {
 
-		      	    uint8_t q = i / 12;
-		      	    uint8_t r = i % 12;
-		      	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
-		      	    uint8_t channel = (r >= 8) ? r - 8 : r;
+			      	    uint8_t q = i / 8;
+			      	    uint8_t r = i % 8;
 
-		      	    //Reset device except active
-		      	    for (int j = 0; j < sizeof(tca_addr); ++j) {
-		      	           if (j != active_device) {
-		      	               HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, &tca_ch_reset, 1, 1000);
-		      	           }
-		      	       }
-
-		      	    // set channel of active device
-		      	    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[active_device] << 1, &tca_ch[channel], 1, 1000);
+			      	    for(int j =0;j< sizeof(tca_addr);j++){
+			      	    	uint8_t *channel = (j==q) ? &tca_ch[r] : &tca_ch_reset;
+			      	    	HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel,1,1000);
+			      	    }
 		              Dev = &vl53l0x_s[i];
 		              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
@@ -481,7 +462,7 @@ int main(void)
 	        	 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "autoMode\r\n"), 100);
 
 
-	        	 for( int lin = 0; lin < 20;lin ++){
+	        	 for( int lin = 0; lin < 1;lin ++){
 					 for(int rev = 0; rev<18; rev++){
 						 for(int r = 1;r<8;r++){
 
@@ -494,24 +475,16 @@ int main(void)
 							 start_time = HAL_GetTick(); // ?��?�� ?���???? 측정
 
 
-
+							 uint8_t count =0;
 							 do{
 						          for (int i = 0; i < NUM_SENSOR; i++) {
+									uint8_t q = i / 8;
+									uint8_t r = i % 8;
 
-						      	    uint8_t q = i / 12;
-						      	    uint8_t r = i % 12;
-						      	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
-						      	    uint8_t channel = (r >= 8) ? r - 8 : r;
-
-						      	    //Reset device except active
-						      	    for (int j = 0; j < sizeof(tca_addr); ++j) {
-						      	           if (j != active_device) {
-						      	               HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, &tca_ch_reset, 1, 1000);
-						      	           }
-						      	       }
-
-						      	    // set channel of active device
-						      	    HAL_I2C_Master_Transmit(&hi2c1, tca_addr[active_device] << 1, &tca_ch[channel], 1, 1000);
+									for(int j =0;j< sizeof(tca_addr);j++){
+										uint8_t *channel = (j==q) ? &tca_ch[r] : &tca_ch_reset;
+										HAL_I2C_Master_Transmit(&hi2c1, tca_addr[j] << 1, channel,1,1000);
+									}
 						              Dev = &vl53l0x_s[i];
 						              VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
 
@@ -532,13 +505,6 @@ int main(void)
 						  /// End of Reading HX711 data ///
 
 
-						  #if 0
-						  /// Read the raw data from AMT103 ///
-						  float encoderAngle = encoderCount/4096.0*360.0;
-						  HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " %.2f ",encoderAngle), 100);
-						  /// End of Reading AMT103 data ///
-						  #endif
-
 						 end_time = HAL_GetTick(); // ?�� ?���???? 측정
 						 time_diff = end_time - start_time; // ?���???? 차이 계산
 
@@ -547,8 +513,9 @@ int main(void)
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",rev), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%.2f",r*0.8), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
+						 count++;
 
-						 }while(time_diff<3000);
+						 }while(count<40);
 						 ///////////////////////////////////////////////////////
 						 ////////////////////Logging End////////////////////////
 						 ///////////////////////////////////////////////////////
@@ -560,8 +527,6 @@ int main(void)
 
 					 }
 					 stepRev(-360);
-	        		 stepLin(8); // moving horizontal
-
 	        	 }
 
 
