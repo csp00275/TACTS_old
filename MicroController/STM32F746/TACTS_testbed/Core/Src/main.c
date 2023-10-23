@@ -22,6 +22,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "crc.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -54,7 +55,7 @@
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
 #define NUM_SENSOR		36
 #define WINDOW_SIZE 5
-#define DEBOUNCE_DELAY 20  // ?��바운?�� �??�� ?���? (�?리초)
+#define DEBOUNCE_DELAY 20  // ?��바운?�� �???�� ?���?? (�??리초)
 
 /* USER CODE END PD */
 
@@ -101,6 +102,7 @@ volatile uint32_t ms_tick_count = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MPU_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -131,6 +133,15 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
+
+  /* MPU Configuration--------------------------------------------------------*/
+  MPU_Config();
+
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -242,7 +253,7 @@ int main(void)
 
 
 		// KalmanFilter initializer BEGIN //
-        Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기값
+        Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기�?
 		// KalmanFilter initializer END //
 		HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d complete \n\r",i), 100);
 	}
@@ -364,7 +375,7 @@ int main(void)
 		      ///////////////////////////////////////////////////////
 		      ////////////////////Logging Start//////////////////////
 		      ///////////////////////////////////////////////////////
-		      start_time = HAL_GetTick(); // ?��?�� ?���??? 측정
+		      start_time = HAL_GetTick(); // ?��?�� ?���???? 측정
 		      do {
 		    	  start_section_time = HAL_GetTick();
 
@@ -422,8 +433,8 @@ int main(void)
 
 
 
-		          end_time = HAL_GetTick(); // 종료 ?���??? 측정
-		          time_diff = end_time - start_time; // ?���??? 차이 계산
+		          end_time = HAL_GetTick(); // 종료 ?���???? 측정
+		          time_diff = end_time - start_time; // ?���???? 차이 계산
 
 		          HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 
@@ -438,7 +449,7 @@ int main(void)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		      HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "sensor test\r\n"), 100);
-	    	  start_time = HAL_GetTick(); // 종료 ?���??? 측정
+	    	  start_time = HAL_GetTick(); // 종료 ?���???? 측정
 
 		      do {
 
@@ -472,8 +483,8 @@ int main(void)
 
 		          /// End of Reading and Filtering Vl53l0x data ///
 
-		          end_time = HAL_GetTick(); // 종료 ?���??? 측정
-		          time_diff = end_time - start_time; // ?���??? 차이 계산
+		          end_time = HAL_GetTick(); // 종료 ?���???? 측정
+		          time_diff = end_time - start_time; // ?���???? 차이 계산
 		          HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "\n"), 100);
 		      } while (time_diff < 10000);
 
@@ -491,7 +502,7 @@ int main(void)
 							 ///////////////////////////////////////////////////////
 							 ////////////////////Logging Start//////////////////////
 							 ///////////////////////////////////////////////////////
-							 start_time = HAL_GetTick(); // ?��?�� ?���???? 측정
+							 start_time = HAL_GetTick(); // ?��?�� ?���????? 측정
 
 
 
@@ -539,8 +550,8 @@ int main(void)
 						  /// End of Reading AMT103 data ///
 						  #endif
 
-						 end_time = HAL_GetTick(); // ?�� ?���???? 측정
-						 time_diff = end_time - start_time; // ?���???? 차이 계산
+						 end_time = HAL_GetTick(); // ?�� ?���????? 측정
+						 time_diff = end_time - start_time; // ?���????? 차이 계산
 
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, " "), 100);
 						 HAL_UART_Transmit(&huart1, (uint8_t*)Message, sprintf((char*)Message, "%d ",2*lin), 100);
@@ -599,8 +610,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 432;
+  RCC_OscInitStruct.PLL.PLLM = 4;
+  RCC_OscInitStruct.PLL.PLLN = 216;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -711,19 +722,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 #if 0
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  uint32_t currentInterruptTime = HAL_GetTick(); // 현재 시간 가져오기
+  uint32_t currentInterruptTime = HAL_GetTick(); // ?��?�� ?���? �??��?���?
 
-  // 지난 인터럽트로부터 DEBOUNCE_DELAY 시간이 경과하지 않았다면 무시
+  // �??�� ?��?��?��?��로�??�� DEBOUNCE_DELAY ?��간이 경과?���? ?��?��?���? 무시
   if((currentInterruptTime - lastInterruptTime) < DEBOUNCE_DELAY) {
-    return;  // 이 인터럽트는 무시
+    return;  // ?�� ?��?��?��?��?�� 무시
   }
 
-  // 현재 시간 업데이트
+  // ?��?�� ?���? ?��?��?��?��
   lastInterruptTime = currentInterruptTime;
 
   if (GPIO_Pin == GPIO_PIN_8) // A 채널
   {
-    if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15)) // B 채널 값을 읽기
+    if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_15)) // B 채널 값을 ?���?
     {
       encoderCount++;
     }
@@ -734,7 +745,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
   else if (GPIO_Pin == GPIO_PIN_15) // B 채널
   {
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)) // A 채널 값을 읽기
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)) // A 채널 값을 ?���?
     {
       encoderCount--;
     }
@@ -750,6 +761,35 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 
 /* USER CODE END 4 */
+
+/* MPU Configuration */
+
+void MPU_Config(void)
+{
+  MPU_Region_InitTypeDef MPU_InitStruct = {0};
+
+  /* Disables the MPU */
+  HAL_MPU_Disable();
+
+  /** Initializes and configures the Region and the memory to be protected
+  */
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+  MPU_InitStruct.BaseAddress = 0xC0000000;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_16MB;
+  MPU_InitStruct.SubRegionDisable = 0x0;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+  MPU_InitStruct.AccessPermission = MPU_REGION_NO_ACCESS;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+  /* Enables the MPU */
+  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
