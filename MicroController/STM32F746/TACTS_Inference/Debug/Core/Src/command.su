@@ -1,3 +1,0 @@
-../Core/Src/command.c:10:6:ProcessCommand	16	static
-../Core/Src/command.c:24:6:FirstCommand	8	static
-../Core/Src/command.c:30:6:SencondCommand	8	static

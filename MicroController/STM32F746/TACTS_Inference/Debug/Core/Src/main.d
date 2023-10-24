@@ -1,5 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
+Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
+ ../Core/Inc/main.h ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h \
@@ -27,7 +27,17 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
- ../Core/Inc/uart.h ../Core/Inc/command.h
+ ../Core/Inc/vl53l0x_jh.h ../Drivers/VL53L0X/core/inc/vl53l0x_api.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_device.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_types.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_platform.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h \
+ ../Core/Inc/kalman.h ../Core/Inc/i2c.h ../Core/Inc/kalman.h \
+ ../Core/Inc/i2c.h
+../Core/Inc/usart.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -57,5 +67,16 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h:
-../Core/Inc/uart.h:
-../Core/Inc/command.h:
+../Core/Inc/vl53l0x_jh.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_api.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_def.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_device.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_types.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_platform.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_def.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h:
+../Core/Inc/kalman.h:
+../Core/Inc/i2c.h:
+../Core/Inc/kalman.h:
+../Core/Inc/i2c.h:

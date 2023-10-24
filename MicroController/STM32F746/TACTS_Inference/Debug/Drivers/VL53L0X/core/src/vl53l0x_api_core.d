@@ -1,5 +1,14 @@
-Core/Src/command.o: ../Core/Src/command.c ../Core/Inc/uart.h \
- ../Core/Inc/main.h ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
+Drivers/VL53L0X/core/src/vl53l0x_api_core.o: \
+ ../Drivers/VL53L0X/core/src/vl53l0x_api_core.c \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_api.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_device.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_types.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_platform.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h \
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h \
@@ -26,9 +35,17 @@ Core/Src/command.o: ../Core/Src/command.c ../Core/Inc/uart.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
-../Core/Inc/uart.h:
-../Core/Inc/main.h:
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_api_core.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_api_calibration.h
+../Drivers/VL53L0X/core/inc/vl53l0x_api.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_def.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_device.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_types.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_platform.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_def.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h:
@@ -57,3 +74,5 @@ Core/Src/command.o: ../Core/Src/command.c ../Core/Inc/uart.h \
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_api_core.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_api_calibration.h:

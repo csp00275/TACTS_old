@@ -17,14 +17,16 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <main.h>
-#include <stdio.h>
-#include <string.h>
+#include <usart.h>
+#include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "uart.h"
-#include "command.h"
+#include "string.h"
+#include "stdio.h"
+#include "vl53l0x_jh.h"
+#include "kalman.h"
+#include "i2c.h"
 
 
 /* USER CODE END Includes */
@@ -36,6 +38,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
+#define NUM_SENSOR		12
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -45,8 +49,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-/* USER CODE BEGIN PV */
 
+/* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
@@ -54,6 +58,10 @@
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_NVIC_Init(void);
+void initializeAllSensors();
+void ProcessCommand(uint8_t *command);
+void FirstCommand();
+void SecondCommand();
 
 /* USER CODE BEGIN PFP */
 
@@ -80,6 +88,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -92,14 +101,19 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
+  MX_I2C1_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
-  HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "----------- AI Inference for TACTS made by JaeHyeong----------\n"), 100);
-  HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+
+
+
+  initializeAllSensors(tca_addr, vl53l0x_s, filters);
+
+  startMsg();
+
 
 
   /* USER CODE END 2 */
@@ -120,6 +134,66 @@ int main(void)
   }
   /* USER CODE END 3 */
 }
+
+void ProcessCommand(uint8_t *command)
+{
+    if (strcmp((char*)command, "echo") == 0) {
+        HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "echo\n"), 100);
+    } else if (strcmp((char*)command, "1") == 0) {
+    	FirstCommand();
+    } else if (strcmp((char*)command, "2") == 0) {
+    	SecondCommand();
+    } else {
+        HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "Please insert correct command\n"), 100);
+    }
+}
+
+
+void FirstCommand()
+{
+    HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "FirstCommand\n"), 100);
+
+}
+
+void SecondCommand()
+{
+    HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "sensor test\r\n"), 100);
+
+    uint32_t timeStart_s, timeEnd_s,timeDiff_s; // single
+    uint32_t timeStart_a, timeEnd_a, timeDiff_a; // all
+
+    timeStart_a = HAL_GetTick(); //
+
+    do {
+    	timeStart_s = HAL_GetTick();
+
+  	  /// Read the VL53l0x data ///
+        for (int i = 0; i < NUM_SENSOR; i++) {
+
+    	    uint8_t q = i / 12;
+    	    uint8_t r = i % 12;
+    	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
+    	    uint8_t channel = (r >= 8) ? r - 8 : r;
+
+    	    resetTcaDevicesExcept(active_device, tca_addr);
+            setActiveTcaChannel(active_device, channel, tca_addr);
+            excuteVl53l0x(&vl53l0x_s[i],i);
+
+        }
+
+		timeEnd_s = HAL_GetTick();
+		timeDiff_s = timeEnd_s - timeStart_s;
+		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%lu ms ", timeDiff_s), 100);
+		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "\n"), 100);
+
+		timeEnd_a = HAL_GetTick();
+		timeDiff_a = timeEnd_a - timeStart_a;
+
+    } while (timeDiff_a < 10000);
+
+}
+
+
 
 /**
   * @brief System Clock Configuration
@@ -184,16 +258,6 @@ static void MX_NVIC_Init(void)
   HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(USART1_IRQn);
 }
-
-/**
-  * @brief USART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-
-
-
-
 
 
 

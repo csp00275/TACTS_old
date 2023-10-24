@@ -9,6 +9,8 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Drivers/VL53L0X/platform/src/subdir.mk
+-include Drivers/VL53L0X/core/src/subdir.mk
 -include Drivers/STM32F7xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
@@ -60,8 +62,8 @@ all: main-build
 main-build: TACTS_Inference.elf secondary-outputs
 
 # Tool invocations
-TACTS_Inference.elf TACTS_Inference.map: $(OBJS) $(USER_OBJS) C:\Users\JH_LAB\STM32CubeIDE\workspace_1.11.0\TACTS_Inference\STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "TACTS_Inference.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\JH_LAB\STM32CubeIDE\workspace_1.11.0\TACTS_Inference\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TACTS_Inference.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+TACTS_Inference.elf TACTS_Inference.map: $(OBJS) $(USER_OBJS) D:\ME\ program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\TACTS_Inference\STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "TACTS_Inference.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\TACTS_Inference\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TACTS_Inference.map" -Wl,--gc-sections -static -u_printf_float --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

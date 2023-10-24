@@ -1,5 +1,8 @@
-../Core/Src/main.c:69:5:main	8	static
-../Core/Src/main.c:127:6:SystemClock_Config	88	static
-../Core/Src/main.c:180:13:MX_NVIC_Init	8	static
-../Core/Src/main.c:204:13:MX_GPIO_Init	16	static
-../Core/Src/main.c:221:6:Error_Handler	8	static,ignoring_inline_asm
+../Core/Src/main.c:78:5:main	8	static
+../Core/Src/main.c:138:6:ProcessCommand	16	static
+../Core/Src/main.c:152:6:FirstCommand	8	static
+../Core/Src/main.c:158:6:SecondCommand	40	static
+../Core/Src/main.c:202:6:SystemClock_Config	88	static
+../Core/Src/main.c:255:13:MX_NVIC_Init	8	static
+../Core/Src/main.c:269:13:MX_GPIO_Init	16	static
+../Core/Src/main.c:286:6:Error_Handler	8	static,ignoring_inline_asm

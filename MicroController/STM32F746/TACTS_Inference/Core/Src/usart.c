@@ -5,7 +5,9 @@
  *      Author: JH_LAB
  */
 
-#include"uart.h"
+#include <usart.h>
+#include <stdio.h>
+
 
 UART_HandleTypeDef huart1;
 uint8_t txMsg[64];
@@ -69,4 +71,16 @@ HAL_StatusTypeDef ReceiveUartMessage(UART_HandleTypeDef *huart, uint8_t *buffer,
         }
     }
 }
+
+void startMsg(){
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "----------- AI Inference for TACTS made by JaeHyeong----------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+}
+
+
 
