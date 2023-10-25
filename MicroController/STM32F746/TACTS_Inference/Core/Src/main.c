@@ -38,8 +38,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		12
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/

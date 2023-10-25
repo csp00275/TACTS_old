@@ -30,7 +30,17 @@ float P = 0.001f;
 
 uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 uint8_t tca_ch_reset = 0x00;
-uint8_t tca_addr[2] = {0x70,0x71};
+
+
+#if NUM_SENSOR <=12
+	uint8_t tca_addr[2] = {0x70,0x71};
+#elif NUM_SENSOR <=24
+	uint8_t tca_addr[4] = {0x70, 0x71, 0x72, 0x73};
+#elif NUM_SENSOR <=36
+	uint8_t tca_addr[6] = {0x70, 0x71, 0x72, 0x73, 0x74, 0x75};
+#elif NUM_SENSOR <=48
+	uint8_t tca_addr[8] = {0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77};
+#endif
 
 void resetTcaDevicesExcept(uint8_t active_device, const uint8_t *tca_addr) {
     for (int j = 0; j < sizeof(tca_addr); ++j) {

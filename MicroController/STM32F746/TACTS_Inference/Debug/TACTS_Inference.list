@@ -35,15 +35,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_ranges 00001040  00000000  00000000  0003f540  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0002838e  00000000  00000000  00040580  2**0
+ 16 .debug_macro  00028382  00000000  00000000  00040580  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00016953  00000000  00000000  0006890e  2**0
+ 17 .debug_line   00016953  00000000  00000000  00068902  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000ef590  00000000  00000000  0007f261  2**0
+ 18 .debug_str    000ef590  00000000  00000000  0007f255  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  0016e7f1  2**0
+ 19 .comment      00000050  00000000  00000000  0016e7e5  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00005a34  00000000  00000000  0016e844  2**2
+ 20 .debug_frame  00005a34  00000000  00000000  0016e838  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -3173,10 +3173,10 @@ void startMsg(){
  8001a00:	0800de7c 	.word	0x0800de7c
 
 08001a04 <resetTcaDevicesExcept>:
-
-uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
-uint8_t tca_ch_reset = 0x00;
-uint8_t tca_addr[2] = {0x70,0x71};
+	uint8_t tca_addr[6] = {0x70, 0x71, 0x72, 0x73, 0x74, 0x75};
+#elif NUM_SENSOR <=48
+	uint8_t tca_addr[8] = {0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77};
+#endif
 
 void resetTcaDevicesExcept(uint8_t active_device, const uint8_t *tca_addr) {
  8001a04:	b580      	push	{r7, lr}

@@ -1,5 +1,5 @@
-../Core/Src/vl53l0x_jh.c:35:6:resetTcaDevicesExcept	32	static
-../Core/Src/vl53l0x_jh.c:43:6:setActiveTcaChannel	24	static
-../Core/Src/vl53l0x_jh.c:47:6:initializeVl53l0x	16	static
-../Core/Src/vl53l0x_jh.c:66:6:initializeAllSensors	48	static
-../Core/Src/vl53l0x_jh.c:87:6:excuteVl53l0x	24	static
+../Core/Src/vl53l0x_jh.c:45:6:resetTcaDevicesExcept	32	static
+../Core/Src/vl53l0x_jh.c:53:6:setActiveTcaChannel	24	static
+../Core/Src/vl53l0x_jh.c:57:6:initializeVl53l0x	16	static
+../Core/Src/vl53l0x_jh.c:76:6:initializeAllSensors	48	static
+../Core/Src/vl53l0x_jh.c:97:6:excuteVl53l0x	24	static

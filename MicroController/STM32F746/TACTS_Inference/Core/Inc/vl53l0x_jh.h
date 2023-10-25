@@ -24,7 +24,16 @@ extern KalmanFilter filters[NUM_SENSOR];
 
 extern uint8_t tca_ch[8]; // control register of TCA9548A
 extern uint8_t tca_ch_reset;
-extern uint8_t tca_addr[2];
+
+#if NUM_SENSOR <=12
+	extern uint8_t tca_addr[2];
+#elif NUM_SENSOR <=24
+	extern uint8_t tca_addr[4];
+#elif NUM_SENSOR <=36
+	extern uint8_t tca_addr[6];
+#elif NUM_SENSOR <=48
+	extern uint8_t tca_addr[8];
+#endif
 
 
 void resetTcaDevicesExcept(uint8_t active_device, const uint8_t *tca_addr);
