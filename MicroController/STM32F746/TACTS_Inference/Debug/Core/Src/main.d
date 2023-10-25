@@ -1,5 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
- ../Core/Inc/main.h ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
+Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h \
@@ -19,6 +19,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_dma.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_dma_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h \
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_crc.h \
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_crc_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_flash.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_flash_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c.h \
@@ -36,8 +38,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
  ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
  ../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h \
  ../Core/Inc/kalman.h ../Core/Inc/i2c.h ../Core/Inc/kalman.h \
- ../Core/Inc/i2c.h
-../Core/Inc/usart.h:
+ ../Core/Inc/i2c.h ../Core/Inc/usart.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -59,6 +60,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_dma.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_dma_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_cortex.h:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_crc.h:
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_crc_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_flash.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_flash_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c.h:
@@ -80,3 +83,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
 ../Core/Inc/i2c.h:
 ../Core/Inc/kalman.h:
 ../Core/Inc/i2c.h:
+../Core/Inc/usart.h:

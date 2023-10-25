@@ -39,6 +39,7 @@ extern uint8_t tca_ch_reset;
 void resetTcaDevicesExcept(uint8_t active_device, const uint8_t *tca_addr);
 void setActiveTcaChannel(uint8_t active_device, uint8_t channel, const uint8_t *tca_addr);
 void initializeVl53l0x(VL53L0X_Dev_t *Dev);
+void initializeAllSensors(uint8_t *tca_addr, VL53L0X_Dev_t *vl53l0x_s, KalmanFilter *filters);
 void excuteVl53l0x(VL53L0X_Dev_t *Dev, int i);
 
 

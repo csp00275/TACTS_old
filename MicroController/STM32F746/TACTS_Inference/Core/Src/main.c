@@ -17,7 +17,6 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <usart.h>
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -27,6 +26,8 @@
 #include "vl53l0x_jh.h"
 #include "kalman.h"
 #include "i2c.h"
+#include "usart.h"
+
 
 
 /* USER CODE END Includes */
@@ -48,6 +49,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+CRC_HandleTypeDef hcrc;
 
 /* USER CODE BEGIN PV */
 
@@ -56,83 +58,19 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_CRC_Init(void);
 static void MX_NVIC_Init(void);
-void initializeAllSensors();
+/* USER CODE BEGIN PFP */
+
 void ProcessCommand(uint8_t *command);
 void FirstCommand();
 void SecondCommand();
-
-/* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-/* USER CODE END 0 */
 
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
-int main(void)
-{
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
-  SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_USART1_UART_Init();
-  MX_I2C1_Init();
-
-  /* Initialize interrupts */
-  MX_NVIC_Init();
-  /* USER CODE BEGIN 2 */
-
-
-
-
-  initializeAllSensors(tca_addr, vl53l0x_s, filters);
-
-  startMsg();
-
-
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-
-	  if(ReceiveUartMessage(&huart1, rxMsg, sizeof(rxMsg)) == HAL_OK)
-	  {
-	      ProcessCommand(rxMsg);
-	  }
-
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
-}
 
 void ProcessCommand(uint8_t *command)
 {
@@ -192,7 +130,78 @@ void SecondCommand()
 
 }
 
+/* USER CODE END 0 */
 
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_USART1_UART_Init();
+  MX_I2C1_Init();
+  MX_CRC_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
+  /* USER CODE BEGIN 2 */
+
+
+
+
+  initializeAllSensors(tca_addr, vl53l0x_s, filters);
+
+  startMsg();
+
+
+
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+
+	  if(ReceiveUartMessage(&huart1, rxMsg, sizeof(rxMsg)) == HAL_OK)
+	  {
+	      ProcessCommand(rxMsg);
+	  }
+
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
+}
 
 /**
   * @brief System Clock Configuration
@@ -258,19 +267,45 @@ static void MX_NVIC_Init(void)
   HAL_NVIC_EnableIRQ(USART1_IRQn);
 }
 
-
-
 /**
-  * @brief GPIO Initialization Function
+  * @brief CRC Initialization Function
   * @param None
   * @retval None
   */
+static void MX_CRC_Init(void)
+{
+
+  /* USER CODE BEGIN CRC_Init 0 */
+
+  /* USER CODE END CRC_Init 0 */
+
+  /* USER CODE BEGIN CRC_Init 1 */
+
+  /* USER CODE END CRC_Init 1 */
+  hcrc.Instance = CRC;
+  hcrc.Init.DefaultPolynomialUse = DEFAULT_POLYNOMIAL_ENABLE;
+  hcrc.Init.DefaultInitValueUse = DEFAULT_INIT_VALUE_ENABLE;
+  hcrc.Init.InputDataInversionMode = CRC_INPUTDATA_INVERSION_NONE;
+  hcrc.Init.OutputDataInversionMode = CRC_OUTPUTDATA_INVERSION_DISABLE;
+  hcrc.InputDataFormat = CRC_INPUTDATA_FORMAT_BYTES;
+  if (HAL_CRC_Init(&hcrc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN CRC_Init 2 */
+
+  /* USER CODE END CRC_Init 2 */
+
+}
+
+
 static void MX_GPIO_Init(void)
 {
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
 
 }
 
