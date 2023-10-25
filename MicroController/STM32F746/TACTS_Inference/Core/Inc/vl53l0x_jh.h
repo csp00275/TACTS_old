@@ -35,6 +35,10 @@ extern uint8_t tca_ch_reset;
 	extern uint8_t tca_addr[8];
 #endif
 
+extern float Xmean[NUM_SENSOR];
+extern float Xstd[NUM_SENSOR];
+extern float Fminmax[2];
+extern float Zminmax[2];
 
 void resetTcaDevicesExcept(uint8_t active_device, const uint8_t *tca_addr);
 void setActiveTcaChannel(uint8_t active_device, uint8_t channel, const uint8_t *tca_addr);

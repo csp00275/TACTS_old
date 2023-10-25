@@ -212,10 +212,15 @@ void SecondCommand()
             if (RangingData.RangeStatus == 0) {
                 float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
                 in_data[i]=filteredValue;
+                HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", in_data[i]), 1000);\
+                in_data[i]-=Xmean[i];
+                in_data[i]/=Xstd[i];
             }else{
-                in_data[i]=45.5;
+            	in_data[i]=45.5;
+                HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", in_data[i]), 1000);
+                in_data[i]-=Xmean[i];
+				in_data[i]/=Xstd[i];
             }
-            HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", in_data[i]), 1000);
 
 
         }
@@ -225,9 +230,15 @@ void SecondCommand()
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%lu ms ", timeDiff_s), 1000);
 
 		aiRun(in_data,out_data);
+		out_data[0] = (out_data[0] + 1) * (Fminmax[1] - Fminmax[0]) / 2 + Fminmax[0];
+		out_data[1] = (out_data[1] + 1) * (Zminmax[1] - Zminmax[0]) / 2 + Zminmax[0];
+
 		for(int k=0; k<4;k++){
-	        HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.16f ", out_data[k]), 1000);
+	        HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", out_data[k]), 1000);
 		}
+
+		float sqSum= out_data[3]*out_data[3] + out_data[4]*out_data[4];
+		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", sqSum), 1000);
 
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "\n"), 100);
 

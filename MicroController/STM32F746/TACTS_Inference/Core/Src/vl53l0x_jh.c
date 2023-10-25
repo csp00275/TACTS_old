@@ -23,10 +23,12 @@ uint8_t PhaseCal = 0;
 VL53L0X_Dev_t vl53l0x_s[NUM_SENSOR];
 VL53L0X_DEV Dev;
 
-KalmanFilter filters[NUM_SENSOR];
+KalmanFilter filters[];
 float Q = 0.001f; // Process noise covariance
 float R = 0.03f;   // Measurement noise covariance
 float P = 0.001f;
+
+
 
 uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 uint8_t tca_ch_reset = 0x00;
@@ -36,6 +38,10 @@ uint8_t tca_ch_reset = 0x00;
 	uint8_t tca_addr[2] = {0x70,0x71};
 #elif NUM_SENSOR <=24
 	uint8_t tca_addr[4] = {0x70, 0x71, 0x72, 0x73};
+	float Xmean[24] = { 47.79, 46.59, 55.06, 43.51, 51.65, 64.75, 60.83, 53.02, 62.29, 56.45, 52.96, 50.56, 48.35, 49.9, 50.34, 46.03, 51.15, 55.87, 47.49, 54.47, 50.52, 55.37, 55.78, 49.8 };
+	float Xstd[24] = { 1.44, 1.71, 1.5, 1.79, 1.2, 1.7, 1.97, 1.89, 1.8, 1.44, 1.6, 1.36, 1.44, 1.67, 1.46, 1.56, 1.58, 2.09, 2.18, 3.0, 2.49, 1.73, 1.76, 1.52 };
+	float Fminmax[2]={ 4.0, 134.5 };
+	float Zminmax[2]={ 0, 160 };
 #elif NUM_SENSOR <=36
 	uint8_t tca_addr[6] = {0x70, 0x71, 0x72, 0x73, 0x74, 0x75};
 #elif NUM_SENSOR <=48
