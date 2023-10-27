@@ -75,9 +75,10 @@ HAL_StatusTypeDef ReceiveUartMessage(UART_HandleTypeDef *huart, uint8_t *buffer,
 void startMsg(){
 	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
 	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
-	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
 	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "----------- AI Inference for TACTS made by JaeHyeong----------\n"), 100);
-	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "----------------- 1 : TOF sensor array -----------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "----------------- 2 : TOF sensor array and AI output ---------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "----------------- 3 : TOF Avg Std Force Z --------------------\n"), 100);
 	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
 	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
 }

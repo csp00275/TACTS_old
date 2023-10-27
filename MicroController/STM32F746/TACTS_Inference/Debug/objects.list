@@ -1,3 +1,4 @@
+"./Core/Src/ai.o"
 "./Core/Src/i2c.o"
 "./Core/Src/kalman.o"
 "./Core/Src/main.o"

@@ -1,0 +1,2 @@
+../Core/Src/ai.c:30:5:aiInit	16	static
+../Core/Src/ai.c:47:5:aiRun	24	static

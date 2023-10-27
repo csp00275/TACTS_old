@@ -40,7 +40,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/kalman.h ../Core/Inc/i2c.h ../Core/Inc/kalman.h \
  ../Core/Inc/i2c.h ../Core/Inc/usart.h ../X-CUBE-AI/App/twoLine.h \
  ../X-CUBE-AI/App/twoline_config.h ../Middlewares/ST/AI/Inc/ai_platform.h \
- ../X-CUBE-AI/App/twoLine_data.h ../X-CUBE-AI/App/twoline_data_params.h
+ ../X-CUBE-AI/App/twoLine_data.h ../X-CUBE-AI/App/twoline_data_params.h \
+ ../Core/Inc/ai.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -91,3 +92,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/ST/AI/Inc/ai_platform.h:
 ../X-CUBE-AI/App/twoLine_data.h:
 ../X-CUBE-AI/App/twoline_data_params.h:
+../Core/Inc/ai.h:

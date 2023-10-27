@@ -8,11 +8,6 @@
 #include "usart.h"
 #include "stdio.h"
 
-
-
-
-
-
 void HX711_Init(void)
 {
   // Set the SCK pin to low
