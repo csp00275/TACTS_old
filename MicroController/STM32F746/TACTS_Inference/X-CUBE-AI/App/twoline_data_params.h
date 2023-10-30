@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    twoline_data_params.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Wed Oct 25 17:11:50 2023
+  * @date    Fri Oct 27 15:55:26 2023
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * Copyright (c) 2023 STMicroelectronics.

@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    twoline.c
   * @author  AST Embedded Analytics Research Platform
-  * @date    Wed Oct 25 17:11:50 2023
+  * @date    Fri Oct 27 15:55:26 2023
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * @attention
@@ -42,7 +42,7 @@
 #endif
 
 #undef AI_TOOLS_DATE_TIME
-#define AI_TOOLS_DATE_TIME   "Wed Oct 25 17:11:50 2023"
+#define AI_TOOLS_DATE_TIME   "Fri Oct 27 15:55:26 2023"
 
 #undef AI_TOOLS_COMPILE_TIME
 #define AI_TOOLS_COMPILE_TIME    __DATE__ " " __TIME__
