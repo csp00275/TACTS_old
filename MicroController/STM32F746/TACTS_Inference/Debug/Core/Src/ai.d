@@ -5,8 +5,16 @@ Core/Src/ai.o: ../Core/Src/ai.c ../Core/Inc/ai.h \
  ../X-CUBE-AI/App/threeline_config.h ../X-CUBE-AI/App/threeLine_data.h \
  ../X-CUBE-AI/App/threeline_data_params.h ../X-CUBE-AI/App/fourLine.h \
  ../X-CUBE-AI/App/fourline_config.h ../X-CUBE-AI/App/fourLine_data.h \
- ../X-CUBE-AI/App/fourline_data_params.h ../Core/Inc/usart.h \
- ../Core/Inc/main.h ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
+ ../X-CUBE-AI/App/fourline_data_params.h ../Core/Inc/vl53l0x_jh.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_api.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_device.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_types.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_platform.h \
+ ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
+ ../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h \
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h \
@@ -36,15 +44,8 @@ Core/Src/ai.o: ../Core/Src/ai.c ../Core/Inc/ai.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
- ../Core/Inc/vl53l0x_jh.h ../Drivers/VL53L0X/core/inc/vl53l0x_api.h \
- ../Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h \
- ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
- ../Drivers/VL53L0X/core/inc/vl53l0x_device.h \
- ../Drivers/VL53L0X/platform/inc/vl53l0x_types.h \
- ../Drivers/VL53L0X/platform/inc/vl53l0x_platform.h \
- ../Drivers/VL53L0X/core/inc/vl53l0x_def.h \
- ../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h \
- ../Core/Inc/kalman.h ../Core/Inc/i2c.h
+ ../Core/Inc/kalman.h ../Core/Inc/i2c.h ../Core/Inc/main.h \
+ ../Core/Inc/usart.h ../Core/Inc/vl53l0x_jh.h
 ../Core/Inc/ai.h:
 ../X-CUBE-AI/App/twoLine.h:
 ../X-CUBE-AI/App/twoline_config.h:
@@ -59,8 +60,15 @@ Core/Src/ai.o: ../Core/Src/ai.c ../Core/Inc/ai.h \
 ../X-CUBE-AI/App/fourline_config.h:
 ../X-CUBE-AI/App/fourLine_data.h:
 ../X-CUBE-AI/App/fourline_data_params.h:
-../Core/Inc/usart.h:
-../Core/Inc/main.h:
+../Core/Inc/vl53l0x_jh.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_api.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_def.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_device.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_types.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_platform.h:
+../Drivers/VL53L0X/core/inc/vl53l0x_def.h:
+../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h:
@@ -91,14 +99,8 @@ Core/Src/ai.o: ../Core/Src/ai.c ../Core/Inc/ai.h \
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h:
-../Core/Inc/vl53l0x_jh.h:
-../Drivers/VL53L0X/core/inc/vl53l0x_api.h:
-../Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h:
-../Drivers/VL53L0X/core/inc/vl53l0x_def.h:
-../Drivers/VL53L0X/core/inc/vl53l0x_device.h:
-../Drivers/VL53L0X/platform/inc/vl53l0x_types.h:
-../Drivers/VL53L0X/platform/inc/vl53l0x_platform.h:
-../Drivers/VL53L0X/core/inc/vl53l0x_def.h:
-../Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h:
 ../Core/Inc/kalman.h:
 ../Core/Inc/i2c.h:
+../Core/Inc/main.h:
+../Core/Inc/usart.h:
+../Core/Inc/vl53l0x_jh.h:

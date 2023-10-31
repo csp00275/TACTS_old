@@ -45,7 +45,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../X-CUBE-AI/App/threeline_config.h ../X-CUBE-AI/App/threeLine_data.h \
  ../X-CUBE-AI/App/threeline_data_params.h ../X-CUBE-AI/App/fourLine.h \
  ../X-CUBE-AI/App/fourline_config.h ../X-CUBE-AI/App/fourLine_data.h \
- ../X-CUBE-AI/App/fourline_data_params.h
+ ../X-CUBE-AI/App/fourline_data_params.h ../Core/Inc/vl53l0x_jh.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -105,3 +105,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../X-CUBE-AI/App/fourline_config.h:
 ../X-CUBE-AI/App/fourLine_data.h:
 ../X-CUBE-AI/App/fourline_data_params.h:
+../Core/Inc/vl53l0x_jh.h:

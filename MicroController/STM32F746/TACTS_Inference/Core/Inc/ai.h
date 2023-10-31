@@ -14,49 +14,40 @@
 #include "threeLine_data.h"
 #include "fourLine.h"
 #include "fourLine_data.h"
+#include "vl53l0x_jh.h"
 
-/* Global handle to reference the instantiated C-model */
-extern ai_handle twoLine;
-extern ai_handle threeLine;
-extern ai_handle fourLine;
+
+extern ai_handle allLine;
 
 /* Global c-array to handle the activations buffer */
+#if NUM_SENSOR == 24
 AI_ALIGNED(32)
 extern ai_u8 activations[AI_TWOLINE_DATA_ACTIVATIONS_SIZE];
-
 AI_ALIGNED(32)
-extern ai_u8 activations_three[AI_THREELINE_DATA_ACTIVATIONS_SIZE];
-
+extern ai_float in_data[AI_TWOLINE_IN_1_SIZE];
 AI_ALIGNED(32)
-extern ai_u8 activations_four[AI_FOURLINE_DATA_ACTIVATIONS_SIZE];
+extern ai_float out_data[AI_TWOLINE_OUT_1_SIZE];
 
-/* Array to store the data of the input tensor */
+#elif NUM_SENSOR == 36
 AI_ALIGNED(32)
-extern ai_float in_data_two[AI_TWOLINE_IN_1_SIZE];
+extern ai_u8 activations[AI_THREELINE_DATA_ACTIVATIONS_SIZE];
 AI_ALIGNED(32)
-extern ai_float out_data_two[AI_TWOLINE_OUT_1_SIZE];
-
+extern ai_float in_data[AI_THREELINE_IN_1_SIZE];
 AI_ALIGNED(32)
-extern ai_float in_data_three[AI_THREELINE_IN_1_SIZE];
+extern ai_float out_data[AI_THREELINE_OUT_1_SIZE];
+
+#elif
 AI_ALIGNED(32)
-extern ai_float out_data_three[AI_THREELINE_OUT_1_SIZE];
-
+extern ai_u8 activations[AI_FOURLINE_DATA_ACTIVATIONS_SIZE];
 AI_ALIGNED(32)
-extern ai_float in_data_four[AI_FOURLINE_IN_1_SIZE];
+extern ai_float in_data[AI_FOURLINE_IN_1_SIZE];
 AI_ALIGNED(32)
-extern ai_float out_data_four[AI_FOURLINE_OUT_1_SIZE];
+extern ai_float out_data[AI_FOURLINE_OUT_1_SIZE];
 
+#endif
 
-
-/* Array of pointer to manage the model's input/output tensors */
-extern ai_buffer *ai_input_two;
-extern ai_buffer *ai_output_two;
-
-extern ai_buffer *ai_input_three;
-extern ai_buffer *ai_output_three;
-
-extern ai_buffer *ai_input_four;
-extern ai_buffer *ai_output_four;
+extern ai_buffer *ai_input;
+extern ai_buffer *ai_output;
 
 int aiInit(void);
 int aiRun(const ai_float *in_data, ai_float *out_data);

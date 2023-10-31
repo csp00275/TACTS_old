@@ -51,10 +51,6 @@
 
 CRC_HandleTypeDef hcrc;
 
-I2C_HandleTypeDef hi2c1;
-
-UART_HandleTypeDef huart1;
-
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -148,9 +144,9 @@ void SecondCommand()
 
             if (RangingData.RangeStatus == 0) {
                 float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter); // 500 us
-                in_data_two[i]=filteredValue;
+                in_data[i]=filteredValue;
                 HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", in_data[i]), 1000);
-                in_data_two[i]= (filteredValue-Xmean[i])/Xstd[i];
+                in_data[i]= (filteredValue-Xmean[i])/Xstd[i];
                 tofCount++;
             }else{
                HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "99 "), 1000);
@@ -161,14 +157,16 @@ void SecondCommand()
 		timeDiff_s = timeEnd_s - timeStart_s;
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%lu ms ", timeDiff_s), 1000);
 
+
+
 		if(tofCount == NUM_SENSOR){
-		aiRun(in_data_two,out_data_two);
+		aiRun(in_data,out_data);
 		out_data[0] = (out_data[0] + 1) * (Fminmax[1] - Fminmax[0]) / 2 + Fminmax[0];
 		out_data[1] = (out_data[1] + 1) * (Zminmax[1] - Zminmax[0]) / 2 + Zminmax[0];
 		for(int k=0; k<4;k++){
 	        HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", out_data[k]), 1000);
 		}
-		float sqSum= out_data_two[3]*out_data_two[3] + out_data_two[4]*out_data_two[4];
+		float sqSum= out_data[3]*out_data[3] + out_data[4]*out_data[4];
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", sqSum), 1000);
 		}
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "\n"), 100);

@@ -1,0 +1,14 @@
+../Drivers/CMSIS/Include/core_cm7.h:2229:22:SCB_EnableICache	4	static,ignoring_inline_asm
+../Drivers/CMSIS/Include/core_cm7.h:2281:22:SCB_EnableDCache	24	static,ignoring_inline_asm
+../Core/Src/main.c:77:6:ProcessCommand	16	static
+../Core/Src/main.c:96:6:FirstCommand	40	static
+../Core/Src/main.c:124:6:SecondCommand	56	static
+../Core/Src/main.c:180:6:ThirdCommand	16	static
+../Core/Src/main.c:198:6:FourthCommand	4	static
+../Core/Src/main.c:201:6:FifthCommand	4	static
+../Core/Src/main.c:211:5:main	8	static
+../Core/Src/main.c:274:6:SystemClock_Config	88	static
+../Core/Src/main.c:327:13:MX_NVIC_Init	8	static
+../Core/Src/main.c:339:13:MX_CRC_Init	8	static
+../Core/Src/main.c:370:13:MX_GPIO_Init	24	static
+../Core/Src/main.c:388:6:Error_Handler	8	static,ignoring_inline_asm
