@@ -18,6 +18,9 @@ LABS_v3
 
 TACTS_v1
 - rename version of LABS_v3
+
+TACTS_v3
+- The hardware is built on a PCB. Edge AI has been applied. 
 =======
 Tof based Air Cushion Touch Sensors
 developed by JH Park
