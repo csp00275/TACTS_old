@@ -52,7 +52,7 @@
 
 
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
-#define NUM_SENSOR		48
+#define NUM_SENSOR		36
 #define WINDOW_SIZE 5
 #define DEBOUNCE_DELAY 20  // ?��바운?�� �??�� ?���? (�?리초)
 
@@ -151,13 +151,15 @@ int main(void)
 	uint8_t tca_ch[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80}; // control register of TCA9548A
 	uint8_t tca_ch_reset = 0x00;
 
+#if NUM_SENSOR == 24
+    uint8_t tca_addr[] = {0x70,0x71,0x72,0x73}; // 2 line
+#elif NUM_SENSOR == 36
+    uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75}; // 3 line
+#elif NUM_SENSOR == 48
     uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77};  // 4 line
-    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73,0x74,0x75}; // 3 line
-    //uint8_t tca_addr[] = {0x70,0x71,0x72,0x73}; // 2 line
-    //uint8_t tca_addr[] = {0x70,0x71};
-    //uint8_t tca_addr[] = {0x72,0x73};
-    //uint8_t tca_addr[] = {0x76,0x77};
-	//uint8_t tca_addr[] = {0x74,0x75};
+#endif
+
+
 
 
     KalmanFilter filters[NUM_SENSOR];

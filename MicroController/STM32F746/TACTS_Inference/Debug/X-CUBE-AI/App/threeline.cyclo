@@ -1,0 +1,13 @@
+threeline.c:548:9:threeline_configure_activations	2
+threeline.c:605:9:threeline_configure_weights	2
+threeline.c:665:9:ai_threeline_get_info	4
+threeline.c:711:9:ai_threeline_get_report	4
+threeline.c:757:10:ai_threeline_get_error	1
+threeline.c:763:10:ai_threeline_create	1
+threeline.c:773:10:ai_threeline_create_and_init	8
+threeline.c:807:12:ai_threeline_inputs_get	2
+threeline.c:817:12:ai_threeline_outputs_get	2
+threeline.c:827:11:ai_threeline_destroy	1
+threeline.c:833:9:ai_threeline_init	2
+threeline.c:850:8:ai_threeline_run	1
+threeline.c:857:8:ai_threeline_forward	1

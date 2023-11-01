@@ -1,0 +1,13 @@
+fourline.c:548:9:fourline_configure_activations	2
+fourline.c:605:9:fourline_configure_weights	2
+fourline.c:665:9:ai_fourline_get_info	4
+fourline.c:711:9:ai_fourline_get_report	4
+fourline.c:757:10:ai_fourline_get_error	1
+fourline.c:763:10:ai_fourline_create	1
+fourline.c:773:10:ai_fourline_create_and_init	8
+fourline.c:807:12:ai_fourline_inputs_get	2
+fourline.c:817:12:ai_fourline_outputs_get	2
+fourline.c:827:11:ai_fourline_destroy	1
+fourline.c:833:9:ai_fourline_init	2
+fourline.c:850:8:ai_fourline_run	1
+fourline.c:857:8:ai_fourline_forward	1
