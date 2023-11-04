@@ -10,7 +10,8 @@
 
 
 
-
+float loadcell_slope = -1/1600.00f; // Convert the raw data to weight (replace the calibration factor with your own)
+float loadcell_bias = 10002;
 
 
 void HX711_Init(void)
@@ -56,11 +57,11 @@ void UART_SendWeight_g(float rawData,float loadcell_slope,float loadcell_bias)
 {
   float weight = loadcell_slope * rawData  + loadcell_bias;
   char buffer[32];
-  int len = sprintf(buffer, "Weight(g):");
   int data = sprintf(buffer, "%.2f", weight);
 
   // Send the buffer content via UART
 #if 0
+  int len = sprintf(buffer, "Weight(g):");
   HAL_UART_Transmit(&huart1, (uint8_t *)buffer, len, 1000);
 #endif
   HAL_UART_Transmit(&huart1, (uint8_t *)buffer, data, 1000);

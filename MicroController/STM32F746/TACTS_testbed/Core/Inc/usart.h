@@ -31,11 +31,15 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
+extern uint8_t txMsg[64];
+extern uint8_t rxMsg[65];
 
 extern UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN Private defines */
-void read_uart(char* buffer);
+HAL_StatusTypeDef ReceiveUartMessage(UART_HandleTypeDef *huart, uint8_t *buffer, uint16_t size);
+void startMsg();
+
 
 
 /* USER CODE END Private defines */

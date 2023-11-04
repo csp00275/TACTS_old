@@ -19,10 +19,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
+#include <stdio.h>
+
 
 /* USER CODE BEGIN 0 */
-const int MAX_LENGTH = 100; // maximum length of input string
-
+uint8_t txMsg[64];
+uint8_t rxMsg[65];
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -137,17 +139,44 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
 /* USER CODE BEGIN 1 */
 
-void read_uart(char* buffer) {
-    int i = 0;
-    while (i < MAX_LENGTH - 1) {
-        if (HAL_UART_Receive(&huart1, (uint8_t*) &buffer[i], 1, HAL_MAX_DELAY) == HAL_OK) {
-            if (buffer[i] == '\n' || buffer[i] == '\r') {
-                buffer[i] = '\0'; // null-terminate the string
-                break;
+HAL_StatusTypeDef ReceiveUartMessage(UART_HandleTypeDef *huart, uint8_t *buffer, uint16_t size)
+{
+    uint8_t receivedByte;
+    uint16_t rxBufferIndex = 0;
+    while(1)
+    {
+        if(HAL_UART_Receive(huart, &receivedByte, 1, 1000) == HAL_OK)
+        {
+            if(receivedByte == '\n') // 종료 문자 감지
+            {
+                buffer[rxBufferIndex] = '\0'; // 문자열의 끝을 표시
+                return HAL_OK;
             }
-            HAL_UART_Transmit(&huart1, (uint8_t*) &buffer[i], 1, HAL_MAX_DELAY); // transmit the received character through UART
-            i++;
+            else
+            {
+                buffer[rxBufferIndex] = receivedByte; // 문자 저장
+                rxBufferIndex++;
+                if(rxBufferIndex >= size) // 버퍼 초과 방지
+                {
+                    buffer[rxBufferIndex - 1] = '\0'; // 문자열의 끝을 표시
+                    return HAL_ERROR;
+                }
+            }
         }
     }
 }
+
+void startMsg(){
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "----- Auto Data Logging Device for TACTS made by JaeHyeong----\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "-----------rev XX : Rotaing Revolution Motor (Deg)------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "-----------lin XX : Moving Linear Motor (mm)------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "-----------servo XX : Poking XX * 0.8 (mm)--------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "-----------auto : Poking point and data logging---------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "-------------------------testbed_axial------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+	HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "--------------------------------------------------------------\n"), 100);
+}
+
 /* USER CODE END 1 */
