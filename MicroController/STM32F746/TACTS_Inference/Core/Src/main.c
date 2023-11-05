@@ -129,9 +129,9 @@ void SecondCommand()
     uint32_t timeStart_a, timeEnd_a, timeDiff_a; // all
 
     timeStart_a = HAL_GetTick();
-    do {
+    for (int count =0; count <100;count ++){
     	timeStart_s = HAL_GetTick();
-    	uint8_t tofCount = 0;
+    	uint8_t tofCount =0;
         for (int i = 0; i < NUM_SENSOR; i++) {
     	    uint8_t q = i / 12;
     	    uint8_t r = i % 12;
@@ -173,7 +173,7 @@ void SecondCommand()
 		timeEnd_a = HAL_GetTick();
 		timeDiff_a = timeEnd_a - timeStart_a;
 
-    } while (timeDiff_a < 1000000);
+    }
 
 }
 
@@ -196,6 +196,43 @@ void ThirdCommand(){
 }
 
 void FourthCommand(){
+
+    HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "only result\r\n"), 100);
+
+    for (int count =0; count <100000;count ++){
+    	uint8_t tofCount =0;
+        for (int i = 0; i < NUM_SENSOR; i++) {
+    	    uint8_t q = i / 12;
+    	    uint8_t r = i % 12;
+    	    uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
+    	    uint8_t channel = (r >= 8) ? r - 8 : r;
+    	    resetTcaDevicesExcept(active_device, tca_addr);
+            setActiveTcaChannel(active_device, channel, tca_addr);
+            Dev = &vl53l0x_s[i];
+            VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500 us
+
+            if (RangingData.RangeStatus == 0) {
+                float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter); // 500 us
+                in_data[i]=filteredValue;
+                in_data[i]= (filteredValue-Xmean[i])/Xstd[i];
+                tofCount++;
+            }
+        }
+
+		if(tofCount == NUM_SENSOR){
+		aiRun(in_data,out_data);
+		out_data[0] = (out_data[0] + 1) * (Fminmax[1] - Fminmax[0]) / 2 + Fminmax[0];
+		out_data[1] = (out_data[1] + 1) * (Zminmax[1] - Zminmax[0]) / 2 + Zminmax[0];
+		for(int k=0; k<4;k++){
+	        HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", out_data[k]), 1000);
+		}
+		float sqSum= out_data[3]*out_data[3] + out_data[4]*out_data[4];
+		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", sqSum), 1000);
+		}
+		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "\n"), 100);
+
+    }
+
 
 }
 void FifthCommand(){
