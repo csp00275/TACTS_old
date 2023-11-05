@@ -84,7 +84,10 @@ int aiRun(const ai_float *in_data, ai_float *out_data) {
     HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "Invalid NUM_SENSOR \n"), 100);
     return -1;
 #endif
-
+    if (n_batch != 1) {
+        HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "aiRun Error \n"), 100);
+        return -1;
+    };
     return 0;
 }
 
