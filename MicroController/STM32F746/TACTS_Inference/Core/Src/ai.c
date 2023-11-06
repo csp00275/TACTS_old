@@ -23,11 +23,11 @@ ai_float out_data[AI_TWOLINE_OUT_1_SIZE];
 
 #elif NUM_SENSOR == 36
 AI_ALIGNED(32)
-ai_u8 activations[AI_THREELINE_DATA_ACTIVATIONS_SIZE];
+ai_u8 activations[AI_THREELINECV_DATA_ACTIVATIONS_SIZE];
 AI_ALIGNED(32)
-ai_float in_data[AI_THREELINE_IN_1_SIZE];
+ai_float in_data[AI_THREELINECV_IN_1_SIZE];
 AI_ALIGNED(32)
-ai_float out_data[AI_THREELINE_OUT_1_SIZE];
+ai_float out_data[AI_THREELINECV_OUT_1_SIZE];
 #elif
 AI_ALIGNED(32)
 ai_u8 activations[AI_FOURLINE_DATA_ACTIVATIONS_SIZE];
@@ -43,9 +43,9 @@ ai_buffer *ai_output;
 int aiInit(void) {
     ai_error err;
     const ai_handle acts[] = { activations };
-    err = ai_threeline_create_and_init(&allLine, acts, NULL);
+    err = ai_threelinecv_create_and_init(&allLine, acts, NULL);
     if (err.type != AI_ERROR_NONE) {
-        HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "threeLine aiInit Error \n"), 100);
+        HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "aiInit Error \n"), 100);
     }
 
 #if NUM_SENSOR == 24
@@ -53,8 +53,8 @@ int aiInit(void) {
     ai_output = ai_twoline_outputs_get(allLine, NULL);
 
 #elif NUM_SENSOR == 36
-    ai_input = ai_threeline_inputs_get(allLine, NULL);
-    ai_output= ai_threeline_outputs_get(allLine, NULL);
+    ai_input = ai_threelinecv_inputs_get(allLine, NULL);
+    ai_output= ai_threelinecv_outputs_get(allLine, NULL);
 #elif NUM_SENSOR == 48
     ai_input = ai_fourline_inputs_get(allLine, NULL);
     ai_output = ai_fourline_outputs_get(allLine, NULL);
@@ -77,7 +77,7 @@ int aiRun(const ai_float *in_data, ai_float *out_data) {
 #if NUM_SENSOR == 24
     n_batch = ai_twoline_run(allLine, &ai_input[0], &ai_output[0]);
 #elif NUM_SENSOR == 36
-    n_batch = ai_threeline_run(allLine, &ai_input[0], &ai_output[0]);
+    n_batch = ai_threelinecv_run(allLine, &ai_input[0], &ai_output[0]);
 #elif NUM_SENSOR == 48
     n_batch = ai_fourline_run(allLine, &ai_input[0], &ai_output[0]);
 #else

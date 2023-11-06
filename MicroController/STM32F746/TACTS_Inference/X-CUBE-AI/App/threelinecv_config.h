@@ -1,9 +1,9 @@
 
 /**
   ******************************************************************************
-  * @file    twoline_config.h
+  * @file    threelinecv_config.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Tue Nov  7 01:08:25 2023
+  * @date    Tue Nov  7 01:08:52 2023
   * @brief   AI Tool Automatic Code Generator for Custom Layers Implementation
   ******************************************************************************
   * @attention
@@ -17,8 +17,8 @@
   ******************************************************************************
   */
 
-#ifndef AI_TWOLINE_CONFIG_H
-#define AI_TWOLINE_CONFIG_H
+#ifndef AI_THREELINECV_CONFIG_H
+#define AI_THREELINECV_CONFIG_H
 #pragma once
 
 #undef AI_TOOLS_VERSION_MAJOR
@@ -44,4 +44,4 @@
 #define AI_TOOLS_API_VERSION_MINOR (5)
 #define AI_TOOLS_API_VERSION_MICRO (0)
 
-#endif /*AI_TWOLINE_CONFIG_H*/
+#endif /*AI_THREELINECV_CONFIG_H*/

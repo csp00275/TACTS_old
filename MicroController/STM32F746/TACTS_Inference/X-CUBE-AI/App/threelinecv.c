@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    fourline.c
+  * @file    threelinecv.c
   * @author  AST Embedded Analytics Research Platform
-  * @date    Tue Nov  7 01:08:43 2023
+  * @date    Tue Nov  7 01:08:52 2023
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * @attention
@@ -17,8 +17,8 @@
   */
 
 
-#include "fourline.h"
-#include "fourline_data.h"
+#include "threelinecv.h"
+#include "threelinecv_data.h"
 
 #include "ai_platform.h"
 #include "ai_platform_interface.h"
@@ -32,26 +32,26 @@
 
 
 #undef AI_NET_OBJ_INSTANCE
-#define AI_NET_OBJ_INSTANCE g_fourline
+#define AI_NET_OBJ_INSTANCE g_threelinecv
  
-#undef AI_FOURLINE_MODEL_SIGNATURE
-#define AI_FOURLINE_MODEL_SIGNATURE     "6195022e0e9440133e1c25af5c2fecc5"
+#undef AI_THREELINECV_MODEL_SIGNATURE
+#define AI_THREELINECV_MODEL_SIGNATURE     "295eedae15a02afc3d66d411930fcd08"
 
 #ifndef AI_TOOLS_REVISION_ID
 #define AI_TOOLS_REVISION_ID     ""
 #endif
 
 #undef AI_TOOLS_DATE_TIME
-#define AI_TOOLS_DATE_TIME   "Tue Nov  7 01:08:43 2023"
+#define AI_TOOLS_DATE_TIME   "Tue Nov  7 01:08:52 2023"
 
 #undef AI_TOOLS_COMPILE_TIME
 #define AI_TOOLS_COMPILE_TIME    __DATE__ " " __TIME__
 
-#undef AI_FOURLINE_N_BATCHES
-#define AI_FOURLINE_N_BATCHES         (1)
+#undef AI_THREELINECV_N_BATCHES
+#define AI_THREELINECV_N_BATCHES         (1)
 
-static ai_ptr g_fourline_activations_map[1] = AI_C_ARRAY_INIT;
-static ai_ptr g_fourline_weights_map[1] = AI_C_ARRAY_INIT;
+static ai_ptr g_threelinecv_activations_map[1] = AI_C_ARRAY_INIT;
+static ai_ptr g_threelinecv_weights_map[1] = AI_C_ARRAY_INIT;
 
 
 
@@ -67,7 +67,7 @@ AI_ARRAY_OBJ_DECLARE(
 /* Array#2 */
 AI_ARRAY_OBJ_DECLARE(
   gemm_1_weights_array, AI_ARRAY_FORMAT_S8,
-  NULL, NULL, 24576, AI_STATIC)
+  NULL, NULL, 18432, AI_STATIC)
 /* Array#3 */
 AI_ARRAY_OBJ_DECLARE(
   gemm_1_bias_array, AI_ARRAY_FORMAT_S32,
@@ -107,7 +107,7 @@ AI_ARRAY_OBJ_DECLARE(
 /* Array#12 */
 AI_ARRAY_OBJ_DECLARE(
   gemm_1_scratch0_array, AI_ARRAY_FORMAT_S16,
-  NULL, NULL, 48, AI_STATIC)
+  NULL, NULL, 36, AI_STATIC)
 /* Array#13 */
 AI_ARRAY_OBJ_DECLARE(
   gemm_2_scratch0_array, AI_ARRAY_FORMAT_S16,
@@ -126,12 +126,12 @@ AI_ARRAY_OBJ_DECLARE(
   NULL, NULL, 32, AI_STATIC)
 /* Array#17 */
 AI_ARRAY_OBJ_DECLARE(
-  serving_default_dense_35_input0_output_array, AI_ARRAY_FORMAT_FLOAT|AI_FMT_FLAG_IS_IO,
-  NULL, NULL, 48, AI_STATIC)
+  serving_default_dense_input0_output_array, AI_ARRAY_FORMAT_FLOAT|AI_FMT_FLAG_IS_IO,
+  NULL, NULL, 36, AI_STATIC)
 /* Array#18 */
 AI_ARRAY_OBJ_DECLARE(
   conversion_0_output_array, AI_ARRAY_FORMAT_S8,
-  NULL, NULL, 48, AI_STATIC)
+  NULL, NULL, 36, AI_STATIC)
 /* Array#19 */
 AI_ARRAY_OBJ_DECLARE(
   gemm_1_output_array, AI_ARRAY_FORMAT_S8,
@@ -153,77 +153,77 @@ AI_ARRAY_OBJ_DECLARE(
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_5_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.005489740986377001f),
-    AI_PACK_INTQ_ZP(-33)))
+    AI_PACK_INTQ_SCALE(0.007478139828890562f),
+    AI_PACK_INTQ_ZP(-12)))
 
 /* Int quant #1 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_1_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.01651861146092415f),
+    AI_PACK_INTQ_SCALE(0.025340210646390915f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #2 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_2_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.01631166599690914f),
+    AI_PACK_INTQ_SCALE(0.017159657552838326f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #3 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_3_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.012347235344350338f),
+    AI_PACK_INTQ_SCALE(0.010638486593961716f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #4 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_4_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.0161135271191597f),
+    AI_PACK_INTQ_SCALE(0.01712697744369507f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #5 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_5_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.0034029593225568533f),
+    AI_PACK_INTQ_SCALE(0.0021587922237813473f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #6 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(conversion_0_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.0038992268964648247f),
+    AI_PACK_INTQ_SCALE(0.003914971370249987f),
     AI_PACK_INTQ_ZP(-128)))
 
 /* Int quant #7 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_1_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.018191616982221603f),
+    AI_PACK_INTQ_SCALE(0.019703486934304237f),
     AI_PACK_INTQ_ZP(-128)))
 
 /* Int quant #8 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_2_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.0593884103000164f),
+    AI_PACK_INTQ_SCALE(0.05567006766796112f),
     AI_PACK_INTQ_ZP(-128)))
 
 /* Int quant #9 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_3_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.01358486246317625f),
+    AI_PACK_INTQ_SCALE(0.03391537815332413f),
     AI_PACK_INTQ_ZP(-128)))
 
 /* Int quant #10 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_4_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.008266407065093517f),
+    AI_PACK_INTQ_SCALE(0.012549630366265774f),
     AI_PACK_INTQ_ZP(-128)))
 
 /**  Tensor declarations section  *********************************************/
@@ -245,7 +245,7 @@ AI_TENSOR_OBJ_DECLARE(
 AI_TENSOR_OBJ_DECLARE(
   gemm_1_weights, AI_STATIC,
   2, 0x1,
-  AI_SHAPE_INIT(4, 48, 512, 1, 1), AI_STRIDE_INIT(4, 1, 48, 24576, 24576),
+  AI_SHAPE_INIT(4, 36, 512, 1, 1), AI_STRIDE_INIT(4, 1, 36, 18432, 18432),
   1, &gemm_1_weights_array, &gemm_1_weights_array_intq)
 
 /* Tensor #3 */
@@ -315,7 +315,7 @@ AI_TENSOR_OBJ_DECLARE(
 AI_TENSOR_OBJ_DECLARE(
   gemm_1_scratch0, AI_STATIC,
   12, 0x0,
-  AI_SHAPE_INIT(4, 1, 48, 1, 1), AI_STRIDE_INIT(4, 2, 2, 96, 96),
+  AI_SHAPE_INIT(4, 1, 36, 1, 1), AI_STRIDE_INIT(4, 2, 2, 72, 72),
   1, &gemm_1_scratch0_array, NULL)
 
 /* Tensor #13 */
@@ -348,16 +348,16 @@ AI_TENSOR_OBJ_DECLARE(
 
 /* Tensor #17 */
 AI_TENSOR_OBJ_DECLARE(
-  serving_default_dense_35_input0_output, AI_STATIC,
+  serving_default_dense_input0_output, AI_STATIC,
   17, 0x0,
-  AI_SHAPE_INIT(4, 1, 48, 1, 1), AI_STRIDE_INIT(4, 4, 4, 192, 192),
-  1, &serving_default_dense_35_input0_output_array, NULL)
+  AI_SHAPE_INIT(4, 1, 36, 1, 1), AI_STRIDE_INIT(4, 4, 4, 144, 144),
+  1, &serving_default_dense_input0_output_array, NULL)
 
 /* Tensor #18 */
 AI_TENSOR_OBJ_DECLARE(
   conversion_0_output, AI_STATIC,
   18, 0x1,
-  AI_SHAPE_INIT(4, 1, 48, 1, 1), AI_STRIDE_INIT(4, 1, 1, 48, 48),
+  AI_SHAPE_INIT(4, 1, 36, 1, 1), AI_STRIDE_INIT(4, 1, 1, 36, 36),
   1, &conversion_0_output_array, &conversion_0_output_array_intq)
 
 /* Tensor #19 */
@@ -491,7 +491,7 @@ AI_LAYER_OBJ_DECLARE(
 
 AI_TENSOR_CHAIN_OBJ_DECLARE(
   conversion_0_chain, AI_STATIC_CONST, 4,
-  AI_TENSOR_LIST_OBJ_INIT(AI_FLAG_NONE, 1, &serving_default_dense_35_input0_output),
+  AI_TENSOR_LIST_OBJ_INIT(AI_FLAG_NONE, 1, &serving_default_dense_input0_output),
   AI_TENSOR_LIST_OBJ_INIT(AI_FLAG_NONE, 1, &conversion_0_output),
   AI_TENSOR_LIST_OBJ_EMPTY,
   AI_TENSOR_LIST_OBJ_EMPTY
@@ -511,13 +511,13 @@ AI_LAYER_OBJ_DECLARE(
 AI_NETWORK_OBJ_DECLARE(
   AI_NET_OBJ_INSTANCE, AI_STATIC,
   AI_BUFFER_INIT(AI_FLAG_NONE,  AI_BUFFER_FORMAT_U8,
-    AI_BUFFER_SHAPE_INIT(AI_SHAPE_BCWH, 4, 1, 98192, 1, 1),
-    98192, NULL, NULL),
+    AI_BUFFER_SHAPE_INIT(AI_SHAPE_BCWH, 4, 1, 92048, 1, 1),
+    92048, NULL, NULL),
   AI_BUFFER_INIT(AI_FLAG_NONE,  AI_BUFFER_FORMAT_U8,
     AI_BUFFER_SHAPE_INIT(AI_SHAPE_BCWH, 4, 1, 1664, 1, 1),
     1664, NULL, NULL),
-  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_FOURLINE_IN_NUM, &serving_default_dense_35_input0_output),
-  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_FOURLINE_OUT_NUM, &conversion_6_output),
+  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_THREELINECV_IN_NUM, &serving_default_dense_input0_output),
+  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_THREELINECV_OUT_NUM, &conversion_6_output),
   &conversion_0_layer, 0, NULL)
 
 #else
@@ -527,8 +527,8 @@ AI_NETWORK_OBJ_DECLARE(
   AI_BUFFER_ARRAY_OBJ_INIT_STATIC(
   	AI_FLAG_NONE, 1,
     AI_BUFFER_INIT(AI_FLAG_NONE,  AI_BUFFER_FORMAT_U8,
-      AI_BUFFER_SHAPE_INIT(AI_SHAPE_BCWH, 4, 1, 98192, 1, 1),
-      98192, NULL, NULL)
+      AI_BUFFER_SHAPE_INIT(AI_SHAPE_BCWH, 4, 1, 92048, 1, 1),
+      92048, NULL, NULL)
   ),
   AI_BUFFER_ARRAY_OBJ_INIT_STATIC(
   	AI_FLAG_NONE, 1,
@@ -536,8 +536,8 @@ AI_NETWORK_OBJ_DECLARE(
       AI_BUFFER_SHAPE_INIT(AI_SHAPE_BCWH, 4, 1, 1664, 1, 1),
       1664, NULL, NULL)
   ),
-  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_FOURLINE_IN_NUM, &serving_default_dense_35_input0_output),
-  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_FOURLINE_OUT_NUM, &conversion_6_output),
+  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_THREELINECV_IN_NUM, &serving_default_dense_input0_output),
+  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_THREELINECV_OUT_NUM, &conversion_6_output),
   &conversion_0_layer, 0, NULL)
 
 #endif	/*(AI_TOOLS_API_VERSION < AI_TOOLS_API_VERSION_1_5)*/
@@ -545,52 +545,52 @@ AI_NETWORK_OBJ_DECLARE(
 
 /******************************************************************************/
 AI_DECLARE_STATIC
-ai_bool fourline_configure_activations(
+ai_bool threelinecv_configure_activations(
   ai_network* net_ctx, const ai_network_params* params)
 {
   AI_ASSERT(net_ctx)
 
-  if (ai_platform_get_activations_map(g_fourline_activations_map, 1, params)) {
+  if (ai_platform_get_activations_map(g_threelinecv_activations_map, 1, params)) {
     /* Updating activations (byte) offsets */
     
-    serving_default_dense_35_input0_output_array.data = AI_PTR(g_fourline_activations_map[0] + 880);
-    serving_default_dense_35_input0_output_array.data_start = AI_PTR(g_fourline_activations_map[0] + 880);
+    serving_default_dense_input0_output_array.data = AI_PTR(g_threelinecv_activations_map[0] + 916);
+    serving_default_dense_input0_output_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 916);
     
-    conversion_0_output_array.data = AI_PTR(g_fourline_activations_map[0] + 880);
-    conversion_0_output_array.data_start = AI_PTR(g_fourline_activations_map[0] + 880);
+    conversion_0_output_array.data = AI_PTR(g_threelinecv_activations_map[0] + 916);
+    conversion_0_output_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 916);
     
-    gemm_1_scratch0_array.data = AI_PTR(g_fourline_activations_map[0] + 928);
-    gemm_1_scratch0_array.data_start = AI_PTR(g_fourline_activations_map[0] + 928);
+    gemm_1_scratch0_array.data = AI_PTR(g_threelinecv_activations_map[0] + 952);
+    gemm_1_scratch0_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 952);
     
-    gemm_1_output_array.data = AI_PTR(g_fourline_activations_map[0] + 1024);
-    gemm_1_output_array.data_start = AI_PTR(g_fourline_activations_map[0] + 1024);
+    gemm_1_output_array.data = AI_PTR(g_threelinecv_activations_map[0] + 1024);
+    gemm_1_output_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 1024);
     
-    gemm_2_scratch0_array.data = AI_PTR(g_fourline_activations_map[0] + 0);
-    gemm_2_scratch0_array.data_start = AI_PTR(g_fourline_activations_map[0] + 0);
+    gemm_2_scratch0_array.data = AI_PTR(g_threelinecv_activations_map[0] + 0);
+    gemm_2_scratch0_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 0);
     
-    gemm_2_output_array.data = AI_PTR(g_fourline_activations_map[0] + 1536);
-    gemm_2_output_array.data_start = AI_PTR(g_fourline_activations_map[0] + 1536);
+    gemm_2_output_array.data = AI_PTR(g_threelinecv_activations_map[0] + 1536);
+    gemm_2_output_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 1536);
     
-    gemm_3_scratch0_array.data = AI_PTR(g_fourline_activations_map[0] + 0);
-    gemm_3_scratch0_array.data_start = AI_PTR(g_fourline_activations_map[0] + 0);
+    gemm_3_scratch0_array.data = AI_PTR(g_threelinecv_activations_map[0] + 0);
+    gemm_3_scratch0_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 0);
     
-    gemm_3_output_array.data = AI_PTR(g_fourline_activations_map[0] + 256);
-    gemm_3_output_array.data_start = AI_PTR(g_fourline_activations_map[0] + 256);
+    gemm_3_output_array.data = AI_PTR(g_threelinecv_activations_map[0] + 256);
+    gemm_3_output_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 256);
     
-    gemm_4_scratch0_array.data = AI_PTR(g_fourline_activations_map[0] + 0);
-    gemm_4_scratch0_array.data_start = AI_PTR(g_fourline_activations_map[0] + 0);
+    gemm_4_scratch0_array.data = AI_PTR(g_threelinecv_activations_map[0] + 0);
+    gemm_4_scratch0_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 0);
     
-    gemm_4_output_array.data = AI_PTR(g_fourline_activations_map[0] + 64);
-    gemm_4_output_array.data_start = AI_PTR(g_fourline_activations_map[0] + 64);
+    gemm_4_output_array.data = AI_PTR(g_threelinecv_activations_map[0] + 64);
+    gemm_4_output_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 64);
     
-    gemm_5_scratch0_array.data = AI_PTR(g_fourline_activations_map[0] + 0);
-    gemm_5_scratch0_array.data_start = AI_PTR(g_fourline_activations_map[0] + 0);
+    gemm_5_scratch0_array.data = AI_PTR(g_threelinecv_activations_map[0] + 0);
+    gemm_5_scratch0_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 0);
     
-    gemm_5_output_array.data = AI_PTR(g_fourline_activations_map[0] + 96);
-    gemm_5_output_array.data_start = AI_PTR(g_fourline_activations_map[0] + 96);
+    gemm_5_output_array.data = AI_PTR(g_threelinecv_activations_map[0] + 96);
+    gemm_5_output_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 96);
     
-    conversion_6_output_array.data = AI_PTR(g_fourline_activations_map[0] + 0);
-    conversion_6_output_array.data_start = AI_PTR(g_fourline_activations_map[0] + 0);
+    conversion_6_output_array.data = AI_PTR(g_threelinecv_activations_map[0] + 0);
+    conversion_6_output_array.data_start = AI_PTR(g_threelinecv_activations_map[0] + 0);
     
     return true;
   }
@@ -602,53 +602,53 @@ ai_bool fourline_configure_activations(
 
 /******************************************************************************/
 AI_DECLARE_STATIC
-ai_bool fourline_configure_weights(
+ai_bool threelinecv_configure_weights(
   ai_network* net_ctx, const ai_network_params* params)
 {
   AI_ASSERT(net_ctx)
 
-  if (ai_platform_get_weights_map(g_fourline_weights_map, 1, params)) {
+  if (ai_platform_get_weights_map(g_threelinecv_weights_map, 1, params)) {
     /* Updating weights (byte) offsets */
     
     gemm_1_weights_array.format |= AI_FMT_FLAG_CONST;
-    gemm_1_weights_array.data = AI_PTR(g_fourline_weights_map[0] + 0);
-    gemm_1_weights_array.data_start = AI_PTR(g_fourline_weights_map[0] + 0);
+    gemm_1_weights_array.data = AI_PTR(g_threelinecv_weights_map[0] + 0);
+    gemm_1_weights_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 0);
     
     gemm_1_bias_array.format |= AI_FMT_FLAG_CONST;
-    gemm_1_bias_array.data = AI_PTR(g_fourline_weights_map[0] + 24576);
-    gemm_1_bias_array.data_start = AI_PTR(g_fourline_weights_map[0] + 24576);
+    gemm_1_bias_array.data = AI_PTR(g_threelinecv_weights_map[0] + 18432);
+    gemm_1_bias_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 18432);
     
     gemm_2_weights_array.format |= AI_FMT_FLAG_CONST;
-    gemm_2_weights_array.data = AI_PTR(g_fourline_weights_map[0] + 26624);
-    gemm_2_weights_array.data_start = AI_PTR(g_fourline_weights_map[0] + 26624);
+    gemm_2_weights_array.data = AI_PTR(g_threelinecv_weights_map[0] + 20480);
+    gemm_2_weights_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 20480);
     
     gemm_2_bias_array.format |= AI_FMT_FLAG_CONST;
-    gemm_2_bias_array.data = AI_PTR(g_fourline_weights_map[0] + 92160);
-    gemm_2_bias_array.data_start = AI_PTR(g_fourline_weights_map[0] + 92160);
+    gemm_2_bias_array.data = AI_PTR(g_threelinecv_weights_map[0] + 86016);
+    gemm_2_bias_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 86016);
     
     gemm_3_weights_array.format |= AI_FMT_FLAG_CONST;
-    gemm_3_weights_array.data = AI_PTR(g_fourline_weights_map[0] + 92672);
-    gemm_3_weights_array.data_start = AI_PTR(g_fourline_weights_map[0] + 92672);
+    gemm_3_weights_array.data = AI_PTR(g_threelinecv_weights_map[0] + 86528);
+    gemm_3_weights_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 86528);
     
     gemm_3_bias_array.format |= AI_FMT_FLAG_CONST;
-    gemm_3_bias_array.data = AI_PTR(g_fourline_weights_map[0] + 96768);
-    gemm_3_bias_array.data_start = AI_PTR(g_fourline_weights_map[0] + 96768);
+    gemm_3_bias_array.data = AI_PTR(g_threelinecv_weights_map[0] + 90624);
+    gemm_3_bias_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 90624);
     
     gemm_4_weights_array.format |= AI_FMT_FLAG_CONST;
-    gemm_4_weights_array.data = AI_PTR(g_fourline_weights_map[0] + 96896);
-    gemm_4_weights_array.data_start = AI_PTR(g_fourline_weights_map[0] + 96896);
+    gemm_4_weights_array.data = AI_PTR(g_threelinecv_weights_map[0] + 90752);
+    gemm_4_weights_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 90752);
     
     gemm_4_bias_array.format |= AI_FMT_FLAG_CONST;
-    gemm_4_bias_array.data = AI_PTR(g_fourline_weights_map[0] + 97920);
-    gemm_4_bias_array.data_start = AI_PTR(g_fourline_weights_map[0] + 97920);
+    gemm_4_bias_array.data = AI_PTR(g_threelinecv_weights_map[0] + 91776);
+    gemm_4_bias_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 91776);
     
     gemm_5_weights_array.format |= AI_FMT_FLAG_CONST;
-    gemm_5_weights_array.data = AI_PTR(g_fourline_weights_map[0] + 98048);
-    gemm_5_weights_array.data_start = AI_PTR(g_fourline_weights_map[0] + 98048);
+    gemm_5_weights_array.data = AI_PTR(g_threelinecv_weights_map[0] + 91904);
+    gemm_5_weights_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 91904);
     
     gemm_5_bias_array.format |= AI_FMT_FLAG_CONST;
-    gemm_5_bias_array.data = AI_PTR(g_fourline_weights_map[0] + 98176);
-    gemm_5_bias_array.data_start = AI_PTR(g_fourline_weights_map[0] + 98176);
+    gemm_5_bias_array.data = AI_PTR(g_threelinecv_weights_map[0] + 92032);
+    gemm_5_bias_array.data_start = AI_PTR(g_threelinecv_weights_map[0] + 92032);
     
     return true;
   }
@@ -662,7 +662,7 @@ ai_bool fourline_configure_weights(
 
 AI_DEPRECATED
 AI_API_ENTRY
-ai_bool ai_fourline_get_info(
+ai_bool ai_threelinecv_get_info(
   ai_handle network, ai_network_report* report)
 {
   ai_network* net_ctx = AI_NETWORK_ACQUIRE_CTX(network);
@@ -670,8 +670,8 @@ ai_bool ai_fourline_get_info(
   if (report && net_ctx)
   {
     ai_network_report r = {
-      .model_name        = AI_FOURLINE_MODEL_NAME,
-      .model_signature   = AI_FOURLINE_MODEL_SIGNATURE,
+      .model_name        = AI_THREELINECV_MODEL_NAME,
+      .model_signature   = AI_THREELINECV_MODEL_SIGNATURE,
       .model_datetime    = AI_TOOLS_DATE_TIME,
       
       .compile_datetime  = AI_TOOLS_COMPILE_TIME,
@@ -687,7 +687,7 @@ ai_bool ai_fourline_get_info(
       .api_version            = ai_platform_api_get_version(),
       .interface_api_version  = ai_platform_interface_api_get_version(),
       
-      .n_macc            = 96172,
+      .n_macc            = 90004,
       .n_inputs          = 0,
       .inputs            = NULL,
       .n_outputs         = 0,
@@ -708,7 +708,7 @@ ai_bool ai_fourline_get_info(
 
 
 AI_API_ENTRY
-ai_bool ai_fourline_get_report(
+ai_bool ai_threelinecv_get_report(
   ai_handle network, ai_network_report* report)
 {
   ai_network* net_ctx = AI_NETWORK_ACQUIRE_CTX(network);
@@ -716,8 +716,8 @@ ai_bool ai_fourline_get_report(
   if (report && net_ctx)
   {
     ai_network_report r = {
-      .model_name        = AI_FOURLINE_MODEL_NAME,
-      .model_signature   = AI_FOURLINE_MODEL_SIGNATURE,
+      .model_name        = AI_THREELINECV_MODEL_NAME,
+      .model_signature   = AI_THREELINECV_MODEL_SIGNATURE,
       .model_datetime    = AI_TOOLS_DATE_TIME,
       
       .compile_datetime  = AI_TOOLS_COMPILE_TIME,
@@ -733,7 +733,7 @@ ai_bool ai_fourline_get_report(
       .api_version            = ai_platform_api_get_version(),
       .interface_api_version  = ai_platform_interface_api_get_version(),
       
-      .n_macc            = 96172,
+      .n_macc            = 90004,
       .n_inputs          = 0,
       .inputs            = NULL,
       .n_outputs         = 0,
@@ -754,13 +754,13 @@ ai_bool ai_fourline_get_report(
 }
 
 AI_API_ENTRY
-ai_error ai_fourline_get_error(ai_handle network)
+ai_error ai_threelinecv_get_error(ai_handle network)
 {
   return ai_platform_network_get_error(network);
 }
 
 AI_API_ENTRY
-ai_error ai_fourline_create(
+ai_error ai_threelinecv_create(
   ai_handle* network, const ai_buffer* network_config)
 {
   return ai_platform_network_create(
@@ -770,41 +770,41 @@ ai_error ai_fourline_create(
 }
 
 AI_API_ENTRY
-ai_error ai_fourline_create_and_init(
+ai_error ai_threelinecv_create_and_init(
   ai_handle* network, const ai_handle activations[], const ai_handle weights[])
 {
     ai_error err;
     ai_network_params params;
 
-    err = ai_fourline_create(network, AI_FOURLINE_DATA_CONFIG);
+    err = ai_threelinecv_create(network, AI_THREELINECV_DATA_CONFIG);
     if (err.type != AI_ERROR_NONE)
         return err;
-    if (ai_fourline_data_params_get(&params) != true) {
-        err = ai_fourline_get_error(*network);
+    if (ai_threelinecv_data_params_get(&params) != true) {
+        err = ai_threelinecv_get_error(*network);
         return err;
     }
-#if defined(AI_FOURLINE_DATA_ACTIVATIONS_COUNT)
+#if defined(AI_THREELINECV_DATA_ACTIVATIONS_COUNT)
     if (activations) {
         /* set the addresses of the activations buffers */
         for (int idx=0;idx<params.map_activations.size;idx++)
             AI_BUFFER_ARRAY_ITEM_SET_ADDRESS(&params.map_activations, idx, activations[idx]);
     }
 #endif
-#if defined(AI_FOURLINE_DATA_WEIGHTS_COUNT)
+#if defined(AI_THREELINECV_DATA_WEIGHTS_COUNT)
     if (weights) {
         /* set the addresses of the weight buffers */
         for (int idx=0;idx<params.map_weights.size;idx++)
             AI_BUFFER_ARRAY_ITEM_SET_ADDRESS(&params.map_weights, idx, weights[idx]);
     }
 #endif
-    if (ai_fourline_init(*network, &params) != true) {
-        err = ai_fourline_get_error(*network);
+    if (ai_threelinecv_init(*network, &params) != true) {
+        err = ai_threelinecv_get_error(*network);
     }
     return err;
 }
 
 AI_API_ENTRY
-ai_buffer* ai_fourline_inputs_get(ai_handle network, ai_u16 *n_buffer)
+ai_buffer* ai_threelinecv_inputs_get(ai_handle network, ai_u16 *n_buffer)
 {
   if (network == AI_HANDLE_NULL) {
     network = (ai_handle)&AI_NET_OBJ_INSTANCE;
@@ -814,7 +814,7 @@ ai_buffer* ai_fourline_inputs_get(ai_handle network, ai_u16 *n_buffer)
 }
 
 AI_API_ENTRY
-ai_buffer* ai_fourline_outputs_get(ai_handle network, ai_u16 *n_buffer)
+ai_buffer* ai_threelinecv_outputs_get(ai_handle network, ai_u16 *n_buffer)
 {
   if (network == AI_HANDLE_NULL) {
     network = (ai_handle)&AI_NET_OBJ_INSTANCE;
@@ -824,21 +824,21 @@ ai_buffer* ai_fourline_outputs_get(ai_handle network, ai_u16 *n_buffer)
 }
 
 AI_API_ENTRY
-ai_handle ai_fourline_destroy(ai_handle network)
+ai_handle ai_threelinecv_destroy(ai_handle network)
 {
   return ai_platform_network_destroy(network);
 }
 
 AI_API_ENTRY
-ai_bool ai_fourline_init(
+ai_bool ai_threelinecv_init(
   ai_handle network, const ai_network_params* params)
 {
   ai_network* net_ctx = ai_platform_network_init(network, params);
   if (!net_ctx) return false;
 
   ai_bool ok = true;
-  ok &= fourline_configure_weights(net_ctx, params);
-  ok &= fourline_configure_activations(net_ctx, params);
+  ok &= threelinecv_configure_weights(net_ctx, params);
+  ok &= threelinecv_configure_activations(net_ctx, params);
 
   ok &= ai_platform_network_post_init(network);
 
@@ -847,21 +847,21 @@ ai_bool ai_fourline_init(
 
 
 AI_API_ENTRY
-ai_i32 ai_fourline_run(
+ai_i32 ai_threelinecv_run(
   ai_handle network, const ai_buffer* input, ai_buffer* output)
 {
   return ai_platform_network_process(network, input, output);
 }
 
 AI_API_ENTRY
-ai_i32 ai_fourline_forward(ai_handle network, const ai_buffer* input)
+ai_i32 ai_threelinecv_forward(ai_handle network, const ai_buffer* input)
 {
   return ai_platform_network_process(network, input, NULL);
 }
 
 
 
-#undef AI_FOURLINE_MODEL_SIGNATURE
+#undef AI_THREELINECV_MODEL_SIGNATURE
 #undef AI_NET_OBJ_INSTANCE
 #undef AI_TOOLS_DATE_TIME
 #undef AI_TOOLS_COMPILE_TIME

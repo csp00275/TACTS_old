@@ -30,11 +30,11 @@ extern ai_float out_data[AI_TWOLINE_OUT_1_SIZE];
 
 #elif NUM_SENSOR == 36
 AI_ALIGNED(32)
-extern ai_u8 activations[AI_THREELINE_DATA_ACTIVATIONS_SIZE];
+extern ai_u8 activations[AI_THREELINECV_DATA_ACTIVATIONS_SIZE];
 AI_ALIGNED(32)
-extern ai_float in_data[AI_THREELINE_IN_1_SIZE];
+extern ai_float in_data[AI_THREELINECV_IN_1_SIZE];
 AI_ALIGNED(32)
-extern ai_float out_data[AI_THREELINE_OUT_1_SIZE];
+extern ai_float out_data[AI_THREELINECV_OUT_1_SIZE];
 
 #elif
 AI_ALIGNED(32)
