@@ -1,7 +1,7 @@
 {
     "_allocate_inputs": 4,
     "_allocate_outputs": 4,
-    "cli_parameters": "generate --name twoline -m D:/ME program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_Inference/231008_0119_2kPa_2line_Data_B8_quant_float32_float32_random_1.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\JH_LAB\\AppData\\Local\\Temp\\mxAI_workspace2896102314200006955485702133873986 --output C:\\Users\\JH_LAB\\.stm32cubemx\\network_output --allocate-inputs --series stm32f7 --allocate-outputs",
+    "cli_parameters": "generate --name threelinecv -m D:/ME program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_Inference/3lineData_B9_2kPa_9V_.tflite --type tflite --compression none --verbosity 1 --workspace C:\\Users\\JH_LAB\\AppData\\Local\\Temp\\mxAI_workspace289636621805300549101286833959120 --output C:\\Users\\JH_LAB\\.stm32cubemx\\network_output --allocate-inputs --series stm32f7 --allocate-outputs",
     "cli_version": {
         "major": 1,
         "micro": 0,
@@ -13,14 +13,14 @@
         "factor": null,
         "layers": {}
     },
-    "date_time": "Tue Nov  7 01:08:25 2023",
+    "date_time": "Tue Nov  7 01:08:52 2023",
     "error": 0,
     "error_str": [],
     "exec_cmd": "generate",
     "exec_duration": 0.0,
-    "hash": "c549faf7c4acd2692b283dc010d16019",
+    "hash": "295eedae15a02afc3d66d411930fcd08",
     "inputs": [
-        "serving_default_dense_35_input0"
+        "serving_default_dense_input0"
     ],
     "layers": [
         {
@@ -32,12 +32,12 @@
                 "n_params": 0,
                 "psize": 0,
                 "rom_output": {
-                    "c_size": 96,
+                    "c_size": 144,
                     "fmt": {
                         "format": "float"
                     },
                     "shape": [
-                        24,
+                        36,
                         1
                     ]
                 },
@@ -45,23 +45,23 @@
             },
             "id": 0,
             "inputs": [],
-            "name": "serving_default_dense_35_input0",
+            "name": "serving_default_dense_input0",
             "original": "",
             "type": "Input"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 48,
+                "n_macc": 72,
                 "n_params": 0,
                 "psize": 0,
                 "rom_output": {
-                    "c_size": 24,
+                    "c_size": 36,
                     "fmt": {
                         "format": "int8_t"
                     },
                     "shape": [
-                        24,
+                        36,
                         1
                     ]
                 },
@@ -69,7 +69,7 @@
             },
             "id": 0,
             "inputs": [
-                "serving_default_dense_35_input0"
+                "serving_default_dense_input0"
             ],
             "name": "conversion_0",
             "original": "QUANTIZE",
@@ -81,13 +81,13 @@
             ],
             "extras": {
                 "n_macc": 0,
-                "n_params": 12288,
-                "psize": 12288,
-                "rom_size": 14336
+                "n_params": 18432,
+                "psize": 18432,
+                "rom_size": 20480
             },
             "id": 1,
             "inputs": [],
-            "name": "sequential_7_dense_35_MatMul",
+            "name": "sequential_dense_MatMul",
             "original": "",
             "type": "Placeholder"
         },
@@ -101,14 +101,14 @@
             },
             "id": 1,
             "inputs": [],
-            "name": "sequential_7_dense_35_BiasAdd_ReadVariableOp",
+            "name": "sequential_dense_BiasAdd_ReadVariableOp",
             "original": "",
             "type": "Placeholder"
         },
         {
             "c_id": [],
             "extras": {
-                "n_macc": 12800,
+                "n_macc": 18944,
                 "n_params": 0,
                 "psize": 0,
                 "rom_output": {
@@ -126,8 +126,8 @@
             "id": 1,
             "inputs": [
                 "conversion_0",
-                "sequential_7_dense_35_MatMul",
-                "sequential_7_dense_35_BiasAdd_ReadVariableOp"
+                "sequential_dense_MatMul",
+                "sequential_dense_BiasAdd_ReadVariableOp"
             ],
             "name": "gemm_1",
             "original": "FULLY_CONNECTED",
@@ -161,7 +161,7 @@
             },
             "id": 2,
             "inputs": [],
-            "name": "sequential_7_dense_36_MatMul",
+            "name": "sequential_dense_1_MatMul",
             "original": "",
             "type": "Placeholder"
         },
@@ -175,7 +175,7 @@
             },
             "id": 2,
             "inputs": [],
-            "name": "sequential_7_dense_36_BiasAdd_ReadVariableOp",
+            "name": "sequential_dense_1_BiasAdd_ReadVariableOp",
             "original": "",
             "type": "Placeholder"
         },
@@ -200,8 +200,8 @@
             "id": 2,
             "inputs": [
                 "nl_1_nl",
-                "sequential_7_dense_36_MatMul",
-                "sequential_7_dense_36_BiasAdd_ReadVariableOp"
+                "sequential_dense_1_MatMul",
+                "sequential_dense_1_BiasAdd_ReadVariableOp"
             ],
             "name": "gemm_2",
             "original": "FULLY_CONNECTED",
@@ -235,7 +235,7 @@
             },
             "id": 3,
             "inputs": [],
-            "name": "sequential_7_dense_37_MatMul",
+            "name": "sequential_dense_2_MatMul",
             "original": "",
             "type": "Placeholder"
         },
@@ -249,7 +249,7 @@
             },
             "id": 3,
             "inputs": [],
-            "name": "sequential_7_dense_37_BiasAdd_ReadVariableOp",
+            "name": "sequential_dense_2_BiasAdd_ReadVariableOp",
             "original": "",
             "type": "Placeholder"
         },
@@ -274,8 +274,8 @@
             "id": 3,
             "inputs": [
                 "nl_2_nl",
-                "sequential_7_dense_37_MatMul",
-                "sequential_7_dense_37_BiasAdd_ReadVariableOp"
+                "sequential_dense_2_MatMul",
+                "sequential_dense_2_BiasAdd_ReadVariableOp"
             ],
             "name": "gemm_3",
             "original": "FULLY_CONNECTED",
@@ -309,7 +309,7 @@
             },
             "id": 4,
             "inputs": [],
-            "name": "sequential_7_dense_38_MatMul",
+            "name": "sequential_dense_3_MatMul",
             "original": "",
             "type": "Placeholder"
         },
@@ -323,7 +323,7 @@
             },
             "id": 4,
             "inputs": [],
-            "name": "sequential_7_dense_38_BiasAdd_ReadVariableOp",
+            "name": "sequential_dense_3_BiasAdd_ReadVariableOp",
             "original": "",
             "type": "Placeholder"
         },
@@ -348,8 +348,8 @@
             "id": 4,
             "inputs": [
                 "nl_3_nl",
-                "sequential_7_dense_38_MatMul",
-                "sequential_7_dense_38_BiasAdd_ReadVariableOp"
+                "sequential_dense_3_MatMul",
+                "sequential_dense_3_BiasAdd_ReadVariableOp"
             ],
             "name": "gemm_4",
             "original": "FULLY_CONNECTED",
@@ -383,7 +383,7 @@
             },
             "id": 5,
             "inputs": [],
-            "name": "sequential_7_dense_39_MatMul",
+            "name": "sequential_dense_4_MatMul",
             "original": "",
             "type": "Placeholder"
         },
@@ -397,7 +397,7 @@
             },
             "id": 5,
             "inputs": [],
-            "name": "sequential_7_dense_39_BiasAdd_ReadVariableOp",
+            "name": "sequential_dense_4_BiasAdd_ReadVariableOp",
             "original": "",
             "type": "Placeholder"
         },
@@ -422,8 +422,8 @@
             "id": 5,
             "inputs": [
                 "nl_4_nl",
-                "sequential_7_dense_39_MatMul",
-                "sequential_7_dense_39_BiasAdd_ReadVariableOp"
+                "sequential_dense_4_MatMul",
+                "sequential_dense_4_BiasAdd_ReadVariableOp"
             ],
             "name": "gemm_5",
             "original": "FULLY_CONNECTED",
@@ -459,18 +459,18 @@
         }
     ],
     "model_files": [
-        "D:\\ME program\\2017-PhD\\01_research\\02Study\\34_ballon_like_cover\\DeepLearing\\TACTS\\MicroController\\STM32F746\\TACTS_Inference\\231008_0119_2kPa_2line_Data_B8_quant_float32_float32_random_1.tflite"
+        "D:\\ME program\\2017-PhD\\01_research\\02Study\\34_ballon_like_cover\\DeepLearing\\TACTS\\MicroController\\STM32F746\\TACTS_Inference\\3lineData_B9_2kPa_9V_.tflite"
     ],
-    "model_n_params": 83780,
-    "model_name": "node_231008_0119_2kPa_2line_Data_B8_quant_float32_float32_random_1",
-    "model_size": 85904,
+    "model_n_params": 89924,
+    "model_name": "node_3lineData_B9_2kPa_9V_",
+    "model_size": 92048,
     "model_type": "tflite",
-    "name": "twoline",
+    "name": "threelinecv",
     "outputs": [
         "conversion_6"
     ],
     "ram_io_size": [
-        96,
+        144,
         16
     ],
     "ram_size": [
@@ -482,12 +482,12 @@
     "rom_heap_inspector": 2048,
     "rom_inputs": [
         {
-            "c_size": 96,
+            "c_size": 144,
             "c_type": "float",
-            "name": "serving_default_dense_35_input0"
+            "name": "serving_default_dense_input0"
         }
     ],
-    "rom_n_macc": 83836,
+    "rom_n_macc": 90004,
     "rom_outputs": [
         {
             "c_size": 16,
@@ -495,7 +495,7 @@
             "name": "conversion_6"
         }
     ],
-    "rom_size": 85904,
+    "rom_size": 92048,
     "strategy": "heap_overlay",
     "tools_api_version": {
         "major": 1,

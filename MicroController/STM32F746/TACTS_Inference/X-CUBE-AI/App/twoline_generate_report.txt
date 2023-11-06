@@ -1,6 +1,6 @@
 Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
-Created date          : 2023-10-27 15:55:26
-Parameters            : generate --name twoline -m D:/ME program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_Inference/231008_0119_2kPa_2line_Data_B8_quant_float32_float32_random_1.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace23652895095820017619273850125760459 --output C:\Users\JH_LAB\.stm32cubemx\network_output --allocate-inputs --series stm32f7 --allocate-outputs
+Created date          : 2023-11-07 01:08:25
+Parameters            : generate --name twoline -m D:/ME program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_Inference/231008_0119_2kPa_2line_Data_B8_quant_float32_float32_random_1.tflite --type tflite --compression none --verbosity 1 --workspace C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace2896102314200006955485702133873986 --output C:\Users\JH_LAB\.stm32cubemx\network_output --allocate-inputs --series stm32f7 --allocate-outputs
 
 Exec/report summary (generate)
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ compression        :   none
 options            :   allocate-inputs, allocate-outputs                                                                                                                                                                  
 optimization       :   balanced                                                                                                                                                                                           
 target/series      :   stm32f7                                                                                                                                                                                            
-workspace dir      :   C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace23652895095820017619273850125760459                                                                                                               
+workspace dir      :   C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace2896102314200006955485702133873986                                                                                                                
 output dir         :   C:\Users\JH_LAB\.stm32cubemx\network_output                                                                                                                                                        
 model_fmt          :   ss/sa per tensor                                                                                                                                                                                   
 model_name         :   node_231008_0119_2kPa_2line_Data_B8_quant_float32_float32_random_1                                                                                                                                 

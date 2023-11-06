@@ -8,7 +8,7 @@
 #ifndef INC_VL53L0X_JH_H_
 #define INC_VL53L0X_JH_H_
 
-#define NUM_SENSOR 24
+#define NUM_SENSOR 36
 #define VL53L0X_ADDR	0x29 << 1 // Default I2C address of VL53L0X
 
 #include "vl53l0x_api.h"
