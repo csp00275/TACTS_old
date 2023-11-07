@@ -1,4 +1,11 @@
 ../X-CUBE-AI/App/aiTestHelper.c:41:6:aiPlatformVersion	32	static
+<<<<<<< HEAD:MicroController/STM32F746/twoLineProject/STM32F746G-DISCO/Debug/X-CUBE-AI/App/aiTestHelper.su
 ../X-CUBE-AI/App/aiTestHelper.c:54:6:aiLogErr	4	static
 ../X-CUBE-AI/App/aiTestHelper.c:77:6:aiPrintBufferInfo	48	static
 ../X-CUBE-AI/App/aiTestHelper.c:142:6:aiPrintNetworkInfo	32	static
+=======
+../X-CUBE-AI/App/aiTestHelper.c:54:6:aiLogErr	16	static
+../X-CUBE-AI/App/aiTestHelper.c:64:20:aiPrintDataType	16	static
+../X-CUBE-AI/App/aiTestHelper.c:77:6:aiPrintBufferInfo	56	static
+../X-CUBE-AI/App/aiTestHelper.c:142:6:aiPrintNetworkInfo	40	static
+>>>>>>> TACTS_line_learning:MicroController/STM32F746/TACTS_Lite/Debug/X-CUBE-AI/App/aiTestHelper.su

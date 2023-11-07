@@ -1,2 +1,7 @@
+<<<<<<< HEAD:MicroController/STM32F746/twoLineProject/STM32F746G-DISCO/Debug/X-CUBE-AI/App/ai_device_adaptor.su
 ../X-CUBE-AI/App/ai_device_adaptor.c:29:6:port_hal_crc_ip_init_imp	8	static
 ../X-CUBE-AI/App/ai_device_adaptor.c:97:6:port_dwt_init_imp	0	static
+=======
+../X-CUBE-AI/App/ai_device_adaptor.c:29:6:port_hal_crc_ip_init_imp	16	static
+../X-CUBE-AI/App/ai_device_adaptor.c:97:6:port_dwt_init_imp	4	static
+>>>>>>> TACTS_line_learning:MicroController/STM32F746/TACTS_Lite/Debug/X-CUBE-AI/App/ai_device_adaptor.su

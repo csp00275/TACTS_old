@@ -1,2 +1,10 @@
+<<<<<<< HEAD:MicroController/STM32F746/twoLineProject/STM32F746G-DISCO/Debug/X-CUBE-AI/App/lc_print.su
 ../X-CUBE-AI/App/lc_print.c:78:12:_write_number	104	static
 ../X-CUBE-AI/App/lc_print.c:213:5:vlc_print	160	static
+=======
+../X-CUBE-AI/App/lc_print.c:50:12:_write_string	40	static
+../X-CUBE-AI/App/lc_print.c:78:12:_write_number	128	static
+../X-CUBE-AI/App/lc_print.c:146:19:_write_double	168	static
+../X-CUBE-AI/App/lc_print.c:208:20:_getChar	16	static
+../X-CUBE-AI/App/lc_print.c:213:5:vlc_print	120	static
+>>>>>>> TACTS_line_learning:MicroController/STM32F746/TACTS_Lite/Debug/X-CUBE-AI/App/lc_print.su

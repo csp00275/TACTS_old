@@ -1,3 +1,4 @@
+<<<<<<< HEAD:MicroController/STM32F746/twoLineProject/STM32F746G-DISCO/Debug/X-CUBE-AI/App/aiTestUtility.su
 ../X-CUBE-AI/App/aiTestUtility.c:351:13:_put_c_buffer_cb	0	static
 ../X-CUBE-AI/App/aiTestUtility.c:322:13:_put_c_driver	16	static
 ../X-CUBE-AI/App/aiTestUtility.c:142:6:ioRawGetUint8	8	static
@@ -16,3 +17,27 @@
 ../X-CUBE-AI/App/aiTestUtility.c:645:6:getSysConf.part.0	8	static
 ../X-CUBE-AI/App/aiTestUtility.c:645:6:getSysConf	0	static
 ../X-CUBE-AI/App/aiTestUtility.c:801:6:systemSettingLog	48	static
+=======
+../X-CUBE-AI/App/ai_device_adaptor.h:437:22:port_io_get	24	static
+../X-CUBE-AI/App/ai_device_adaptor.h:452:22:port_io_write	24	static
+../X-CUBE-AI/App/ai_device_adaptor.h:461:22:port_io_read	24	static
+../X-CUBE-AI/App/aiTestUtility.c:142:6:ioRawGetUint8	16	static
+../X-CUBE-AI/App/aiTestUtility.c:199:6:ioRawWriteBuffer	16	static
+../X-CUBE-AI/App/aiTestUtility.c:204:6:ioRawReadBuffer	16	static
+../X-CUBE-AI/App/aiTestUtility.c:209:6:ioRawDisableLLWrite	4	static
+../X-CUBE-AI/App/aiTestUtility.c:222:5:_write	32	static
+../X-CUBE-AI/App/aiTestUtility.c:322:13:_put_c_driver	16	static
+../X-CUBE-AI/App/aiTestUtility.c:337:6:lc_print	16	static
+../X-CUBE-AI/App/aiTestUtility.c:351:13:_put_c_buffer_cb	24	static
+../X-CUBE-AI/App/aiTestUtility.c:361:8:lc_vsnprint	40	static
+../X-CUBE-AI/App/aiTestUtility.c:385:7:__wrap_malloc	24	static
+../X-CUBE-AI/App/aiTestUtility.c:425:6:__wrap_free	24	static
+../X-CUBE-AI/App/aiTestUtility.c:478:6:stackMonInit	24	static
+../X-CUBE-AI/App/aiTestUtility.c:521:5:dwtCyclesToTime	216	static
+../X-CUBE-AI/App/aiTestUtility.c:538:7:dwtCyclesToFloatMs	24	static
+../X-CUBE-AI/App/aiTestUtility.c:546:20:devIdToStr	24	static
+../X-CUBE-AI/App/aiTestUtility.c:635:29:bitToStr	16	static
+../X-CUBE-AI/App/aiTestUtility.c:645:6:getSysConf	16	static
+../X-CUBE-AI/App/aiTestUtility.c:699:10:getFlashCacheConf	24	static
+../X-CUBE-AI/App/aiTestUtility.c:801:6:systemSettingLog	56	static
+>>>>>>> TACTS_line_learning:MicroController/STM32F746/TACTS_Lite/Debug/X-CUBE-AI/App/aiTestUtility.su

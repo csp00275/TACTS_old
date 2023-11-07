@@ -1,4 +1,5 @@
 ../X-CUBE-AI/App/aiTestUtility.h:142:20:_mon_alloc_reset	8	static
+<<<<<<< HEAD:MicroController/STM32F746/twoLineProject/STM32F746G-DISCO/Debug/X-CUBE-AI/App/aiSystemPerformance.su
 ../X-CUBE-AI/App/aiTestUtility.h:358:26:cyclesCounterEnd	24	static
 ../X-CUBE-AI/App/aiSystemPerformance.c:256:15:user_observer_cb	32	static
 ../X-CUBE-AI/App/aiSystemPerformance.c:217:13:aiDeInit	8	static
@@ -7,4 +8,20 @@
 ../X-CUBE-AI/App/aiSystemPerformance.c:319:6:aiObserverDone	168	static
 ../X-CUBE-AI/App/aiSystemPerformance.c:628:5:aiSystemPerformanceInit	56	static
 ../X-CUBE-AI/App/aiSystemPerformance.c:647:5:aiSystemPerformanceProcess	152	static,ignoring_inline_asm
+=======
+../X-CUBE-AI/App/aiTestUtility.h:308:22:cyclesCounterInit	40	static
+../X-CUBE-AI/App/aiTestUtility.h:341:22:cyclesCounterStart	8	static
+../X-CUBE-AI/App/aiTestUtility.h:358:26:cyclesCounterEnd	80	static
+../X-CUBE-AI/App/aiTestUtility.h:410:26:disableInts	16	static,ignoring_inline_asm
+../X-CUBE-AI/App/aiSystemPerformance.c:140:12:aiBootstrap	24	static
+../X-CUBE-AI/App/aiSystemPerformance.c:186:12:aiInit	24	static
+../X-CUBE-AI/App/aiSystemPerformance.c:217:13:aiDeInit	16	static
+../X-CUBE-AI/App/aiSystemPerformance.c:256:15:user_observer_cb	96	static
+../X-CUBE-AI/App/aiSystemPerformance.c:280:6:aiObserverInit	88	static
+../X-CUBE-AI/App/aiSystemPerformance.c:319:6:aiObserverDone	208	static
+../X-CUBE-AI/App/aiSystemPerformance.c:399:12:aiTestPerformance	320	static,ignoring_inline_asm
+../X-CUBE-AI/App/aiSystemPerformance.c:594:12:aiTestConsole	16	static
+../X-CUBE-AI/App/aiSystemPerformance.c:628:5:aiSystemPerformanceInit	8	static
+../X-CUBE-AI/App/aiSystemPerformance.c:647:5:aiSystemPerformanceProcess	16	static
+>>>>>>> TACTS_line_learning:MicroController/STM32F746/TACTS_Lite/Debug/X-CUBE-AI/App/aiSystemPerformance.su
 ../X-CUBE-AI/App/aiSystemPerformance.c:724:6:aiSystemPerformanceDeInit	8	static

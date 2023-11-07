@@ -26,4 +26,5 @@ Core/Startup \
 Drivers/STM32F7xx_HAL_Driver/Src \
 Drivers/VL53L0X/core/src \
 Drivers/VL53L0X/platform/src \
+X-CUBE-AI/App \
 
