@@ -37,6 +37,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  00029de2  00000000  00000000  00059c40  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
+<<<<<<< HEAD
  17 .debug_line   00022f98  00000000  00000000  00083a22  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  18 .debug_str    000f9923  00000000  00000000  000a69ba  2**0
@@ -44,6 +45,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
  19 .comment      00000050  00000000  00000000  001a02dd  2**0
                   CONTENTS, READONLY
  20 .debug_frame  00007cf4  00000000  00000000  001a0330  2**2
+=======
+ 17 .debug_line   000223f5  00000000  00000000  00081b5d  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_str    000f9858  00000000  00000000  000a3f52  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .comment      00000050  00000000  00000000  0019d7aa  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  00007a84  00000000  00000000  0019d7fc  2**2
+>>>>>>> TACTS_line_predict
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -4771,6 +4781,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
  8002508:	40020400 	.word	0x40020400
  800250c:	40020000 	.word	0x40020000
 
+<<<<<<< HEAD
 08002510 <ReceiveUartMessage>:
 }
 
@@ -5485,6 +5496,50 @@ Default_Handler:
 Infinite_Loop:
   b  Infinite_Loop
  8002a08:	e7fe      	b.n	8002a08 <ADC_IRQHandler>
+=======
+080035bc <Reset_Handler>:
+ 80035bc:	f8df d034 	ldr.w	sp, [pc, #52]	; 80035f4 <LoopFillZerobss+0x12>
+ 80035c0:	480d      	ldr	r0, [pc, #52]	; (80035f8 <LoopFillZerobss+0x16>)
+ 80035c2:	490e      	ldr	r1, [pc, #56]	; (80035fc <LoopFillZerobss+0x1a>)
+ 80035c4:	4a0e      	ldr	r2, [pc, #56]	; (8003600 <LoopFillZerobss+0x1e>)
+ 80035c6:	2300      	movs	r3, #0
+ 80035c8:	e002      	b.n	80035d0 <LoopCopyDataInit>
+
+080035ca <CopyDataInit>:
+ 80035ca:	58d4      	ldr	r4, [r2, r3]
+ 80035cc:	50c4      	str	r4, [r0, r3]
+ 80035ce:	3304      	adds	r3, #4
+
+080035d0 <LoopCopyDataInit>:
+ 80035d0:	18c4      	adds	r4, r0, r3
+ 80035d2:	428c      	cmp	r4, r1
+ 80035d4:	d3f9      	bcc.n	80035ca <CopyDataInit>
+ 80035d6:	4a0b      	ldr	r2, [pc, #44]	; (8003604 <LoopFillZerobss+0x22>)
+ 80035d8:	4c0b      	ldr	r4, [pc, #44]	; (8003608 <LoopFillZerobss+0x26>)
+ 80035da:	2300      	movs	r3, #0
+ 80035dc:	e001      	b.n	80035e2 <LoopFillZerobss>
+
+080035de <FillZerobss>:
+ 80035de:	6013      	str	r3, [r2, #0]
+ 80035e0:	3204      	adds	r2, #4
+
+080035e2 <LoopFillZerobss>:
+ 80035e2:	42a2      	cmp	r2, r4
+ 80035e4:	d3fb      	bcc.n	80035de <FillZerobss>
+ 80035e6:	f7ff fe11 	bl	800320c <SystemInit>
+ 80035ea:	f00c fea1 	bl	8010330 <__libc_init_array>
+ 80035ee:	f7fd ff93 	bl	8001518 <main>
+ 80035f2:	4770      	bx	lr
+ 80035f4:	20050000 	.word	0x20050000
+ 80035f8:	20000000 	.word	0x20000000
+ 80035fc:	2000049c 	.word	0x2000049c
+ 8003600:	08015f1c 	.word	0x08015f1c
+ 8003604:	2000049c 	.word	0x2000049c
+ 8003608:	20000778 	.word	0x20000778
+
+0800360c <ADC_IRQHandler>:
+ 800360c:	e7fe      	b.n	800360c <ADC_IRQHandler>
+>>>>>>> TACTS_line_predict
 
 08002a0a <HAL_Init>:
   *         need to ensure that the SysTick time base is always set to 1 millisecond

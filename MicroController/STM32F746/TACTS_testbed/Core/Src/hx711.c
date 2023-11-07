@@ -8,12 +8,15 @@
 #include "usart.h"
 #include "stdio.h"
 
+<<<<<<< HEAD
 
 
 float loadcell_slope = -1/1600.00f; // Convert the raw data to weight (replace the calibration factor with your own)
 float loadcell_bias = 10002;
 
 
+=======
+>>>>>>> TACTS_line_predict
 void HX711_Init(void)
 {
   // Set the SCK pin to low
