@@ -22,6 +22,8 @@ extern "C" {
 /* USER CODE BEGIN Private defines */
 extern float loadcell_slope;
 extern float loadcell_bias;
+extern float Hx711Data;
+
 // HX711 pins
 #define HX711_SCK_GPIO_Port GPIOI // D13
 #define HX711_SCK_Pin GPIO_PIN_1  // CLK connected to D13 (PI1)

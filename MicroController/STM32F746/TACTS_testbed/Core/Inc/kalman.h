@@ -8,6 +8,8 @@
 #ifndef KALMAN_H
 #define KALMAN_H
 
+#include "vl53l0x_jh.h"
+
 typedef struct {
     float Q;  // process noise covariance
     float R;  // measurement noise covariance
@@ -15,6 +17,11 @@ typedef struct {
     float X;  // value of the best estimate of the desired variable
     float K;  // Kalman gain
 } KalmanFilter;
+
+extern KalmanFilter filters[NUM_SENSOR];
+extern float Q; // Process noise covariance
+extern float R;   // Measurement noise covariance
+extern float P;
 
 // Initialize Kalman filter
 void Kalman_Init(KalmanFilter *kf, float Q, float R, float P, float initial_value);

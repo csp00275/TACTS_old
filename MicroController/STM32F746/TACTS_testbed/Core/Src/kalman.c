@@ -8,6 +8,12 @@
 
 #include "kalman.h"
 
+
+KalmanFilter filters[NUM_SENSOR];
+float Q = 0.001f; // Process noise covariance
+float R = 0.03f;   // Measurement noise covariance
+float P = 0.001f;
+
 void Kalman_Init(KalmanFilter *kf, float Q, float R, float P, float initial_value) {
     kf->Q = Q;
     kf->R = R;

@@ -31,7 +31,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
  ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/gpio.h ../Core/Inc/motor.h \
- ../Core/Inc/hx711.h ../Core/Inc/kalman.h \
+ ../Core/Inc/hx711.h ../Core/Inc/kalman.h ../Core/Inc/vl53l0x_jh.h \
  D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_api.h \
  D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h \
  D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_def.h \
@@ -39,7 +39,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_types.h \
  D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform.h \
  D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_def.h \
- D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h
+ D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h \
+ ../Core/Inc/avgstd.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -79,6 +80,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/motor.h:
 ../Core/Inc/hx711.h:
 ../Core/Inc/kalman.h:
+../Core/Inc/vl53l0x_jh.h:
 D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_api.h:
 D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_api_strings.h:
 D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_def.h:
@@ -87,3 +89,4 @@ D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TAC
 D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform.h:
 D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/core/inc/vl53l0x_def.h:
 D:/ME\ program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_testbed/Drivers/VL53L0X/platform/inc/vl53l0x_platform_log.h:
+../Core/Inc/avgstd.h:

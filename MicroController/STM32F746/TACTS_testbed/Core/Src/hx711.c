@@ -12,6 +12,7 @@
 
 float loadcell_slope = -1/1600.00f; // Convert the raw data to weight (replace the calibration factor with your own)
 float loadcell_bias = 10002;
+float Hx711Data = 0;
 
 
 void HX711_Init(void)
