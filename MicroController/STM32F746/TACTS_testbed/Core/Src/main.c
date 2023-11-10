@@ -228,7 +228,10 @@ void AutoCommand(){
 				  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d ", RangingData.RangeStatus), 500);
 				  // 1 : Sigma Fail | 2 : Signal Fail | 3 : Min Range Fail | 4 : Phase Fail | 5 : Hardware Fail | 255 : No update
 			  }
+
 		}
+		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "\n"), 100);
+
 
     }
 
@@ -238,8 +241,10 @@ void AutoCommand(){
 	HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "autoMode\r\n"), 100);
 	ResetAllDevices();
 
+	float forceSensorZeroPoint = 0.0f;
+
 	servo_angle(&htim2, TIM_CHANNEL_1, 1); // poking
-  	 for(int lin = 8; lin < 21; lin ++){
+  	 for(int lin = 0; lin < 16; lin ++){
 		 for(int rev = 0; rev < 18; rev++){
 			 for(int r = 0; r < 8; r++){
 				 servo_angle(&htim2, TIM_CHANNEL_1, r+2); // poking
@@ -265,9 +270,16 @@ void AutoCommand(){
 						  }
 					  }
 
-				  Hx711Data = Read_HX711();
-				  UART_SendWeight_g(Hx711Data,-1/1600.00f,10002); // Send the weight data over UART
-				  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, " %d %d %.2f\n", 8*lin, 20*rev, r*0.8), 500);
+
+				if (r == 0) {
+					forceSensorZeroPoint = Read_HX711();
+					Hx711Data = 0;
+				} else {
+					Hx711Data = Read_HX711() - forceSensorZeroPoint;
+				}
+
+				  UART_SendWeight_g(Hx711Data,-1/1600.00f,0); // Send the weight data over UART
+				  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, " %d %d %.2f\n", 10*lin+10, 20*rev, r*0.8), 500);
 				 }
 			 HAL_Delay(500);
 			 servo_angle(&htim2, TIM_CHANNEL_1, 0); // turn to origin
@@ -277,7 +289,7 @@ void AutoCommand(){
 		 }
 		 HAL_Delay(500);
 		 stepRev(-360);
-		 stepLin(-8); // moving horizontal
+		 stepLin(-10); // moving horizontal
   	 }
 }
 
