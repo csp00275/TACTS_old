@@ -17,7 +17,12 @@ uint8_t VhvSettings[NUM_SENSOR] = {0};
 uint8_t PhaseCal[NUM_SENSOR] = {0};
 
 #ifdef preset
-	#if NUM_SENSOR == 36
+	#if  NUM_SENSOR == 24
+	uint32_t refSpadCountHost[NUM_SENSOR]={6,4,11,6,5,4,4,5,4,6,4,3,5,4,4,5,6,4,5,4,4,4,5,6};
+	uint8_t isApertureSpadsHost[NUM_SENSOR]={0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	uint8_t VhvSettingsHost[NUM_SENSOR]={32,26,27,32,25,28,36,26,31,34,30,30,28,28,32,32,33,29,32,32,26,29,30,25};
+	uint8_t PhaseCalHost[NUM_SENSOR]={1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+	#elif NUM_SENSOR == 36
 	uint32_t refSpadCountHost[NUM_SENSOR]={4,5,3,5,5,5,4,4,8,5,5,6,4,5,4,4,4,5,4,5,4,3,4,6,5,5,3,5,5,5,5,5,5,5,4,5};
 	uint8_t isApertureSpadsHost[NUM_SENSOR]={0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0};
 	uint8_t VhvSettingsHost[NUM_SENSOR]={26,28,29,25,30,31,29,35,30,30,26,28,33,32,32,30,31,27,28,33,34,32,30,29,34,28,32,33,33,33,34,32,30,32,30,35};

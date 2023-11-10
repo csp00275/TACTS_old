@@ -24,11 +24,11 @@ void CalculateStats(int sensorIndex) {
     int count = readingCount[sensorIndex];
 
     // 평균 계산
-    for (int i = throwSomenumber; i < count; i++) { sum += sensorValues[sensorIndex][i];}
+    for (int i = 0; i < count; i++) { sum += sensorValues[sensorIndex][i];}
     mean = sum / count;
     sensorAverages[sensorIndex] = mean;
     // 표준편차 계산
-    for (int i = throwSomenumber; i < count; i++) { stdDevSum += pow(sensorValues[sensorIndex][i] - mean, 2);}
+    for (int i = 0; i < count; i++) { stdDevSum += pow(sensorValues[sensorIndex][i] - mean, 2);}
     sensorStdDevs[sensorIndex] = sqrt(stdDevSum / count);
 }
 

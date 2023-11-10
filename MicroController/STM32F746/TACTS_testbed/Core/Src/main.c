@@ -93,9 +93,7 @@ void InitializaionCalibrationCommand();
 void CalibrationCommand();
 void SetSensorCommand();
 void AvgStdCommand();
-void CalculateStats(int sensorIndex);
-void TransmitStats();
-void ResetSensorData();
+
 
 /* USER CODE END PFP */
 
@@ -116,7 +114,7 @@ void ProcessCommand(uint8_t *commandBuffer)
     else if (strcmp((char*)command, "cali") == 0) {CalibrationCommand();}
     else if (strcmp((char*)command, "ini") == 0) {InitializaionCalibrationCommand();}
     else if (strcmp((char*)command, "setsensor") == 0) {SetSensorCommand();}
-    else if (strcmp((char*)command, "2") == 0) {CalibrationCommand();}
+    else if (strcmp((char*)command, "auto") == 0) {AutoCommand();}
     else if (strcmp((char*)command, "3") == 0) {CalibrationCommand();}
     else if (strcmp((char*)command, "4") == 0) {CalibrationCommand();}
     else {HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "Please insert correct command\n"), 100);}
@@ -176,7 +174,6 @@ void SensorCommand(){
 			setActiveTcaChannel(active_device, channel);
 			Dev = &vl53l0x_s[i];
 			VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
-
 			if (RangingData.RangeStatus == 0) {
 			  if (RangingData.RangeMilliMeter < 80) {
 				  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
@@ -206,18 +203,48 @@ void SensorCommand(){
 }
 
 void AutoCommand(){
+
+
     HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "Auto Command \r\n"), 100);
 
-    SensorCommand();
+
+	ResetAllDevices();
+    for(int count =0; count < 100; count++){
+		for (int i = 0; i < NUM_SENSOR; i++) {
+			uint8_t q = i / 12;
+			uint8_t r = i % 12;
+			uint8_t active_device = q * 2 + (r >= 8 ? 1 : 0);
+			uint8_t channel = (r >= 8) ? r - 8 : r;
+			ResetDevicesExcept(active_device);
+			setActiveTcaChannel(active_device, channel);
+			Dev = &vl53l0x_s[i];
+			VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
+			if (RangingData.RangeStatus == 0) {
+			  if (RangingData.RangeMilliMeter < 80) {
+				  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
+				  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.1f ", filteredValue), 500);
+			  }
+			}else{
+				  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d ", RangingData.RangeStatus), 500);
+				  // 1 : Sigma Fail | 2 : Signal Fail | 3 : Min Range Fail | 4 : Phase Fail | 5 : Hardware Fail | 255 : No update
+			  }
+		}
+
+    }
+
+
+
 
 	HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "autoMode\r\n"), 100);
+	ResetAllDevices();
+
 	servo_angle(&htim2, TIM_CHANNEL_1, 1); // poking
-  	 for(int lin = 0; lin < 21; lin ++){
+  	 for(int lin = 8; lin < 21; lin ++){
 		 for(int rev = 0; rev < 18; rev++){
-			 for(int r = 1; r < 8; r++){
+			 for(int r = 0; r < 8; r++){
 				 servo_angle(&htim2, TIM_CHANNEL_1, r+2); // poking
 				 HAL_Delay(500);
-				 for(int count = 0; count < 100; count++){
+				 for(int count = 0; count < 40; count++){
 					  for (int i = 0; i < NUM_SENSOR; i++) {
 						uint8_t q = i / 12;
 						uint8_t r = i % 12;
@@ -225,10 +252,21 @@ void AutoCommand(){
 						uint8_t channel = (r >= 8) ? r - 8 : r;
 						ResetDevicesExcept(active_device);
 				        setActiveTcaChannel(active_device,channel);
+						Dev = &vl53l0x_s[i];
+						VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500us
+						if (RangingData.RangeStatus == 0) {
+						  if (RangingData.RangeMilliMeter < 80) {
+							  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
+							  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.1f ", filteredValue), 500);
+						  }
+						}else{
+							  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d ", RangingData.RangeStatus), 500);
+							  // 1 : Sigma Fail | 2 : Signal Fail | 3 : Min Range Fail | 4 : Phase Fail | 5 : Hardware Fail | 255 : No update
+						  }
 					  }
 
 				  Hx711Data = Read_HX711();
-				  UART_SendWeight_g(Hx711Data,loadcell_slope,loadcell_bias); // Send the weight data over UART
+				  UART_SendWeight_g(Hx711Data,-1/1600.00f,10002); // Send the weight data over UART
 				  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, " %d %d %.2f\n", 8*lin, 20*rev, r*0.8), 500);
 				 }
 			 HAL_Delay(500);
@@ -237,6 +275,7 @@ void AutoCommand(){
 			 }
 			 stepRev(20); // revolution
 		 }
+		 HAL_Delay(500);
 		 stepRev(-360);
 		 stepLin(-8); // moving horizontal
   	 }
@@ -285,7 +324,6 @@ void InitializaionCalibrationCommand()
 
  		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%02d ",i), 100);
  		if(i%12 ==11){HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "\n\r"), 100);}
-
   	}
 
 

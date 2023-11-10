@@ -1,5 +1,3 @@
-vl53l0x_jh.c:51:6:resetTcaDevicesExcept	3
-vl53l0x_jh.c:59:6:setActiveTcaChannel	1
-vl53l0x_jh.c:63:6:initializeVl53l0x	1
-vl53l0x_jh.c:82:6:initializeAllSensors	4
-vl53l0x_jh.c:103:6:excuteVl53l0x	2
+vl53l0x_jh.c:63:6:ResetAllDevices	2
+vl53l0x_jh.c:69:6:ResetDevicesExcept	3
+vl53l0x_jh.c:77:6:setActiveTcaChannel	1

@@ -11,7 +11,7 @@
 #include "vl53l0x_api.h"
 
 #define VL53L0X_ADDR 0x29 << 1
-#define NUM_SENSOR 48
+#define NUM_SENSOR 24
 
 extern uint32_t refSpadCount[NUM_SENSOR];
 extern uint8_t isApertureSpads[NUM_SENSOR];

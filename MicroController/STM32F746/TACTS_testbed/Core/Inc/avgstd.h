@@ -10,7 +10,7 @@
 
 #include "vl53l0x_jh.h"
 
-#define NUM_READINGS 120
+#define NUM_READINGS 300
 
 extern float sensorValues[NUM_SENSOR][NUM_READINGS];
 extern float sensorAverages[NUM_SENSOR];
