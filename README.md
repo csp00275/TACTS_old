@@ -8,7 +8,7 @@ Large Area Balloon-like Sensors .
 It is old name of TACTS.
 
 LABS_v1
-- only 8 sensors and one circle
+- only 10 sensors and one circle
 
 LABS_v2
 - 24 sensors and two circle (12 sensor make circular array)
