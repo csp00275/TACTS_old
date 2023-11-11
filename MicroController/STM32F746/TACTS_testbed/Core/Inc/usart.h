@@ -29,7 +29,8 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+extern uint8_t txMsg[64];
+extern uint8_t rxMsg[65];
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart1;

@@ -1,0 +1,13 @@
+../X-CUBE-AI/App/twoline.c:548:9:twoline_configure_activations	16	static
+../X-CUBE-AI/App/twoline.c:605:9:twoline_configure_weights	16	static
+../X-CUBE-AI/App/twoline.c:665:9:ai_twoline_get_info	160	static
+../X-CUBE-AI/App/twoline.c:711:9:ai_twoline_get_report	160	static
+../X-CUBE-AI/App/twoline.c:757:10:ai_twoline_get_error	16	static
+../X-CUBE-AI/App/twoline.c:763:10:ai_twoline_create	24	static
+../X-CUBE-AI/App/twoline.c:773:10:ai_twoline_create_and_init	96	static
+../X-CUBE-AI/App/twoline.c:807:12:ai_twoline_inputs_get	16	static
+../X-CUBE-AI/App/twoline.c:817:12:ai_twoline_outputs_get	16	static
+../X-CUBE-AI/App/twoline.c:827:11:ai_twoline_destroy	16	static
+../X-CUBE-AI/App/twoline.c:833:9:ai_twoline_init	24	static
+../X-CUBE-AI/App/twoline.c:850:8:ai_twoline_run	24	static
+../X-CUBE-AI/App/twoline.c:857:8:ai_twoline_forward	16	static

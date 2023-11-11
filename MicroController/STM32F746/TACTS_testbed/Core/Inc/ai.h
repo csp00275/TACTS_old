@@ -12,6 +12,7 @@
 
 
 #include "vl53l0x_jh.h"
+#include "ai_platform.h"
 
 
 extern ai_handle allLine;

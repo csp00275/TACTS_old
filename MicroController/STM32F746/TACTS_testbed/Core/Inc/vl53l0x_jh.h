@@ -31,6 +31,21 @@ extern VL53L0X_DEV Dev;
 extern uint8_t tca_ch[8];
 extern uint8_t tca_ch_reset;
 
+#if NUM_SENSOR <=12
+	extern uint8_t tca_addr[2];
+#elif NUM_SENSOR <=24
+	extern uint8_t tca_addr[4];
+#elif NUM_SENSOR <=36
+	extern uint8_t tca_addr[6];
+#elif NUM_SENSOR <=48
+	extern uint8_t tca_addr[8];
+#endif
+
+extern float Xmean[NUM_SENSOR];
+extern float Xstd[NUM_SENSOR];
+extern float Fminmax[2];
+extern float Zminmax[2];
+
 void ResetAllDevices();
 void ResetDevicesExcept(uint8_t active_device);
 void setActiveTcaChannel(uint8_t active_device, uint8_t channel);

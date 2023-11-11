@@ -43,7 +43,7 @@ ai_buffer *ai_output;
 int aiInit(void) {
     ai_error err;
     const ai_handle acts[] = { activations };
-    err = ai_threelinecv_create_and_init(&allLine, acts, NULL);
+    err = ai_twoline_create_and_init(&allLine, acts, NULL);
     if (err.type != AI_ERROR_NONE) {
         HAL_UART_Transmit(&huart1, txMsg, sprintf((char*)txMsg, "aiInit Error \n"), 100);
     }
