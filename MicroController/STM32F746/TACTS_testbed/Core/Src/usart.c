@@ -19,8 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-#include <stdio.h>
-
 
 /* USER CODE BEGIN 0 */
 uint8_t txMsg[64];
@@ -147,18 +145,18 @@ HAL_StatusTypeDef ReceiveUartMessage(UART_HandleTypeDef *huart, uint8_t *buffer,
     {
         if(HAL_UART_Receive(huart, &receivedByte, 1, 1000) == HAL_OK)
         {
-            if(receivedByte == '\n') // ì¢…ë£Œ ë¬¸ì ê°ì§€
+            if(receivedByte == '\n') // ì¢…ë£Œ ë¬¸ì ê°ì?
             {
-                buffer[rxBufferIndex] = '\0'; // ë¬¸ìì—´ì˜ ëì„ í‘œì‹œ
+                buffer[rxBufferIndex] = '\0'; // ë¬¸ì?—´?˜ ??„ ?‘œ?‹œ
                 return HAL_OK;
             }
             else
             {
-                buffer[rxBufferIndex] = receivedByte; // ë¬¸ì ì €ì¥
+                buffer[rxBufferIndex] = receivedByte; // ë¬¸ì ???¥
                 rxBufferIndex++;
-                if(rxBufferIndex >= size) // ë²„í¼ ì´ˆê³¼ ë°©ì§€
+                if(rxBufferIndex >= size) // ë²„í¼ ì´ˆê³¼ ë°©ì?
                 {
-                    buffer[rxBufferIndex - 1] = '\0'; // ë¬¸ìì—´ì˜ ëì„ í‘œì‹œ
+                    buffer[rxBufferIndex - 1] = '\0'; // ë¬¸ì?—´?˜ ??„ ?‘œ?‹œ
                     return HAL_ERROR;
                 }
             }

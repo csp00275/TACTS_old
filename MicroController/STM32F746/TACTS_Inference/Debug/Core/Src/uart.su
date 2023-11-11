@@ -1,0 +1,2 @@
+../Core/Src/uart.c:15:6:MX_USART1_UART_Init	8	static
+../Core/Src/uart.c:46:19:ReceiveUartMessage	32	static
