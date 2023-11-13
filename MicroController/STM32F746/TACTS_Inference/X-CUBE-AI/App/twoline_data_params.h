@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    twoline_data_params.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Tue Nov 14 01:07:01 2023
+  * @date    Tue Nov 14 01:45:17 2023
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * Copyright (c) 2023 STMicroelectronics.
@@ -29,18 +29,18 @@
 
 
 #define AI_TWOLINE_DATA_ACTIVATIONS_SIZES \
-  { 1664, }
-#define AI_TWOLINE_DATA_ACTIVATIONS_SIZE     (1664)
+  { 2560, }
+#define AI_TWOLINE_DATA_ACTIVATIONS_SIZE     (2560)
 #define AI_TWOLINE_DATA_ACTIVATIONS_COUNT    (1)
-#define AI_TWOLINE_DATA_ACTIVATION_1_SIZE    (1664)
+#define AI_TWOLINE_DATA_ACTIVATION_1_SIZE    (2560)
 
 
 
 #define AI_TWOLINE_DATA_WEIGHTS_SIZES \
-  { 85904, }
-#define AI_TWOLINE_DATA_WEIGHTS_SIZE         (85904)
+  { 335120, }
+#define AI_TWOLINE_DATA_WEIGHTS_SIZE         (335120)
 #define AI_TWOLINE_DATA_WEIGHTS_COUNT        (1)
-#define AI_TWOLINE_DATA_WEIGHT_1_SIZE        (85904)
+#define AI_TWOLINE_DATA_WEIGHT_1_SIZE        (335120)
 
 
 

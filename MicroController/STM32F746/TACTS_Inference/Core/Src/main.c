@@ -60,6 +60,7 @@ CRC_HandleTypeDef hcrc;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+
 static void MX_CRC_Init(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
@@ -164,7 +165,7 @@ void SetSensorCommand(){
   		VL53L0X_SetVcselPulsePeriod(Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
   		VL53L0X_SetVcselPulsePeriod(Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 
-		Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기�???
+		Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기�????
 
  		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%02d:(",i), 100);
  		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%02lu ",refSpadCountHost[i]), 100);
@@ -230,8 +231,10 @@ void InferenceCommand()
 			if(sqSum >= 0.75 && sqSum <= 1.25){
 				out_data[0] = (out_data[0] + 1) * (Fminmax[1] - Fminmax[0]) / 2 + Fminmax[0];
 				out_data[1] = (out_data[1] + 1) * (Zminmax[1] - Zminmax[0]) / 2 + Zminmax[0];
-				for(int k=0; k<4;k++){
-					HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", out_data[k]), 1000);
+				if(out_data[0]>25){
+					for(int k=0; k<4;k++){
+						HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", out_data[k]), 1000);
+					}
 				}
 			}
 			HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", sqSum), 1000);
@@ -400,7 +403,6 @@ static void MX_CRC_Init(void)
   /* USER CODE END CRC_Init 2 */
 
 }
-
 
 
 /**

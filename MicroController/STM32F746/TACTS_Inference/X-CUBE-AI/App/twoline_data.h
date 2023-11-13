@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    twoline_data.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Tue Nov 14 01:07:01 2023
+  * @date    Tue Nov 14 01:45:17 2023
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * Copyright (c) 2023 STMicroelectronics.
@@ -33,7 +33,7 @@ AI_DEPRECATED
 AI_API_DECLARE_BEGIN
 
 
-extern const ai_u64 s_twoline_weights_array_u64[10738];
+extern const ai_u64 s_twoline_weights_array_u64[41890];
 
 
 
