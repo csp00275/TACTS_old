@@ -1,0 +1,3 @@
+../Core/Src/avgstd.c:20:6:CalculateStats	48	static
+../Core/Src/avgstd.c:36:6:TransmitStats	168	static
+../Core/Src/avgstd.c:45:6:ResetSensorData	16	static

@@ -1,0 +1,3 @@
+../Core/Src/vl53l0x_jh.c:147:6:ResetAllDevices	24	static
+../Core/Src/vl53l0x_jh.c:153:6:ResetDevicesExcept	32	static
+../Core/Src/vl53l0x_jh.c:161:6:setActiveTcaChannel	24	static
