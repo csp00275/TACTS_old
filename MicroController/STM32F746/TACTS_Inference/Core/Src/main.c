@@ -52,6 +52,7 @@
 
 CRC_HandleTypeDef hcrc;
 
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -59,7 +60,6 @@ CRC_HandleTypeDef hcrc;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-
 static void MX_CRC_Init(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
@@ -164,7 +164,7 @@ void SetSensorCommand(){
   		VL53L0X_SetVcselPulsePeriod(Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
   		VL53L0X_SetVcselPulsePeriod(Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 
-		Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기�??
+		Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기�???
 
  		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%02d:(",i), 100);
  		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%02lu ",refSpadCountHost[i]), 100);
@@ -203,7 +203,6 @@ void InferenceCommand()
 {
 	ResetAllDevices();
     HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "sensor test\r\n"), 100);
-
     for (int count =0; count <50000;count ++){
     	uint8_t tofCount =0;
         for (int i = 0; i < NUM_SENSOR; i++) {
@@ -214,8 +213,7 @@ void InferenceCommand()
     	    ResetDevicesExcept(active_device);
             setActiveTcaChannel(active_device, channel);
             Dev = &vl53l0x_s[i];
-            VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500 us
-
+            VL53L0X_PerformContinuousRangingMeasurement(Dev, &RangingData); // 1500 uss
             if (RangingData.RangeStatus == 0) {
                 float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter); // 500 us
                 in_data[i]=filteredValue;
@@ -226,14 +224,10 @@ void InferenceCommand()
                HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "99 "), 1000);
             }
         }
-
-
 		if(tofCount == NUM_SENSOR){
 			aiRun(in_data,out_data);
-
 			float sqSum= out_data[2]*out_data[2] + out_data[3]*out_data[3];
-
-			if(sqSum >= 0.7 && sqSum <= 1.3){
+			if(sqSum >= 0.75 && sqSum <= 1.25){
 				out_data[0] = (out_data[0] + 1) * (Fminmax[1] - Fminmax[0]) / 2 + Fminmax[0];
 				out_data[1] = (out_data[1] + 1) * (Zminmax[1] - Zminmax[0]) / 2 + Zminmax[0];
 				for(int k=0; k<4;k++){
@@ -241,11 +235,8 @@ void InferenceCommand()
 				}
 			}
 			HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", sqSum), 1000);
-
-
 		}
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "\n"), 100);
-
     }
 
 }

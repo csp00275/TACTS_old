@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    twoline.h
   * @author  AST Embedded Analytics Research Platform
-  * @date    Mon Nov 13 14:17:17 2023
+  * @date    Tue Nov 14 01:07:01 2023
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * @attention
@@ -25,7 +25,7 @@
 
 /******************************************************************************/
 #define AI_TWOLINE_MODEL_NAME          "twoline"
-#define AI_TWOLINE_ORIGIN_MODEL_NAME   "node_3.6kpa_5v_2linedatab9"
+#define AI_TWOLINE_ORIGIN_MODEL_NAME   "node_231114_0033_4kpa_5v_2line_data_b9_quant_float32_float32_random_1"
 
 /******************************************************************************/
 #define AI_TWOLINE_ACTIVATIONS_ALIGNMENT   (4)

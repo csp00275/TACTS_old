@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    twoline.c
   * @author  AST Embedded Analytics Research Platform
-  * @date    Mon Nov 13 14:17:17 2023
+  * @date    Tue Nov 14 01:07:01 2023
   * @brief   AI Tool Automatic Code Generator for Embedded NN computing
   ******************************************************************************
   * @attention
@@ -35,14 +35,14 @@
 #define AI_NET_OBJ_INSTANCE g_twoline
  
 #undef AI_TWOLINE_MODEL_SIGNATURE
-#define AI_TWOLINE_MODEL_SIGNATURE     "14aef975d41bd31e258cf1a8d0963690"
+#define AI_TWOLINE_MODEL_SIGNATURE     "bf527ba1a7b32955cf1f989d1f0f1069"
 
 #ifndef AI_TOOLS_REVISION_ID
 #define AI_TOOLS_REVISION_ID     ""
 #endif
 
 #undef AI_TOOLS_DATE_TIME
-#define AI_TOOLS_DATE_TIME   "Mon Nov 13 14:17:17 2023"
+#define AI_TOOLS_DATE_TIME   "Tue Nov 14 01:07:01 2023"
 
 #undef AI_TOOLS_COMPILE_TIME
 #define AI_TOOLS_COMPILE_TIME    __DATE__ " " __TIME__
@@ -126,7 +126,7 @@ AI_ARRAY_OBJ_DECLARE(
   NULL, NULL, 32, AI_STATIC)
 /* Array#17 */
 AI_ARRAY_OBJ_DECLARE(
-  serving_default_dense_5_input0_output_array, AI_ARRAY_FORMAT_FLOAT|AI_FMT_FLAG_IS_IO,
+  serving_default_dense_input0_output_array, AI_ARRAY_FORMAT_FLOAT|AI_FMT_FLAG_IS_IO,
   NULL, NULL, 24, AI_STATIC)
 /* Array#18 */
 AI_ARRAY_OBJ_DECLARE(
@@ -153,77 +153,77 @@ AI_ARRAY_OBJ_DECLARE(
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_5_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.007215350400656462f),
-    AI_PACK_INTQ_ZP(-4)))
+    AI_PACK_INTQ_SCALE(0.006176866125315428f),
+    AI_PACK_INTQ_ZP(31)))
 
 /* Int quant #1 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_1_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.023291537538170815f),
+    AI_PACK_INTQ_SCALE(0.027628254145383835f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #2 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_2_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.019356856122612953f),
+    AI_PACK_INTQ_SCALE(0.019442418590188026f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #3 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_3_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.010711961425840855f),
+    AI_PACK_INTQ_SCALE(0.013049188069999218f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #4 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_4_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.0084290886297822f),
+    AI_PACK_INTQ_SCALE(0.014683307148516178f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #5 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_5_weights_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.0018479268765076995f),
+    AI_PACK_INTQ_SCALE(0.0028823555912822485f),
     AI_PACK_INTQ_ZP(0)))
 
 /* Int quant #6 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(conversion_0_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.003918851260095835f),
+    AI_PACK_INTQ_SCALE(0.003917908761650324f),
     AI_PACK_INTQ_ZP(-128)))
 
 /* Int quant #7 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_1_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.023140346631407738f),
+    AI_PACK_INTQ_SCALE(0.02212945930659771f),
     AI_PACK_INTQ_ZP(-128)))
 
 /* Int quant #8 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_2_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.06602434813976288f),
+    AI_PACK_INTQ_SCALE(0.07881737500429153f),
     AI_PACK_INTQ_ZP(-128)))
 
 /* Int quant #9 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_3_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.0244095791131258f),
+    AI_PACK_INTQ_SCALE(0.03587246313691139f),
     AI_PACK_INTQ_ZP(-128)))
 
 /* Int quant #10 */
 AI_INTQ_INFO_LIST_OBJ_DECLARE(gemm_4_output_array_intq, AI_STATIC_CONST,
   AI_BUFFER_META_FLAG_SCALE_FLOAT|AI_BUFFER_META_FLAG_ZEROPOINT_S8, 1,
   AI_PACK_INTQ_INFO(
-    AI_PACK_INTQ_SCALE(0.013719553127884865f),
+    AI_PACK_INTQ_SCALE(0.013939104974269867f),
     AI_PACK_INTQ_ZP(-128)))
 
 /**  Tensor declarations section  *********************************************/
@@ -348,10 +348,10 @@ AI_TENSOR_OBJ_DECLARE(
 
 /* Tensor #17 */
 AI_TENSOR_OBJ_DECLARE(
-  serving_default_dense_5_input0_output, AI_STATIC,
+  serving_default_dense_input0_output, AI_STATIC,
   17, 0x0,
   AI_SHAPE_INIT(4, 1, 24, 1, 1), AI_STRIDE_INIT(4, 4, 4, 96, 96),
-  1, &serving_default_dense_5_input0_output_array, NULL)
+  1, &serving_default_dense_input0_output_array, NULL)
 
 /* Tensor #18 */
 AI_TENSOR_OBJ_DECLARE(
@@ -491,7 +491,7 @@ AI_LAYER_OBJ_DECLARE(
 
 AI_TENSOR_CHAIN_OBJ_DECLARE(
   conversion_0_chain, AI_STATIC_CONST, 4,
-  AI_TENSOR_LIST_OBJ_INIT(AI_FLAG_NONE, 1, &serving_default_dense_5_input0_output),
+  AI_TENSOR_LIST_OBJ_INIT(AI_FLAG_NONE, 1, &serving_default_dense_input0_output),
   AI_TENSOR_LIST_OBJ_INIT(AI_FLAG_NONE, 1, &conversion_0_output),
   AI_TENSOR_LIST_OBJ_EMPTY,
   AI_TENSOR_LIST_OBJ_EMPTY
@@ -516,7 +516,7 @@ AI_NETWORK_OBJ_DECLARE(
   AI_BUFFER_INIT(AI_FLAG_NONE,  AI_BUFFER_FORMAT_U8,
     AI_BUFFER_SHAPE_INIT(AI_SHAPE_BCWH, 4, 1, 1664, 1, 1),
     1664, NULL, NULL),
-  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_TWOLINE_IN_NUM, &serving_default_dense_5_input0_output),
+  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_TWOLINE_IN_NUM, &serving_default_dense_input0_output),
   AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_TWOLINE_OUT_NUM, &conversion_6_output),
   &conversion_0_layer, 0, NULL)
 
@@ -536,7 +536,7 @@ AI_NETWORK_OBJ_DECLARE(
       AI_BUFFER_SHAPE_INIT(AI_SHAPE_BCWH, 4, 1, 1664, 1, 1),
       1664, NULL, NULL)
   ),
-  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_TWOLINE_IN_NUM, &serving_default_dense_5_input0_output),
+  AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_TWOLINE_IN_NUM, &serving_default_dense_input0_output),
   AI_TENSOR_LIST_IO_OBJ_INIT(AI_FLAG_NONE, AI_TWOLINE_OUT_NUM, &conversion_6_output),
   &conversion_0_layer, 0, NULL)
 
@@ -553,8 +553,8 @@ ai_bool twoline_configure_activations(
   if (ai_platform_get_activations_map(g_twoline_activations_map, 1, params)) {
     /* Updating activations (byte) offsets */
     
-    serving_default_dense_5_input0_output_array.data = AI_PTR(g_twoline_activations_map[0] + 952);
-    serving_default_dense_5_input0_output_array.data_start = AI_PTR(g_twoline_activations_map[0] + 952);
+    serving_default_dense_input0_output_array.data = AI_PTR(g_twoline_activations_map[0] + 952);
+    serving_default_dense_input0_output_array.data_start = AI_PTR(g_twoline_activations_map[0] + 952);
     
     conversion_0_output_array.data = AI_PTR(g_twoline_activations_map[0] + 952);
     conversion_0_output_array.data_start = AI_PTR(g_twoline_activations_map[0] + 952);
