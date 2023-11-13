@@ -1,0 +1,3 @@
+avgstd.c:20:6:CalculateStats	3
+avgstd.c:36:6:TransmitStats	2
+avgstd.c:45:6:ResetSensorData	2

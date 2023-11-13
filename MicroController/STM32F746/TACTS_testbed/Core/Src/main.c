@@ -79,16 +79,12 @@ uint32_t elapsed_section_time =0;
 void SystemClock_Config(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
-void DelayMicroseconds(uint32_t microseconds);
-void DelayMilliseconds(uint32_t milliseconds);
 void ProcessCommand(uint8_t *command);
 void RevCommand(char *arg);
 void LinCommand();
 void ServoCommand();
 void SensorCommand();
 void AutoCommand();
-void FirstCommand();
-void SecondCommand();
 void InitializaionCalibrationCommand();
 void CalibrationCommand();
 void SetSensorCommand();
@@ -244,10 +240,10 @@ void AutoCommand(){
 	float forceSensorZeroPoint = 0.0f;
 
 	servo_angle(&htim2, TIM_CHANNEL_1, 1); // poking
-  	 for(int lin = 0; lin < 16; lin ++){
+  	 for(int lin = 11; lin < 22; lin ++){
 		 for(int rev = 0; rev < 18; rev++){
 			 for(int r = 0; r < 8; r++){
-				 servo_angle(&htim2, TIM_CHANNEL_1, r+2); // poking
+				 servo_angle(&htim2, TIM_CHANNEL_1, r+7); // poking
 				 HAL_Delay(500);
 				 for(int count = 0; count < 40; count++){
 					  for (int i = 0; i < NUM_SENSOR; i++) {
@@ -262,14 +258,13 @@ void AutoCommand(){
 						if (RangingData.RangeStatus == 0) {
 						  if (RangingData.RangeMilliMeter < 80) {
 							  float filteredValue = Kalman_Estimate(&filters[i], RangingData.RangeMilliMeter);
-							  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.1f ", filteredValue), 500);
+							  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", filteredValue), 500);
 						  }
 						}else{
-							  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d ", RangingData.RangeStatus), 500);
+							  //HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d ", RangingData.RangeStatus), 500);
 							  // 1 : Sigma Fail | 2 : Signal Fail | 3 : Min Range Fail | 4 : Phase Fail | 5 : Hardware Fail | 255 : No update
 						  }
 					  }
-
 
 				if (r == 0) {
 					forceSensorZeroPoint = Read_HX711();
@@ -279,7 +274,7 @@ void AutoCommand(){
 				}
 
 				  UART_SendWeight_g(Hx711Data,-1/1600.00f,0); // Send the weight data over UART
-				  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, " %d %d %.2f\n", 10*lin+10, 20*rev, r*0.8), 500);
+				  HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, " %d %d %.2f\n", 8*lin+2, 20*rev, r*0.8), 500);
 				 }
 			 HAL_Delay(500);
 			 servo_angle(&htim2, TIM_CHANNEL_1, 0); // turn to origin
@@ -289,7 +284,7 @@ void AutoCommand(){
 		 }
 		 HAL_Delay(500);
 		 stepRev(-360);
-		 stepLin(-10); // moving horizontal
+		 stepLin(-8); // moving horizontal
   	 }
 }
 
