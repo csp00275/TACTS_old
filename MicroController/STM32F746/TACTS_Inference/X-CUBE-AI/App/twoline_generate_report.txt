@@ -1,6 +1,6 @@
 Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
-Created date          : 2023-11-14 01:45:17
-Parameters            : generate --name twoline -m D:/ME program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_Inference/231114_0033_4kPa_5V_2line_Data_B9.h5 --type keras --compression none --verbosity 1 --workspace C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace55700828659990010082200863687461183 --output C:\Users\JH_LAB\.stm32cubemx\network_output --allocate-inputs --series stm32f7 --allocate-outputs
+Created date          : 2023-11-17 00:05:06
+Parameters            : generate --name twoline -m D:/ME program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_Inference/231114_0033_4kPa_5V_2line_Data_B9.h5 --type keras --compression none --verbosity 1 --workspace C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace4039242453600012942149655286889028 --output C:\Users\JH_LAB\.stm32cubemx\network_output --allocate-inputs --series stm32f7 --allocate-outputs
 
 Exec/report summary (generate)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ compression        :   none
 options            :   allocate-inputs, allocate-outputs                                                                                                                                  
 optimization       :   balanced                                                                                                                                                           
 target/series      :   stm32f7                                                                                                                                                            
-workspace dir      :   C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace55700828659990010082200863687461183                                                                               
+workspace dir      :   C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace4039242453600012942149655286889028                                                                                
 output dir         :   C:\Users\JH_LAB\.stm32cubemx\network_output                                                                                                                        
 model_fmt          :   float                                                                                                                                                              
 model_name         :   node_231114_0033_4kPa_5V_2line_Data_B9                                                                                                                             

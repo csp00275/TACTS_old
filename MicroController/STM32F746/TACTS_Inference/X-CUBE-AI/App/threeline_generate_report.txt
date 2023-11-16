@@ -1,0 +1,180 @@
+Neural Network Tools for STM32 family v1.7.0 (stm.ai v8.1.0-19520)
+Created date          : 2023-11-17 00:05:15
+Parameters            : generate --name threeline -m D:/ME program/2017-PhD/01_research/02Study/34_ballon_like_cover/DeepLearing/TACTS/MicroController/STM32F746/TACTS_Inference/231116_1108_4kPa_6.5V_3line_Data_B12.h5 --type keras --compression none --verbosity 1 --workspace C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace4040121870680017849624630051194754 --output C:\Users\JH_LAB\.stm32cubemx\network_output --allocate-inputs --series stm32f7 --allocate-outputs
+
+Exec/report summary (generate)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+model file         :   D:\ME program\2017-PhD\01_research\02Study\34_ballon_like_cover\DeepLearing\TACTS\MicroController\STM32F746\TACTS_Inference\231116_1108_4kPa_6.5V_3line_Data_B12.h5   
+type               :   keras                                                                                                                                                                 
+c_name             :   threeline                                                                                                                                                             
+compression        :   none                                                                                                                                                                  
+options            :   allocate-inputs, allocate-outputs                                                                                                                                     
+optimization       :   balanced                                                                                                                                                              
+target/series      :   stm32f7                                                                                                                                                               
+workspace dir      :   C:\Users\JH_LAB\AppData\Local\Temp\mxAI_workspace4040121870680017849624630051194754                                                                                   
+output dir         :   C:\Users\JH_LAB\.stm32cubemx\network_output                                                                                                                           
+model_fmt          :   float                                                                                                                                                                 
+model_name         :   node_231116_1108_4kPa_6.5V_3line_Data_B12                                                                                                                             
+model_hash         :   63a2bd4fd4f9e0725f1860760b89c4a7                                                                                                                                      
+params #           :   89,036 items (347.80 KiB)                                                                                                                                             
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+input 1/1          :   'input_0' (domain:activations/**default**)                                                                                                                            
+                   :   36 items, 144 B, ai_float, float, (1,36)                                                                                                                              
+output 1/1         :   'dense_89_dense' (domain:activations/**default**)                                                                                                                     
+                   :   4 items, 16 B, ai_float, float, (1,4)                                                                                                                                 
+macc               :   89,716                                                                                                                                                                
+weights (ro)       :   356,144 B (347.80 KiB) (1 segment)                                                                                                                                    
+activations (rw)   :   2,560 B (2.50 KiB) (1 segment) *                                                                                                                                      
+ram (total)        :   2,560 B (2.50 KiB) = 2,560 + 0 + 0                                                                                                                                    
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+(*) 'input'/'output' buffers can be used from the activations buffer
+
+Model name - node_231116_1108_4kPa_6.5V_3line_Data_B12 ['input_0'] ['dense_89_dense']
+------ -------------------------------- ---------------- ---------------- -------- ---------------- --- ------------------ ------------------ -------------------------- 
+m_id   layer (type,original)            oshape           param/size           macc     connected to   | c_size             c_macc             c_type                     
+------ -------------------------------- ---------------- ---------------- -------- ---------------- --- ------------------ ------------------ -------------------------- 
+0      input_0 (Input, None)            [b:None,c:36]                                                 | +75,776(+100.0%)   +19,456(+100.0%)   dense_of32/nl_of32[0, 1]   
+       dense_85_dense (Dense, Dense)    [b:None,c:512]   18,944/75,776      18,944          input_0   | -75,776(-100.0%)   -18,944(-100.0%)   
+       dense_85 (Nonlinearity, Dense)   [b:None,c:512]                         512   dense_85_dense   |                    -512(-100.0%)      
+------ -------------------------------- ---------------- ---------------- -------- ---------------- --- ------------------ ------------------ -------------------------- 
+1      dense_86_dense (Dense, Dense)    [b:None,c:128]   65,664/262,656     65,664         dense_85   |                    +128(+0.2%)        dense_of32/nl_of32[2, 3]   
+       dense_86 (Nonlinearity, Dense)   [b:None,c:128]                         128   dense_86_dense   |                    -128(-100.0%)      
+------ -------------------------------- ---------------- ---------------- -------- ---------------- --- ------------------ ------------------ -------------------------- 
+2      dense_87_dense (Dense, Dense)    [b:None,c:32]    4,128/16,512        4,128         dense_86   |                    +32(+0.8%)         dense_of32/nl_of32[4, 5]   
+       dense_87 (Nonlinearity, Dense)   [b:None,c:32]                           32   dense_87_dense   |                    -32(-100.0%)       
+------ -------------------------------- ---------------- ---------------- -------- ---------------- --- ------------------ ------------------ -------------------------- 
+3      dense_88_dense (Dense, Dense)    [b:None,c:8]     264/1,056             264         dense_87   |                    +8(+3.0%)          dense_of32/nl_of32[6, 7]   
+       dense_88 (Nonlinearity, Dense)   [b:None,c:8]                             8   dense_88_dense   |                    -8(-100.0%)        
+------ -------------------------------- ---------------- ---------------- -------- ---------------- --- ------------------ ------------------ -------------------------- 
+4      dense_89_dense (Dense, Dense)    [b:None,c:4]     36/144                 36         dense_88   |                                       dense_of32[o][8]           
+------ -------------------------------- ---------------- ---------------- -------- ---------------- --- ------------------ ------------------ -------------------------- 
+model/c-model: macc=89,716/89,716  weights=356,144/356,144  activations=--/2,560 io=--/0
+
+
+
+Generated C-graph summary
+------------------------------------------------------------------------------------------------------------------------
+model name            : node_231116_1108_4kpa_6.5v_3line_data_b12
+c-name                : threeline
+c-node #              : 9
+c-array #             : 20
+activations size      : 2560 (1 segment)
+weights size          : 356144 (1 segment)
+macc                  : 89716
+inputs                : ['input_0_output']
+outputs               : ['dense_89_dense_output']
+
+C-Arrays (20)
+------ ------------------------ -------------- ------------------------- ------------- --------- --------- 
+c_id   name (*_array)           item/size      domain/mem-pool           c-type        fmt       comment   
+------ ------------------------ -------------- ------------------------- ------------- --------- --------- 
+0      input_0_output           36/144         activations/**default**   float         float32   /input    
+1      dense_85_dense_output    512/2048       activations/**default**   float         float32             
+2      dense_85_output          512/2048       activations/**default**   float         float32             
+3      dense_86_dense_output    128/512        activations/**default**   float         float32             
+4      dense_86_output          128/512        activations/**default**   float         float32             
+5      dense_87_dense_output    32/128         activations/**default**   float         float32             
+6      dense_87_output          32/128         activations/**default**   float         float32             
+7      dense_88_dense_output    8/32           activations/**default**   float         float32             
+8      dense_88_output          8/32           activations/**default**   float         float32             
+9      dense_89_dense_output    4/16           activations/**default**   float         float32   /output   
+10     dense_85_dense_weights   18432/73728    weights/weights           const float   float32             
+11     dense_85_dense_bias      512/2048       weights/weights           const float   float32             
+12     dense_86_dense_weights   65536/262144   weights/weights           const float   float32             
+13     dense_86_dense_bias      128/512        weights/weights           const float   float32             
+14     dense_87_dense_weights   4096/16384     weights/weights           const float   float32             
+15     dense_87_dense_bias      32/128         weights/weights           const float   float32             
+16     dense_88_dense_weights   256/1024       weights/weights           const float   float32             
+17     dense_88_dense_bias      8/32           weights/weights           const float   float32             
+18     dense_89_dense_weights   32/128         weights/weights           const float   float32             
+19     dense_89_dense_bias      4/16           weights/weights           const float   float32             
+------ ------------------------ -------------- ------------------------- ------------- --------- --------- 
+
+C-Layers (9)
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+c_id   name (*_layer)   id   layer_type   macc    rom      tensors                     shape (array id)   
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+0      dense_85_dense   0    dense        18944   75776    I: input_0_output           (1,36) (0)         
+                                                           W: dense_85_dense_weights   (36,512) (10)      
+                                                           W: dense_85_dense_bias      (512,) (11)        
+                                                           O: dense_85_dense_output    (1,512) (1)        
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+1      dense_85         0    nl           512     0        I: dense_85_dense_output    (1,512) (1)        
+                                                           O: dense_85_output          (1,512) (2)        
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+2      dense_86_dense   1    dense        65664   262656   I: dense_85_output          (1,512) (2)        
+                                                           W: dense_86_dense_weights   (512,128) (12)     
+                                                           W: dense_86_dense_bias      (128,) (13)        
+                                                           O: dense_86_dense_output    (1,128) (3)        
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+3      dense_86         1    nl           128     0        I: dense_86_dense_output    (1,128) (3)        
+                                                           O: dense_86_output          (1,128) (4)        
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+4      dense_87_dense   2    dense        4128    16512    I: dense_86_output          (1,128) (4)        
+                                                           W: dense_87_dense_weights   (128,32) (14)      
+                                                           W: dense_87_dense_bias      (32,) (15)         
+                                                           O: dense_87_dense_output    (1,32) (5)         
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+5      dense_87         2    nl           32      0        I: dense_87_dense_output    (1,32) (5)         
+                                                           O: dense_87_output          (1,32) (6)         
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+6      dense_88_dense   3    dense        264     1056     I: dense_87_output          (1,32) (6)         
+                                                           W: dense_88_dense_weights   (32,8) (16)        
+                                                           W: dense_88_dense_bias      (8,) (17)          
+                                                           O: dense_88_dense_output    (1,8) (7)          
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+7      dense_88         3    nl           8       0        I: dense_88_dense_output    (1,8) (7)          
+                                                           O: dense_88_output          (1,8) (8)          
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+8      dense_89_dense   4    dense        36      144      I: dense_88_output          (1,8) (8)          
+                                                           W: dense_89_dense_weights   (8,4) (18)         
+                                                           W: dense_89_dense_bias      (4,) (19)          
+                                                           O: dense_89_dense_output    (1,4) (9)          
+------ ---------------- ---- ------------ ------- -------- --------------------------- ------------------ 
+
+
+
+Number of operations per c-layer
+------- ------ ------------------------ -------- -------------- -------- ---------- 
+c_id    m_id   name (type)                   #op           type   #param   sparsity 
+------- ------ ------------------------ -------- -------------- -------- ---------- 
+0       0      dense_85_dense (dense)     18,944   smul_f32_f32   18,944     0.0000 
+1       0      dense_85 (nl)                 512     op_f32_f32          
+2       1      dense_86_dense (dense)     65,664   smul_f32_f32   65,664     0.0000 
+3       1      dense_86 (nl)                 128     op_f32_f32          
+4       2      dense_87_dense (dense)      4,128   smul_f32_f32    4,128     0.0000 
+5       2      dense_87 (nl)                  32     op_f32_f32          
+6       3      dense_88_dense (dense)        264   smul_f32_f32      264     0.0000 
+7       3      dense_88 (nl)                   8     op_f32_f32          
+8       4      dense_89_dense (dense)         36   smul_f32_f32       36     0.0000 
+------- ------ ------------------------ -------- -------------- -------- ---------- 
+total                                     89,716                  89,036     0.0000 
+
+Number of operation types
+---------------- -------- ----------- 
+operation type          #           % 
+---------------- -------- ----------- 
+smul_f32_f32       89,036       99.2% 
+op_f32_f32            680        0.8% 
+
+Complexity report (model)
+------ ---------------- ------------------------- ------------------------- -------- 
+m_id   name             c_macc                    c_rom                     c_id     
+------ ---------------- ------------------------- ------------------------- -------- 
+0      input_0          |||||             21.7%   |||||             21.3%   [0, 1]   
+1      dense_86_dense   ||||||||||||||||  73.3%   ||||||||||||||||  73.7%   [2, 3]   
+2      dense_87_dense   |                  4.6%   |                  4.6%   [4, 5]   
+3      dense_88_dense   |                  0.3%   |                  0.3%   [6, 7]   
+4      dense_89_dense   |                  0.0%   |                  0.0%   [8]      
+------ ---------------- ------------------------- ------------------------- -------- 
+macc=89,716 weights=356,144 act=2,560 ram_io=0
+
+Generated files (7)
+--------------------------------------------------------------------- 
+C:\Users\JH_LAB\.stm32cubemx\network_output\threeline_config.h        
+C:\Users\JH_LAB\.stm32cubemx\network_output\threeline.h               
+C:\Users\JH_LAB\.stm32cubemx\network_output\threeline.c               
+C:\Users\JH_LAB\.stm32cubemx\network_output\threeline_data_params.h   
+C:\Users\JH_LAB\.stm32cubemx\network_output\threeline_data_params.c   
+C:\Users\JH_LAB\.stm32cubemx\network_output\threeline_data.h          
+C:\Users\JH_LAB\.stm32cubemx\network_output\threeline_data.c          

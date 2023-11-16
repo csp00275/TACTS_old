@@ -60,7 +60,6 @@ CRC_HandleTypeDef hcrc;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-
 static void MX_CRC_Init(void);
 static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
@@ -165,7 +164,7 @@ void SetSensorCommand(){
   		VL53L0X_SetVcselPulsePeriod(Dev, VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
   		VL53L0X_SetVcselPulsePeriod(Dev, VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 
-		Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기�????
+		Kalman_Init(&filters[i], Q, R, P, 0);  // Q, R, P, 초기�?????
 
  		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%02d:(",i), 100);
  		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%02lu ",refSpadCountHost[i]), 100);
@@ -405,11 +404,6 @@ static void MX_CRC_Init(void)
 }
 
 
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
 static void MX_GPIO_Init(void)
 {
 
