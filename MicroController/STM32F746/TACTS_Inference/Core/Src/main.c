@@ -228,10 +228,10 @@ void InferenceCommand()
 		if(tofCount == NUM_SENSOR){
 			aiRun(in_data,out_data);
 			float sqSum= out_data[2]*out_data[2] + out_data[3]*out_data[3];
-			if(sqSum >= 0.75 && sqSum <= 1.25){
+			if(sqSum >= 0.8 && sqSum <= 1.2){
 				out_data[0] = (out_data[0] + 1) * (Fminmax[1] - Fminmax[0]) / 2 + Fminmax[0];
 				out_data[1] = (out_data[1] + 1) * (Zminmax[1] - Zminmax[0]) / 2 + Zminmax[0];
-				if(out_data[0]>25){
+				if(out_data[0]>20){
 					for(int k=0; k<4;k++){
 						HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%.2f ", out_data[k]), 1000);
 					}
