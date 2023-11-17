@@ -119,10 +119,15 @@ void ProcessCommand(uint8_t *commandBuffer)
 
 void RevCommand(char *arg){
     int step_rev_angle;
+    uint32_t startTime, endTime, elapsedTime;
     if(sscanf(arg, "%d", &step_rev_angle) == 1){
+        startTime = HAL_GetTick();
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d deg revolution Start \n\r",step_rev_angle), 100);
         stepRev(step_rev_angle);
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d deg revolution End \n\r",step_rev_angle), 100);
+		endTime = HAL_GetTick();
+		elapsedTime = endTime - startTime;
+        HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "Elapsed Time: %lu ms\n\r", elapsedTime), 100);
     }else{
     	HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "invalid data\r\n"), 100);
     }
@@ -131,10 +136,15 @@ void RevCommand(char *arg){
 
 void LinCommand(char *arg){
     int step_lin_dist = 0;
+    uint32_t startTime, endTime, elapsedTime;
     if (sscanf(arg, "%d", &step_lin_dist) == 1) {
+        startTime = HAL_GetTick();
 		HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d mm lin Still moving \n\r",step_lin_dist), 100);
         stepLin(step_lin_dist);
         HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "%d mm lin End\n\r", step_lin_dist), 100);
+		endTime = HAL_GetTick();
+		elapsedTime = endTime - startTime;
+        HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "Elapsed Time: %lu ms\n\r", elapsedTime), 100);
     } else {
         HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "invalid data\r\n"), 100);
     }
@@ -226,7 +236,6 @@ void AutoCommand(){
 
     HAL_UART_Transmit(&huart1, (uint8_t*)txMsg, sprintf((char*)txMsg, "Auto Command \r\n"), 100);
 
-
 	ResetAllDevices();
     for(int count =0; count < 100; count++){
 		for (int i = 0; i < NUM_SENSOR; i++) {
@@ -264,7 +273,7 @@ void AutoCommand(){
 
 	servo_angle(&htim2, TIM_CHANNEL_1, 1); // poking
   	 for(int lin = 0; lin < 21; lin ++){
-		 for(int rev = 0; rev < 18; rev++){
+		 for(int rev = 0; rev < 72; rev++){
 			 for(int r = 0; r < 8; r++){
 				 servo_angle(&htim2, TIM_CHANNEL_1, r); // poking
 				 HAL_Delay(500);
